@@ -13,10 +13,14 @@ Kit location: `{{KIT}}` (CLI: `{{KIT}}/latexkit.py`, also on PATH as `latexkit` 
 
 1. **New document** — never hand-write a preamble; generate it:
    ```bash
-   latexkit new <notes|paper|report|book|slides> <folder> -t "Title" -a "Author" -l vi|en -m all
+   latexkit new <type> <folder> -t "Title" -a "Author" -l vi|en [-m modules]
    ```
-   `-m` takes modules: `table,diagram,plot,code,box,math,algo,science` or `all`
-   (default: table,diagram,plot,code,box,math). Vietnamese always compiles with LuaLaTeX.
+   Types: `notes paper report book slides thesis proposal poster exam cv letter` (`latexkit list`
+   describes each; new folders in `templates/` become types too). `-m` takes
+   `table,diagram,plot,code,box,math,algo,science`, `all` or `none`; omit it to get the type's
+   defaults (cv/letter: none). Only the chosen modules load. Vietnamese compiles with LuaLaTeX.
+   Pick the type from the request ("luận văn/đồ án" → thesis, "đề cương" → proposal, "đề thi/bài
+   tập" → exam, "thư xin việc" → letter); ask only when two types fit.
 2. **Edit** `main.tex` (report/book: `chapters/*.tex`). Use the components below instead of
    raw LaTeX so every document looks the same. Before adding a table, diagram, chart or figure,
    pass the guard below.
@@ -84,6 +88,7 @@ TikZ · các thành phần và kết nối → D2 · các tầng chồng nhau �
 | Math | `theorem lemma definition example remark proof`, `\R \E \argmin \norm{} \abs{} \vect{} \mat{} \T` |
 | Algorithm | `algorithm` + `algorithmic` (`\Require \State \For \While \Comment`) |
 | References | `\cref{...}` (localized names), `\citep{}`/`\citet{}`, bibliography: `\lkbibliography` |
+| Type-specific | poster `\block{}{}` in `\column{}`; exam `\question[pts]`, `\part`, `choices`, `solution` (`\printanswers` = answer key); thesis files in `front/` and `chapters/`; cv/letter `\cvheader \cvsection \cventry \cvproject \cvskill \letterheader` (reference.md) |
 
 ## Rules
 

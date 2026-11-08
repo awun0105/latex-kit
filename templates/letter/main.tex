@@ -1,0 +1,42 @@
+% <<vi:Thư xin việc / thư trang trọng — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Cover / formal letter — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Thay các đoạn trong ngoặc vuông bằng nội dung thật. Giữ thư trong 1 trang.||en:Replace the bracketed paragraphs with real text. Keep the letter to 1 page.>>
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper, left=2.3cm, right=2.3cm, top=1.5cm, bottom=2cm]{geometry}
+\usepackage[{{PKGOPTS}}]{latexkit}
+\usepackage{latexkit-cv}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.7em}
+
+\begin{document}
+
+\letterheader{{{AUTHOR}}}
+  {\href{mailto:email@example.com}{email@example.com},
+   \href{https://linkedin.com/in/username}{linkedin.com/in/username},
+   +84 900 000 000, <<vi:TP. Hồ Chí Minh||en:City, Country>>}
+
+\hfill <<vi:TP. Hồ Chí Minh, ngày \today||en:\today>>
+
+<<vi:Kính gửi: Ban Tuyển dụng Công ty XYZ||en:Hiring Team\\ XYZ Company\\ 123 Example Street, City>>
+
+\textbf{<<vi:V/v: Ứng tuyển vị trí [tên vị trí]||en:Re: Application for [position title]>>}
+
+%%IF en
+Dear Hiring Manager,
+%%ENDIF
+
+<<vi:[Đoạn 1: vị trí ứng tuyển, nơi biết đến tin tuyển dụng và lý do quan tâm đến công ty.]||en:[Paragraph 1: the position, where the posting was found and why the company is of interest.]>>
+
+<<vi:[Đoạn 2: hai hoặc ba kinh nghiệm, dự án phù hợp nhất với yêu cầu công việc, kèm kết quả cụ thể.]||en:[Paragraph 2: two or three experiences or projects that best match the requirements, with concrete results.]>>
+
+<<vi:[Đoạn 3: điều có thể đóng góp cho nhóm và lý do phù hợp với văn hóa công ty.]||en:[Paragraph 3: what can be contributed to the team and why it fits the company culture.]>>
+
+<<vi:[Đoạn 4: cảm ơn, mong có buổi phỏng vấn, nhắc CV đính kèm.]||en:[Paragraph 4: thanks, hope for an interview, mention the attached CV.]>>
+
+\vspace{1em}
+\begin{flushright}
+  <<vi:Trân trọng,||en:Sincerely,>>\\[2.5em]
+  {{AUTHOR}}
+\end{flushright}
+
+\end{document}

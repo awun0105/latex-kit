@@ -1,0 +1,33 @@
+\chapter{<<vi:Phương pháp đề xuất||en:Proposed Method>>}
+\label{ch:method}
+
+\section{<<vi:Tổng quan hệ thống||en:System overview>>}
+%%IF diagram
+\begin{figure}
+  \centering
+  \lkpipeline{<<vi:Dữ liệu||en:Data>>, <<vi:Tiền xử lý||en:Preprocessing>>, <<vi:Mô hình||en:Model>>, <<vi:Đánh giá||en:Evaluation>>}
+  \caption{<<vi:Các bước của phương pháp||en:Steps of the method>>}
+  \label{fig:pipeline}
+\end{figure}
+%%ENDIF
+\todo{<<vi:Mô tả từng khối của hệ thống.||en:Describe each block of the system.>>}
+
+%%IF algo
+\begin{algorithm}
+  \caption{<<vi:Huấn luyện||en:Training>>}
+  \begin{algorithmic}[1]
+    \Require <<vi:dữ liệu||en:data>> $\mathcal{D}$, $\eta$
+    \For{<<vi:mỗi||en:each>> batch $(x, y) \in \mathcal{D}$}
+      \State $\theta \gets \theta - \eta\nabla_\theta \ell\big(f_\theta(x), y\big)$
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+%%ENDIF
+
+%%IF code
+\begin{lkcode}[Python]{<<vi:Đoạn mã chính||en:Core code>>}
+loss = criterion(model(x), y)
+loss.backward()
+optimizer.step()
+\end{lkcode}
+%%ENDIF

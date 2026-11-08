@@ -16,10 +16,19 @@
 
 % Layers used by figures that are \input from standalone files (their preamble is
 % skipped), e.g. OpenTikZ neural-net draws its edges on 'edges'.
+% Layers already set by the class (tikzposter: backgroundlayer, notelayer) are kept:
+% latexkit's layers go around 'main'.
 \pgfdeclarelayer{background}
 \pgfdeclarelayer{edges}
 \pgfdeclarelayer{foreground}
-\pgfsetlayers{background,edges,main,foreground}
+\def\lk@layers@main{main}
+\ifx\pgf@layerlist\lk@layers@main
+  \pgfsetlayers{background,edges,main,foreground}
+\else
+  \begingroup
+    \def\lk@sub#1main#2\lk@end{\endgroup\pgfsetlayers{#1background,edges,main,foreground#2}}%
+    \expandafter\lk@sub\pgf@layerlist\lk@end
+\fi
 
 % ---------------------------------------------------------------- shared styles
 % Put [lk] on a tikzpicture, then use the node styles below.

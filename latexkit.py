@@ -35,7 +35,67 @@ TYPES = {
     "report": "Báo cáo nhiều chương / multi-chapter report (report)",
     "book": "Sách, giáo trình / book with parts and chapters (book)",
     "slides": "Slide thuyết trình / presentation (beamer)",
+    "thesis": "Luận văn, đồ án tốt nghiệp / thesis (report, front matter, lists)",
+    "proposal": "Đề cương nghiên cứu / research proposal (article, plan, budget)",
+    "poster": "Poster hội nghị A0 / conference poster (tikzposter)",
+    "exam": "Bài tập, đề thi / assignment or exam (exam class, points, solutions)",
+    "cv": "CV một cột / one-column CV (ATS friendly)",
+    "letter": "Thư xin việc, thư trang trọng / cover or formal letter",
 }
+# Modules used when -m is not given, per type (other types: DEFAULT_MODULES).
+TYPE_MODULES = {
+    "proposal": ["table", "diagram", "plot", "box"],
+    "poster": ["table", "diagram", "plot", "box", "math"],
+    "exam": ["table", "math", "code"],
+    "cv": [],
+    "letter": [],
+}
+# Extra package options per type.
+TYPE_OPTS = {
+    "notes": ["parskip", "float=here"],
+    "paper": ["style=plain"],
+    "thesis": ["float=here"],
+    "proposal": ["parskip"],
+    "poster": ["style=plain", "margin=none", "float=here"],
+    "exam": ["style=plain"],
+    "cv": ["style=plain", "margin=none"],
+    "letter": ["style=plain", "margin=none"],
+}
+DEFAULT_TITLES = {
+    "notes": ("Ghi chú", "Notes"), "paper": ("Tên bài báo", "Paper Title"),
+    "report": ("Báo cáo", "Report"), "book": ("Tên sách", "Book Title"),
+    "slides": ("Bài trình bày", "Presentation"), "thesis": ("Tên đề tài", "Thesis Title"),
+    "proposal": ("Đề cương nghiên cứu", "Research Proposal"), "poster": ("Tên poster", "Poster Title"),
+    "exam": ("Bài kiểm tra", "Exam"), "cv": ("Nguyễn Văn A", "Jane Doe"),
+    "letter": ("Thư ứng tuyển", "Cover Letter"),
+}
+
+
+def discover_templates() -> None:
+    """Folders in templates/ without a built-in entry become types too.
+    Optional templates/<name>/template.json: {"description", "modules", "options", "title", "minimal"}."""
+    if not TEMPLATES.exists():
+        return
+    for d in sorted(TEMPLATES.iterdir()):
+        if not d.is_dir() or d.name.startswith("_") or d.name in TYPES or not (d / "main.tex").exists():
+            continue
+        cfg = {}
+        if (d / "template.json").exists():
+            cfg = json.loads((d / "template.json").read_text(encoding="utf-8"))
+        TYPES[d.name] = cfg.get("description", f"{d.name} (templates/{d.name})")
+        if "modules" in cfg:
+            TYPE_MODULES[d.name] = cfg["modules"]
+        if "options" in cfg:
+            TYPE_OPTS[d.name] = cfg["options"]
+        if "title" in cfg:
+            DEFAULT_TITLES[d.name] = (cfg["title"], cfg["title"])
+        if cfg.get("minimal"):
+            MINIMAL_TYPES.add(d.name)
+
+
+# Types that need no diagrams/, plots/, code/ or references.bib from _common.
+MINIMAL_TYPES = {"cv", "letter"}
+discover_templates()
 MODULES = {
     "table": "booktabs, tabularx, tabularray, gradbars, lktable, \\best, \\cmark, heat cells",
     "diagram": "TikZ styles, \\lkpipeline, \\lktimeline, OpenTikZ, PlotNeuralNet, Mermaid/Graphviz/D2/draw.io",
@@ -109,6 +169,8 @@ def render_text(text: str, ctx: dict, modules: set[str], lang: str) -> str:
 def copy_tree(src: Path, dst: Path, ctx: dict, modules: set[str], lang: str) -> None:
     for path in sorted(src.rglob("*")):
         rel = path.relative_to(src)
+        if rel.as_posix() == "template.json":   # template settings, not part of the project
+            continue
         target = dst / rel
         if path.is_dir():
             target.mkdir(parents=True, exist_ok=True)
@@ -120,6 +182,10 @@ def copy_tree(src: Path, dst: Path, ctx: dict, modules: set[str], lang: str) -> 
                               encoding="utf-8")
         else:
             shutil.copy2(path, target)
+
+
+def copy_tree_file(path: Path, target: Path, ctx: dict, modules: set[str], lang: str) -> None:
+    target.write_text(render_text(path.read_text(encoding="utf-8"), ctx, modules, lang), encoding="utf-8")
 
 
 def texmfhome() -> Path:
@@ -164,22 +230,21 @@ def cmd_new(a: argparse.Namespace) -> None:
         a.author = a.author or ask("Tác giả / author", default_author())
         a.lang = a.lang or ask("Ngôn ngữ / language (vi, en)", "vi", ["vi", "en"])
         if a.modules is None:
-            say("\nModule: " + ", ".join(MODULES) + ", all")
-            a.modules = ask("Module", ",".join(DEFAULT_MODULES))
+            say("\nModule: " + ", ".join(MODULES) + ", all, none")
+            a.modules = ask("Module", ",".join(TYPE_MODULES.get(a.type, DEFAULT_MODULES)) or "none")
     if a.type not in TYPES:
         die(f"unknown type '{a.type}'. Types: {', '.join(TYPES)}")
     lang = a.lang or "vi"
-    mods = parse_modules(a.modules)
+    mods = parse_modules(a.modules if a.modules is not None
+                         else ",".join(TYPE_MODULES.get(a.type, DEFAULT_MODULES)) or "none")
     dst = Path(a.dir).expanduser().resolve()
     if dst.exists() and any(dst.iterdir()):
         die(f"{dst} already exists and is not empty")
 
-    title = a.title or ("Ghi chú" if lang == "vi" else "Untitled")
-    opts = [f"lang={lang}"] + sorted(mods, key=list(MODULES).index)
-    if a.type == "notes":
-        opts += ["parskip", "float=here"]
-    if a.type == "paper":
-        opts += ["style=plain"]
+    title = a.title or DEFAULT_TITLES.get(a.type, ("Tài liệu", "Untitled"))[0 if lang == "vi" else 1]
+    # "none" first: only the chosen modules load (the package turns some on by default).
+    opts = [f"lang={lang}", "none"] + sorted(mods, key=list(MODULES).index)
+    opts += TYPE_OPTS.get(a.type, [])
     if a.bib != "natbib":
         opts.append(f"bib={a.bib}")
     if a.minted:
@@ -199,9 +264,13 @@ def cmd_new(a: argparse.Namespace) -> None:
         ctx["PDF_MODE"], ctx["ENGINE"] = "4", "lualatex"
 
     dst.mkdir(parents=True, exist_ok=True)
-    copy_tree(COMMON, dst, ctx, mods, lang)
+    if a.type in MINIMAL_TYPES:
+        for name in ("latexmkrc", ".gitignore"):
+            copy_tree_file(COMMON / name, dst / name, ctx, mods, lang)
+    else:
+        copy_tree(COMMON, dst, ctx, mods, lang)
     copy_tree(TEMPLATES / a.type, dst, ctx, mods, lang)
-    if "plot" in mods:
+    if "plot" in mods and a.type not in MINIMAL_TYPES:
         (dst / "plots" / "styles").mkdir(parents=True, exist_ok=True)
         shutil.copytree(SCIENCEPLOTS, dst / "plots" / "styles", dirs_exist_ok=True)
         shutil.copy2(PYHELPER, dst / "plots" / "latexkit_plot.py")
@@ -236,6 +305,7 @@ def parse_modules(spec: str | None) -> set[str]:
     names = {s.strip() for s in spec.replace(" ", ",").split(",") if s.strip()}
     if "all" in names:
         return set(MODULES)
+    names.discard("none")
     bad = names - set(MODULES)
     if bad:
         die(f"unknown module(s): {', '.join(sorted(bad))}. Modules: {', '.join(MODULES)}, all")
@@ -674,12 +744,16 @@ def main(argv: list[str] | None = None) -> None:
     sub = p.add_subparsers(dest="cmd", required=True)
 
     n = sub.add_parser("new", help="create a project (asks questions when type or folder is missing)")
-    n.add_argument("type", nargs="?", choices=list(TYPES))
-    n.add_argument("dir", nargs="?")
-    n.add_argument("-t", "--title")
-    n.add_argument("-a", "--author")
-    n.add_argument("-l", "--lang", choices=["vi", "en"])
-    n.add_argument("-m", "--modules", help="comma list, e.g. table,diagram,code or 'all'")
+    n.add_argument("type", nargs="?", choices=list(TYPES),
+                   help="document type (latexkit list shows each one); omit to be asked")
+    n.add_argument("dir", nargs="?", help="folder to create (must not exist or be empty)")
+    n.add_argument("-t", "--title", help="document title (default depends on the type)")
+    n.add_argument("-a", "--author", help="author name (default: git config user.name)")
+    n.add_argument("-l", "--lang", choices=["vi", "en"],
+                   help="language of labels, headings and sample text (default vi)")
+    n.add_argument("-m", "--modules",
+                   help="package parts to load: table,diagram,plot,code,box,math,algo,science, 'all' or 'none'"
+                        " (default depends on the type)")
     n.add_argument("--engine", choices=list(ENGINES), default="lualatex")
     n.add_argument("--bib", choices=["natbib", "biblatex", "none"], default="natbib")
     n.add_argument("--minted", action="store_true", help="minted code highlighting (needs -shell-escape)")

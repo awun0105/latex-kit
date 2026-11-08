@@ -216,3 +216,36 @@ Both need `texlive-science`; without it the document still compiles and shows a 
 
 `\lkkey{term}` highlighted term · `\todo{...}` · `\lkfig[0.8]{file}{Caption}{label}` ·
 `\lkfigs{Caption}{label}{a/Left, b/Right}` · `\lktitlepage` with `\subtitle{}` and `\institution{}`.
+
+## Document types
+
+| Type | Class | Notes |
+|---|---|---|
+| `notes` | article | reading-note skeleton: paper details, summary, problem, contributions, method, results, assessment, next steps |
+| `paper` | article + authblk | `\author[1,2]{...}` `\affil[1]{...}`; acknowledgments and data/code availability sections |
+| `report` | report | roman-numbered front matter: acknowledgments, summary, contents, lists of figures/tables, abbreviations; chapters in `chapters/` |
+| `book` | book | preface, lists, `\index{term}` + `\printindex` (imakeidx, latexmk runs makeindex) |
+| `slides` | beamer | outline at each `\section`, references frame, backup frames after `\appendix` |
+| `thesis` | report + scrextend 13pt, setspace 1.3, geometry 3.5/2/2.5/2.5 cm (loaded before latexkit) | `front/` cover, subcover, declaration, acknowledgments, abstract-vi/en, abbreviations; `chapters/01..05`, appendix |
+| `proposal` | article | info table, objectives, plan as `ganttchart` (pgfgantt), budget table, risks |
+| `poster` | tikzposter A0 | `\begin{columns}\column{0.33}\block{Title}{body}...\end{columns}`; color style `latexkit` uses `accent` |
+| `exam` | exam | `\question[2]`, `\part[1]`, `\begin{choices}\choice ...\CorrectChoice`, `\begin{solution}`; uncomment `\printanswers` for the answer key (writing lines are hidden there) |
+| `cv` | article + latexkit-cv | one column, plain text order for applicant tracking systems |
+| `letter` | article + latexkit-cv | gray header band, date, recipient, subject, body, closing |
+
+### latexkit-cv (cv, letter)
+```latex
+\cvheader{Jane Doe}{Computer Vision Engineer}{email@example.com, \href{https://github.com/username}{github.com/username}}
+\cvsection{Experience}
+\cventry{Company}{City}{Role}{2024 -- now}
+\begin{cvitems} \item Built ... \end{cvitems}
+\cvproject{Project}{PyTorch, FastAPI}{2025}
+\cvskill{Languages}{Python, C++}
+\letterheader{Jane Doe}{email@example.com, City}      % letter: gray band
+```
+
+### New template
+A folder `templates/<name>/main.tex` becomes type `<name>`. Placeholders: `{{TITLE}} {{AUTHOR}}
+{{DATE}} {{YEAR}} {{PKGOPTS}}`, `<<vi:...||en:...>>`, `%%IF module` ... `%%ENDIF` (also `%%IF a|b`,
+`%%IF !a`). Optional `template.json`: `{"description", "modules", "options", "title", "minimal"}`.
+Test with `-l vi`, `-l en`, `-m none` and fix every error.

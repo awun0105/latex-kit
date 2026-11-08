@@ -1,0 +1,153 @@
+% <<vi:Poster hội nghị A0 — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:A0 conference poster — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Khổ ngang: đổi portrait thành landscape. Cỡ chữ gốc: 20pt, 24pt hoặc 25pt.||en:Landscape: change portrait to landscape. Base font size: 20pt, 24pt or 25pt.>>
+\documentclass[25pt,a0paper,portrait,margin=0mm,innermargin=20mm,blockverticalspace=18mm,colspace=18mm]{tikzposter}
+\usepackage[{{PKGOPTS}}]{latexkit}
+
+% ---------------------------------------------------------------- theme
+% <<vi:Màu lấy từ latexkit (accent, lkteal ...); đổi màu chủ đạo bằng tùy chọn accent= của latexkit.||en:Colors come from latexkit (accent, lkteal ...); change the main color with latexkit's accent= option.>>
+\definecolorstyle{latexkit}{%
+  \colorlet{colorOne}{accent}\colorlet{colorTwo}{lkteal}\colorlet{colorThree}{lkorange}%
+}{%
+  \colorlet{backgroundcolor}{white}
+  \colorlet{framecolor}{white}
+  \colorlet{titlefgcolor}{white}
+  \colorlet{titlebgcolor}{colorOne}
+  \colorlet{blocktitlebgcolor}{colorOne}
+  \colorlet{blocktitlefgcolor}{white}
+  \colorlet{blockbodybgcolor}{colorOne!4}
+  \colorlet{blockbodyfgcolor}{black}
+  \colorlet{innerblocktitlebgcolor}{colorTwo}
+  \colorlet{innerblocktitlefgcolor}{white}
+  \colorlet{innerblockbodybgcolor}{colorTwo!8}
+  \colorlet{innerblockbodyfgcolor}{black}
+  \colorlet{notefgcolor}{black}
+  \colorlet{notebgcolor}{colorThree!15}
+  \colorlet{notefrcolor}{colorThree}
+}
+\usecolorstyle{latexkit}
+\usetitlestyle{Filled}
+\useblockstyle{Default}
+\useinnerblockstyle{Default}
+\usebackgroundstyle{Default}
+\settitle{%
+  \centering\vbox{%
+    \@titlegraphic\\[\TP@titlegraphictotitledistance]
+    {\color{titlefgcolor}\sffamily\bfseries\Huge \@title\par}
+    \vspace{0.8em}
+    {\color{titlefgcolor}\sffamily\Large \@author\par}
+    \vspace{0.4em}
+    {\color{titlefgcolor}\sffamily\large \@institute}}}
+
+% ---------------------------------------------------------------- content
+\title{{{TITLE}}}
+\author{{{AUTHOR}}, <<vi:Đồng tác giả||en:Co-author>>}
+\institute{<<vi:Đơn vị — Hội nghị, thành phố, năm||en:Affiliation — Conference, city, year>> {{YEAR}}}
+% <<vi:Logo: bỏ dấu % ở dòng dưới và đặt file ảnh vào figures/.||en:Logo: remove the % below and put the image in figures/.>>
+% \titlegraphic{\includegraphics[height=6cm]{figures/logo}}
+
+\tikzposterlatexaffectionproofoff   % <<vi:bỏ dòng "Made with TikZposter" ở góc dưới||en:hide the "Made with TikZposter" credit>>
+
+\begin{document}
+\maketitle
+
+\begin{columns}
+% ================================================================ column 1
+\column{0.33}
+\block{<<vi:Động lực||en:Motivation>>}{
+  <<vi:Vấn đề cần giải quyết, viết trong hai ba câu ngắn. Người xem đứng cách poster khoảng hai mét, nên mỗi khối chỉ nên có một ý.||en:The problem, in two or three short sentences. Readers stand about two metres away, so each block should carry one idea.>>
+  \begin{itemize}
+    \item <<vi:Hạn chế của cách làm hiện tại||en:Limitation of current approaches>>
+    \item <<vi:Điều cần đạt được||en:What is needed>>
+  \end{itemize}
+}
+
+%%IF box
+\block{<<vi:Ý chính||en:Key idea>>}{
+  \begin{keyidea}
+    <<vi:Một câu tóm tắt đóng góp của công trình.||en:One sentence that states the contribution.>>
+  \end{keyidea}
+}
+%%ENDIF
+
+\block{<<vi:Đóng góp||en:Contributions>>}{
+  \begin{enumerate}
+    \item <<vi:Đóng góp thứ nhất||en:First contribution>>
+    \item <<vi:Đóng góp thứ hai||en:Second contribution>>
+    \item <<vi:Đóng góp thứ ba||en:Third contribution>>
+  \end{enumerate}
+}
+
+% ================================================================ column 2
+\column{0.34}
+\block{<<vi:Phương pháp||en:Method>>}{
+%%IF diagram
+  \begin{tikzfigure}
+    \adjustbox{width=0.55\linewidth}{%
+    \begin{tikzpicture}[lk]
+      \node[io]                    (in)  {<<vi:Ảnh đầu vào||en:Input images>>};
+      \node[process, below=of in]  (enc) {Encoder};
+      \node[process, below=of enc] (dec) {Decoder};
+      \node[io,      below=of dec] (out) {<<vi:Kết quả||en:Output>>};
+      \draw[flow] (in) -- (enc);
+      \draw[flow] (enc) -- (dec);
+      \draw[flow] (dec) -- (out);
+    \end{tikzpicture}}
+  \end{tikzfigure}
+%%ENDIF
+  <<vi:Mô tả ngắn từng bước của phương pháp.||en:A short description of each step of the method.>>
+%%IF math
+  \[
+    \mathcal{L}(\theta) = \frac{1}{N}\sum_{i=1}^{N} \ell\big(f_\theta(x_i), y_i\big)
+  \]
+%%ENDIF
+}
+
+\block{<<vi:Thiết lập thí nghiệm||en:Experimental setup>>}{
+  <<vi:Dataset, baseline, metric và phần cứng.||en:Datasets, baselines, metrics and hardware.>>
+}
+
+% ================================================================ column 3
+\column{0.33}
+\block{<<vi:Kết quả||en:Results>>}{
+%%IF table
+  \begin{center}
+    \begin{tabular}{l ccc}\toprule
+      <<vi:Phương pháp||en:Method>> & PSNR\up & SSIM\up & LPIPS\down \\ \midrule
+      Baseline 1 & 25.10 & 0.810 & 0.240 \\
+      Baseline 2 & \second{27.40} & \second{0.860} & \second{0.190} \\
+      \lkhl Ours & \best{29.20} & \best{0.890} & \best{0.150} \\ \bottomrule
+    \end{tabular}
+  \end{center}
+%%ENDIF
+%%IF plot
+  \begin{tikzfigure}[<<vi:Quá trình huấn luyện||en:Training curves>>]
+    \begin{tikzpicture}
+      \begin{axis}[lkplot, width=0.9\linewidth, height=14cm, xlabel={<<vi:Bước||en:Step>>},
+                   ylabel={PSNR (dB)}, legend pos=south east,
+                   label style={font=\large}, tick label style={font=\normalsize},
+                   legend style={font=\normalsize}, max space between ticks=90pt,
+                   x tick label style={/pgf/number format/1000 sep={}}]
+        \addplot table[x=step, y=baseline, col sep=comma] {plots/results.csv};
+        \addplot table[x=step, y=ours, col sep=comma] {plots/results.csv};
+        \legend{Baseline, Ours}
+      \end{axis}
+    \end{tikzpicture}
+  \end{tikzfigure}
+%%ENDIF
+  <<vi:Nhận xét chính về kết quả.||en:Main observations about the results.>>
+}
+
+\block{<<vi:Kết luận||en:Conclusion>>}{
+  <<vi:Tóm tắt kết quả và hướng phát triển tiếp theo.||en:Summary and future work.>>
+}
+
+\block{<<vi:Tài liệu tham khảo||en:References>>}{
+  \raggedright\small
+  [1] B.~Kerbl, G.~Kopanas, T.~Leimkühler, G.~Drettakis. 3D Gaussian Splatting for Real-Time Radiance Field Rendering. \textit{ACM TOG}, 2023.
+
+  \vspace{0.5em}
+  \normalsize <<vi:Liên hệ||en:Contact>>: \texttt{email@example.com} \quad·\quad <<vi:Code||en:Code>>: \texttt{github.com/user/repo}
+}
+\end{columns}
+
+\end{document}

@@ -1,0 +1,30 @@
+\chapter{<<vi:Thực nghiệm và đánh giá||en:Experiments and Evaluation>>}
+\label{ch:experiments}
+
+\section{<<vi:Thiết lập||en:Setup>>}
+\todo{<<vi:Dữ liệu, cấu hình phần cứng, chỉ số đánh giá và các phương pháp so sánh.||en:Datasets, hardware, metrics and baselines.>>}
+
+\section{<<vi:Kết quả||en:Results>>}
+%%IF table
+\begin{lktable}{<<vi:Kết quả chính||en:Main results>>}{tab:results}{l cc}
+  <<vi:Phương pháp||en:Method>> & PSNR\up & SSIM\up \\ \midrule
+  Baseline   & 25.10 & 0.810 \\
+  \lkhl <<vi:Đề xuất||en:Proposed>> & \best{27.40} & \best{0.860} \\
+\end{lktable}
+%%ENDIF
+%%IF plot
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[lkplot, width=0.75\linewidth, height=5cm, xlabel={<<vi:Bước||en:Step>>},
+                 ylabel={PSNR (dB)}, legend pos=south east]
+      \addplot table[x=step, y=baseline, col sep=comma] {plots/results.csv};
+      \addplot table[x=step, y=ours, col sep=comma] {plots/results.csv};
+      \legend{Baseline, <<vi:Đề xuất||en:Proposed>>}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{<<vi:Quá trình huấn luyện||en:Training curves>>}
+  \label{fig:curve}
+\end{figure}
+%%ENDIF
+\todo{<<vi:Phân tích kết quả và so sánh với các phương pháp khác.||en:Analyse the results against the baselines.>>}

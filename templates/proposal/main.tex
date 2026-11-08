@@ -1,0 +1,127 @@
+% <<vi:Đề cương nghiên cứu — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Research proposal — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+\documentclass[11pt,a4paper]{article}
+\usepackage[{{PKGOPTS}}]{latexkit}
+\usepackage{pgfgantt}   % <<vi:biểu đồ Gantt cho kế hoạch||en:Gantt chart for the schedule>>
+
+\title{\sffamily\bfseries {{TITLE}}}
+\author{{{AUTHOR}}}
+\date{{{DATE}}}
+
+\begin{document}
+\maketitle
+
+% ======================================================
+\section*{<<vi:Thông tin chung||en:General information>>}
+\begin{center}
+\begin{tabular}{@{}p{0.3\linewidth}p{0.62\linewidth}@{}}
+  \hline
+  <<vi:Tên đề tài||en:Title>>              & {{TITLE}} \\
+  <<vi:Chủ nhiệm đề tài||en:Principal investigator>> & {{AUTHOR}} \\
+  <<vi:Đơn vị||en:Institution>>           & <<vi:Trường Đại học ...||en:University of ...>> \\
+  <<vi:Thời gian thực hiện||en:Duration>> & <<vi:6 tháng (01/{{YEAR}} -- 06/{{YEAR}})||en:6 months (01/{{YEAR}} -- 06/{{YEAR}})>> \\
+  <<vi:Tổng kinh phí||en:Total budget>>   & \todo{<<vi:số tiền||en:amount>>} \\
+  \hline
+\end{tabular}
+\end{center}
+
+% ======================================================
+\section{<<vi:Đặt vấn đề||en:Background and motivation>>}
+\label{sec:background}
+\todo{<<vi:Bối cảnh, vấn đề cần giải quyết và lý do vấn đề quan trọng.||en:Context, the problem to solve and why it matters.>>}
+
+% ======================================================
+\section{<<vi:Mục tiêu||en:Objectives>>}
+\label{sec:objectives}
+\begin{enumerate}
+  \item <<vi:Mục tiêu 1.||en:Objective 1.>>
+  \item <<vi:Mục tiêu 2.||en:Objective 2.>>
+\end{enumerate}
+<<vi:Câu hỏi nghiên cứu||en:Research questions>>:
+\begin{enumerate}[label=RQ\arabic*.]
+  \item \todo{<<vi:Câu hỏi 1||en:Question 1>>}
+  \item \todo{<<vi:Câu hỏi 2||en:Question 2>>}
+\end{enumerate}
+
+% ======================================================
+\section{<<vi:Tổng quan tình hình nghiên cứu||en:Literature review>>}
+\label{sec:review}
+\todo{<<vi:Các hướng tiếp cận chính, kết quả và khoảng trống, ví dụ||en:Main approaches, results and gaps, e.g.>> \citet{kerbl2023gaussian}.}
+
+% ======================================================
+\section{<<vi:Phương pháp nghiên cứu||en:Methodology>>}
+\label{sec:method}
+%%IF diagram
+\begin{figure}[H]
+  \centering
+  \lkpipeline{<<vi:Khảo sát||en:Survey>>, <<vi:Thu thập dữ liệu||en:Data collection>>, <<vi:Xây dựng mô hình||en:Modelling>>, <<vi:Đánh giá||en:Evaluation>>}
+  \caption{<<vi:Các bước thực hiện||en:Research steps>>}
+  \label{fig:method}
+\end{figure}
+%%ENDIF
+\todo{<<vi:Dữ liệu, phương pháp, công cụ và cách đánh giá kết quả.||en:Data, methods, tools and how results are evaluated.>>}
+
+% ======================================================
+\section{<<vi:Kế hoạch thực hiện||en:Work plan>>}
+\label{sec:plan}
+\begin{center}
+\begin{ganttchart}[
+    hgrid, vgrid, x unit=1.5cm, y unit chart=0.7cm, bar height=0.55,
+    title label font=\sffamily\small\bfseries, bar label font=\sffamily\small,
+    milestone label font=\sffamily\small\itshape,
+    bar/.append style={fill=accent!45, draw=accent},
+    milestone/.append style={fill=lkorange, draw=lkorange},
+    title/.append style={fill=accent!10, draw=accent!40}
+  ]{1}{6}
+  \gantttitle{<<vi:Tháng||en:Month>>}{6} \\
+  \gantttitlelist{1,...,6}{1} \\
+  \ganttbar{<<vi:Khảo sát tài liệu||en:Literature review>>}{1}{1} \\
+  \ganttbar{<<vi:Thu thập dữ liệu||en:Data collection>>}{2}{3} \\
+  \ganttbar{<<vi:Xây dựng mô hình||en:Modelling>>}{3}{5} \\
+  \ganttbar{<<vi:Đánh giá||en:Evaluation>>}{5}{6} \\
+  \ganttmilestone[milestone left shift=0.3, milestone right shift=-0.3]{<<vi:Báo cáo cuối kỳ||en:Final report>>}{6}
+\end{ganttchart}
+\end{center}
+
+% ======================================================
+\section{<<vi:Sản phẩm dự kiến||en:Expected outcomes>>}
+\label{sec:outcomes}
+\begin{itemize}
+  \item <<vi:Báo cáo tổng kết||en:Final report>>
+  \item <<vi:Mã nguồn và dữ liệu||en:Source code and data>>
+  \item <<vi:Bài báo khoa học||en:Research paper>>
+\end{itemize}
+
+% ======================================================
+\section{<<vi:Kinh phí dự kiến||en:Budget>>}
+\label{sec:budget}
+%%IF table
+\begin{lktable}[H]{<<vi:Dự toán kinh phí||en:Budget estimate>>}{tab:budget}{l r}
+  <<vi:Khoản mục||en:Item>> & <<vi:Số tiền||en:Amount>> \\ \midrule
+  <<vi:Thuê máy tính GPU||en:GPU compute>> & \todo{...} \\
+  <<vi:Thu thập dữ liệu||en:Data collection>> & \todo{...} \\
+  <<vi:Hội thảo, công bố||en:Conferences, publication>> & \todo{...} \\ \midrule
+  \textbf{<<vi:Tổng||en:Total>>} & \todo{...} \\
+\end{lktable}
+%%ENDIF
+%%IF !table
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+  \hline
+  \textbf{<<vi:Khoản mục||en:Item>>} & \textbf{<<vi:Số tiền||en:Amount>>} \\ \hline
+  <<vi:Thuê máy tính GPU||en:GPU compute>> & \todo{...} \\
+  <<vi:Thu thập dữ liệu||en:Data collection>> & \todo{...} \\ \hline
+  \textbf{<<vi:Tổng||en:Total>>} & \todo{...} \\ \hline
+\end{tabular}
+\end{center}
+%%ENDIF
+
+% ======================================================
+\section{<<vi:Rủi ro và cách xử lý||en:Risks and mitigation>>}
+\label{sec:risks}
+\begin{itemize}
+  \item <<vi:Thiếu dữ liệu: dùng bộ dữ liệu công khai thay thế.||en:Not enough data: use public datasets instead.>>
+  \item <<vi:Chậm tiến độ: ưu tiên các mục tiêu chính ở \cref{sec:objectives}.||en:Delays: focus on the main objectives in \cref{sec:objectives}.>>
+\end{itemize}
+
+\lkbibliography
+\end{document}

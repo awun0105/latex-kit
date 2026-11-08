@@ -7,6 +7,9 @@
 \author{{{AUTHOR}}}
 \date{{{DATE}}}
 
+% <<vi:Mỗi khi sang phần mới, một slide mục lục hiện phần đang trình bày.||en:Each new section opens with an outline slide that highlights it.>>
+\AtBeginSection[]{\begin{frame}{<<vi:Nội dung||en:Outline>>}\tableofcontents[currentsection]\end{frame}}
+
 \begin{document}
 \begin{frame}
   \titlepage
@@ -21,6 +24,7 @@
   \begin{itemize}
     \item<1-> <<vi:Ý thứ nhất||en:First point>>
     \item<2-> <<vi:Ý thứ hai (hiện sau một lần bấm)||en:Second point (appears on click)>>
+    \item<3-> <<vi:Dẫn nguồn||en:Cite a source>>: \citet{kerbl2023gaussian}
   \end{itemize}
 %%IF box
   \begin{keyidea}
@@ -79,7 +83,18 @@ loss.backward()
 \end{frame}
 %%ENDIF
 
+\begin{frame}[allowframebreaks]{<<vi:Tài liệu tham khảo||en:References>>}
+  \footnotesize
+  \lkbibliography
+\end{frame}
+
 \begin{frame}
   \centering\Huge\sffamily <<vi:Cảm ơn||en:Thank you>>
+\end{frame}
+
+% <<vi:Slide dự phòng: chỉ mở khi có câu hỏi; không tính vào tổng số slide.||en:Backup slides: shown only for questions; not counted in the slide total.>>
+\appendix
+\begin{frame}{<<vi:Dự phòng: chi tiết thêm||en:Backup: more details>>}
+  \todo{<<vi:Bảng số liệu đầy đủ, ablation, chứng minh.||en:Full tables, ablations, proofs.>>}
 \end{frame}
 \end{document}

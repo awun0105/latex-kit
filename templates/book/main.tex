@@ -1,5 +1,7 @@
 % <<vi:Sách / giáo trình — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Book — made with latexkit. Build: latexmk (output in build/main.pdf).>>
 \documentclass[11pt,a4paper,openany]{book}
+\usepackage{imakeidx}   % <<vi:chỉ mục: đánh dấu từ bằng \index{từ}||en:index: mark a term with \index{term}>>
+\makeindex[intoc, title=<<vi:Chỉ mục||en:Index>>]
 \usepackage[{{PKGOPTS}}]{latexkit}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -20,6 +22,8 @@
 \chapter{<<vi:Lời nói đầu||en:Preface>>}
 \todo{<<vi:Sách này dành cho ai và cách đọc.||en:Who this book is for and how to read it.>>}
 \tableofcontents
+\listoffigures
+\listoftables
 
 \mainmatter
 \part{<<vi:Cơ bản||en:Basics>>}
@@ -30,4 +34,5 @@
 
 \backmatter
 \lkbibliography
+\printindex
 \end{document}

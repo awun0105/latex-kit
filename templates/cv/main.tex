@@ -1,0 +1,53 @@
+% <<vi:CV một cột — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:One-column CV — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Bố cục thân thiện với hệ thống lọc hồ sơ (ATS): một cột, chữ thường, không icon. Giữ trong 1 trang.||en:ATS-friendly layout: one column, plain text, no icons. Keep it to 1 page.>>
+\documentclass[a4paper,11pt]{article}
+\usepackage[a4paper, left=1.8cm, right=1.8cm, top=1.6cm, bottom=1.6cm]{geometry}
+\usepackage[{{PKGOPTS}}]{latexkit}
+\usepackage{latexkit-cv}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\raggedright
+
+\begin{document}
+
+\cvheader{{{AUTHOR}}}
+  {<<vi:Vị trí mong muốn \textbar{} Lĩnh vực 1 \textbar{} Lĩnh vực 2||en:Target role \textbar{} Field 1 \textbar{} Field 2>>}
+  {+84 900 000 000, \href{mailto:email@example.com}{email@example.com},
+   \href{https://linkedin.com/in/username}{linkedin.com/in/username},
+   \href{https://github.com/username}{github.com/username}}
+
+\cvsection{<<vi:Tóm tắt||en:Summary>>}
+{\small <<vi:[Hai đến ba câu: chuyên môn chính, số năm kinh nghiệm, thế mạnh nổi bật và loại công việc muốn làm.]||en:[Two or three sentences: main expertise, years of experience, strongest skills and the kind of work wanted.]>>}
+
+\cvsection{<<vi:Học vấn||en:Education>>}
+\cventry{<<vi:Trường Đại học ABC||en:ABC University>>}{<<vi:TP. Hồ Chí Minh||en:City, Country>>}
+        {<<vi:Cử nhân Công nghệ Thông tin, GPA 3.5/4||en:B.Sc. in Computer Science, GPA 3.5/4>>}{2022 -- 2026}
+
+\cvsection{<<vi:Kinh nghiệm||en:Experience>>}
+\cventry{<<vi:Kỹ sư AI||en:AI Engineer>>}{<<vi:Công ty XYZ||en:XYZ Company>>}
+        {<<vi:Thực tập, nhóm Thị giác máy tính||en:Intern, Computer Vision team>>}{<<vi:06/2025 -- nay||en:Jun 2025 -- Present>>}
+\begin{cvitems}
+  \item <<vi:Tối ưu mô hình phát hiện vật thể bằng TensorRT, giảm 30\% thời gian suy luận. (Mỗi dòng: việc đã làm, công cụ, kết quả đo được.)||en:Optimised an object detector with TensorRT, cutting inference time by 30\%. (Each line: what was done, tools, measured result.)>>
+  \item <<vi:Xây dựng pipeline gán nhãn dữ liệu cho 50.000 ảnh. (Bắt đầu bằng động từ: xây dựng, thiết kế, triển khai...)||en:Built a labelling pipeline for 50,000 images. (Start with a verb: built, designed, deployed...)>>
+\end{cvitems}
+
+\cvsection{<<vi:Dự án||en:Projects>>}
+\cvproject{\href{https://github.com/username/project}{<<vi:Tên dự án||en:Project name>>}}{Python, PyTorch, FastAPI}{2025}
+\begin{cvitems}
+  \item <<vi:Hệ thống tìm kiếm ảnh theo mô tả văn bản; trưởng nhóm 4 người; độ chính xác Recall@10 đạt 85\%.||en:Text-to-image search system; led a team of 4; reached 85\% Recall@10.>>
+  \item <<vi:Chỉ mục FAISS cho 1 triệu vector, trả kết quả dưới 50 ms.||en:FAISS index over 1 million vectors, answering in under 50 ms.>>
+\end{cvitems}
+\cvproject{<<vi:Dự án thứ hai||en:Second project>>}{React, PostgreSQL}{2024}
+\begin{cvitems}
+  \item <<vi:Ứng dụng quản lý công việc cho 200 người dùng nội bộ.||en:Task manager used by 200 internal users.>>
+\end{cvitems}
+
+\cvsection{<<vi:Kỹ năng||en:Skills>>}
+\cvskill{<<vi:Ngôn ngữ lập trình||en:Languages>>}{Python, C++, SQL}
+\cvskill{<<vi:Công cụ và framework||en:Tools and frameworks>>}{PyTorch, OpenCV, Docker, Git}
+\cvskill{<<vi:Ngoại ngữ||en:Spoken languages>>}{<<vi:Tiếng Anh (IELTS 6.5)||en:Vietnamese (native), English (IELTS 6.5)>>}
+
+\cvsection{<<vi:Chứng chỉ \& giải thưởng||en:Certifications \& Awards>>}
+\cventry{<<vi:Tên chứng chỉ hoặc giải thưởng||en:Certificate or award name>>}{2025}{<<vi:Đơn vị cấp||en:Issuer>>}{}
+
+\end{document}

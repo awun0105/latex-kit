@@ -11,14 +11,33 @@
 \date{{{DATE}}}
 
 \begin{document}
+\pagenumbering{roman}
 \lktitlepage
-\tableofcontents
 
-\part{<<vi:Nền tảng||en:Foundation>>}
+\chapter*{<<vi:Lời cảm ơn||en:Acknowledgments>>}
+\addcontentsline{toc}{chapter}{<<vi:Lời cảm ơn||en:Acknowledgments>>}
+\todo{<<vi:Cảm ơn người hướng dẫn, đơn vị tài trợ, nhóm.||en:Thank supervisors, funders and the team.>>}
+
+\chapter*{<<vi:Tóm tắt||en:Executive Summary>>}
+\addcontentsline{toc}{chapter}{<<vi:Tóm tắt||en:Executive Summary>>}
+\todo{<<vi:Một trang: vấn đề, cách làm, kết quả chính, khuyến nghị.||en:One page: problem, approach, key results, recommendations.>>}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter*{<<vi:Danh mục từ viết tắt||en:Abbreviations>>}
+\addcontentsline{toc}{chapter}{<<vi:Danh mục từ viết tắt||en:Abbreviations>>}
+\begin{tabular}{@{}ll@{}}
+  \textbf{API}  & Application Programming Interface \\
+  \textbf{NeRF} & Neural Radiance Fields \\
+  \textbf{3DGS} & 3D Gaussian Splatting \\
+\end{tabular}
+
+\cleardoublepage
+\pagenumbering{arabic}
 \input{chapters/01_introduction}
 \input{chapters/02_architecture}
-
-\part{<<vi:Kết quả||en:Results>>}
 \input{chapters/03_results}
 \input{chapters/04_conclusion}
 

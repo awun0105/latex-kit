@@ -1,0 +1,21 @@
+% <<vi:Bìa chính: thay khung logo bằng \includegraphics[height=3cm]{images/logo}.||en:Main cover: replace the logo box with \includegraphics[height=3cm]{images/logo}.>>
+\begin{titlepage}
+  \begin{center}
+    {\large\bfseries \university\par}
+    {\large\bfseries \faculty\par}
+    \vspace{1.5cm}
+    \fbox{\parbox[c][3cm][c]{3cm}{\centering\small LOGO}}\par
+    \vspace{1.5cm}
+    {\Large\bfseries \thesistype\par}
+    \vspace{1cm}
+    {\LARGE\bfseries\color{accent} \MakeUppercase{\csname @title\endcsname}\par}
+    \vfill
+    \begin{tabular}{@{}ll@{}}
+      <<vi:Sinh viên thực hiện||en:Student>>: & \csname @author\endcsname \\
+      & \studentid \\
+      <<vi:Giảng viên hướng dẫn||en:Supervisor>>: & \supervisor \\
+    \end{tabular}\par
+    \vspace{2cm}
+    {\large \placeyear\par}
+  \end{center}
+\end{titlepage}

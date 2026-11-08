@@ -3,12 +3,14 @@
 % <<vi:và thêm margin=none (giữ lề của class) vào tùy chọn của latexkit.||en:and add margin=none (keep the class margins) to the latexkit options.>>
 \documentclass[11pt,a4paper]{article}
 \usepackage[{{PKGOPTS}}]{latexkit}
+\usepackage{authblk}   % <<vi:nhiều tác giả, mỗi người một hoặc nhiều đơn vị||en:several authors, each with one or more affiliations>>
+\renewcommand\Affilfont{\small}
 
 \title{{{TITLE}}}
-\author{
-  {{AUTHOR}}\thanks{<<vi:Tác giả liên hệ||en:Corresponding author>>: \texttt{email@example.com}} \\
-  <<vi:Đơn vị||en:Affiliation>>
-}
+\author[1]{{{AUTHOR}}\thanks{<<vi:Tác giả liên hệ||en:Corresponding author>>: \texttt{email@example.com}}}
+\author[1,2]{<<vi:Tác giả thứ hai||en:Second Author>>}
+\affil[1]{<<vi:Khoa, Trường Đại học, Thành phố, Quốc gia||en:Department, University, City, Country>>}
+\affil[2]{<<vi:Phòng thí nghiệm, Viện, Thành phố, Quốc gia||en:Laboratory, Institute, City, Country>>}
 \date{{{DATE}}}
 
 \begin{document}
@@ -70,7 +72,13 @@
   \label{eq:loss}
 \end{equation}
 %%ENDIF
-\todo{<<vi:Mô tả phương pháp; tham chiếu||en:Describe the method; refer to>> \cref{eq:loss,fig:overview}.}
+\todo{<<vi:Mô tả phương pháp.||en:Describe the method.>>}
+%%IF math
+<<vi:Hàm mất mát ở||en:The loss is in>> \cref{eq:loss}.
+%%ENDIF
+%%IF diagram
+<<vi:Tổng quan ở||en:The overview is in>> \cref{fig:overview}.
+%%ENDIF
 
 % ======================================================
 \section{<<vi:Thí nghiệm||en:Experiments>>}
@@ -112,6 +120,12 @@
 
 \section{<<vi:Kết luận||en:Conclusion>>}
 \todo{<<vi:Tóm tắt đóng góp và hướng tiếp theo.||en:Summary and future work.>>}
+
+\section*{<<vi:Lời cảm ơn||en:Acknowledgments>>}
+\todo{<<vi:Tài trợ, mã số đề tài, người hỗ trợ.||en:Funding, grant numbers, people who helped.>>}
+
+\section*{<<vi:Dữ liệu và mã nguồn||en:Data and Code Availability>>}
+\todo{<<vi:Nơi công bố dữ liệu và mã nguồn, giấy phép.||en:Where the data and code are published, and their license.>>}
 
 \lkbibliography
 

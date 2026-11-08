@@ -1,0 +1,145 @@
+% <<vi:Bài tập / đề thi — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Assignment / exam — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Đáp án: bỏ dấu % trước \printanswers để in kèm lời giải (bản cho người chấm).||en:Answer key: remove the % before \printanswers to print the solutions (grader's copy).>>
+\documentclass[11pt,a4paper,addpoints]{exam}
+\usepackage[{{PKGOPTS}}]{latexkit}
+% \printanswers
+% <<vi:Bản đáp án không in dòng kẻ và ô trống để làm bài.||en:The answer key leaves out the writing lines and empty boxes.>>
+\AtBeginDocument{\ifprintanswers\renewcommand{\fillwithlines}[1]{}\renewcommand{\makeemptybox}[1]{}\fi}
+
+% ---------------------------------------------------------------- exam.cls wording
+\pointpoints{<<vi:điểm||en:point>>}{<<vi:điểm||en:points>>}
+\bonuspointpoints{<<vi:điểm thưởng||en:bonus point>>}{<<vi:điểm thưởng||en:bonus points>>}
+\renewcommand{\questionlabel}{\textbf{<<vi:Câu||en:Question>> \thequestion.}}
+\renewcommand{\partlabel}{\thepartno)}
+\renewcommand{\solutiontitle}{\noindent\textbf{<<vi:Lời giải||en:Solution>>:}\par\noindent}
+\hqword{<<vi:Câu||en:Question>>}
+\hpword{<<vi:Điểm tối đa||en:Points>>}
+\hsword{<<vi:Điểm đạt||en:Score>>}
+\htword{<<vi:Tổng||en:Total>>}
+\vqword{<<vi:Câu||en:Question>>}
+\vpword{<<vi:Điểm tối đa||en:Points>>}
+\vsword{<<vi:Điểm đạt||en:Score>>}
+\vtword{<<vi:Tổng||en:Total>>}
+\qformat{\textbf{<<vi:Câu||en:Question>> \thequestion} \quad (\totalpoints~\points)\hfill}
+\shadedsolutions
+\colorlet{SolutionColor}{accent!6}
+
+% ---------------------------------------------------------------- header and footer
+\pagestyle{headandfoot}
+\firstpageheader{<<vi:Tên môn học||en:Course name>>}{}{<<vi:Học kỳ||en:Term>> {{YEAR}}}
+\runningheader{<<vi:Tên môn học||en:Course name>>}{{{TITLE}}}{<<vi:Học kỳ||en:Term>> {{YEAR}}}
+\runningheadrule
+\firstpagefooter{}{<<vi:Trang||en:Page>> \thepage\ / \numpages}{}
+\runningfooter{}{<<vi:Trang||en:Page>> \thepage\ / \numpages}{}
+
+\begin{document}
+
+\begin{center}
+  {\sffamily\bfseries\LARGE {{TITLE}}\par}
+  \vspace{0.4em}
+  {\sffamily <<vi:Thời gian làm bài: 90 phút — Tổng điểm||en:Time: 90 minutes — Total>>: \numpoints~\points}\par
+  \vspace{0.2em}
+  {\small <<vi:Giảng viên||en:Instructor>>: {{AUTHOR}} \quad·\quad {{DATE}}}
+\end{center}
+
+\vspace{0.6em}
+\makebox[0.62\textwidth]{<<vi:Họ và tên||en:Name>>:\enspace\hrulefill}
+\hfill
+\makebox[0.33\textwidth]{<<vi:MSSV||en:Student ID>>:\enspace\hrulefill}
+
+\vspace{1em}
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\small
+  \textbf{<<vi:Hướng dẫn||en:Instructions>>.}
+  <<vi:Được dùng một trang ghi chú khổ A4. Không dùng thiết bị có kết nối mạng. Trình bày lời giải rõ ràng; câu trả lời không có lập luận không được tính điểm.||en:One A4 page of notes is allowed. No networked devices. Show your reasoning; answers without reasoning receive no credit.>>}}
+
+\vspace{1em}
+\begin{center}
+  \gradetable[h][questions]
+\end{center}
+
+% ================================================================ questions
+\begin{questions}
+
+% ---------------------------------------------------------------- multiple choice
+\question[2]
+<<vi:Chọn đáp án đúng. Độ phức tạp thời gian của tìm kiếm nhị phân trên mảng đã sắp xếp có $n$ phần tử là||en:Choose the correct answer. The time complexity of binary search on a sorted array of $n$ elements is>>
+\begin{choices}
+  \choice $O(1)$
+  \CorrectChoice $O(\log n)$
+  \choice $O(n)$
+  \choice $O(n \log n)$
+\end{choices}
+\begin{solution}
+<<vi:Mỗi bước loại bỏ một nửa số phần tử còn lại, nên cần khoảng $\log_2 n$ bước.||en:Each step discards half of the remaining elements, so about $\log_2 n$ steps are needed.>>
+\end{solution}
+
+% ---------------------------------------------------------------- short answer with parts
+\question <<vi:Trả lời ngắn gọn các ý sau.||en:Answer briefly.>>
+\begin{parts}
+  \part[2] <<vi:Nêu sự khác nhau giữa overfitting và underfitting.||en:Explain the difference between overfitting and underfitting.>>
+  \begin{solution}
+  <<vi:Overfitting: lỗi huấn luyện thấp nhưng lỗi kiểm tra cao. Underfitting: cả hai lỗi đều cao.||en:Overfitting: low training error but high test error. Underfitting: both errors are high.>>
+  \end{solution}
+  \fillwithlines{3cm}
+
+  \part[2] <<vi:Kể tên hai cách giảm overfitting.||en:Name two ways to reduce overfitting.>>
+  \begin{solution}
+  <<vi:Regularization (ví dụ $L_2$, dropout) và tăng dữ liệu (data augmentation).||en:Regularization (e.g. $L_2$, dropout) and data augmentation.>>
+  \end{solution}
+  \fillwithlines{2cm}
+\end{parts}
+
+%%IF math
+% ---------------------------------------------------------------- math
+\question[3]
+<<vi:Cho hàm mất mát||en:Given the loss>> $\mathcal{L}(w) = \frac{1}{2}\norm{Xw - y}^2$. <<vi:Tính gradient||en:Compute the gradient>> $\nabla_w \mathcal{L}$ <<vi:và nghiệm đóng khi||en:and the closed-form solution when>> $X\T X$ <<vi:khả nghịch.||en:is invertible.>>
+\begin{solution}
+\[
+  \nabla_w \mathcal{L} = X\T (Xw - y) = 0 \quad\Longrightarrow\quad w^\ast = (X\T X)^{-1} X\T y.
+\]
+\end{solution}
+\makeemptybox{4cm}
+%%ENDIF
+
+%%IF code
+% ---------------------------------------------------------------- code
+\question[3]
+<<vi:Đoạn code sau in ra gì? Giải thích.||en:What does this code print? Explain.>>
+\begin{lkcode}[Python]{}
+xs = [3, 1, 2]
+ys = sorted(xs)
+xs.append(0)
+print(len(xs), ys)
+\end{lkcode}
+\begin{solution}
+<<vi:In ra||en:Prints>> \texttt{4 [1, 2, 3]}: \texttt{sorted} <<vi:tạo danh sách mới, nên việc thêm phần tử vào||en:returns a new list, so appending to>> \texttt{xs} <<vi:không ảnh hưởng tới||en:does not change>> \texttt{ys}.
+\end{solution}
+\fillwithlines{2cm}
+%%ENDIF
+
+%%IF table
+% ---------------------------------------------------------------- table
+\question[2]
+<<vi:Dựa vào bảng dưới, phương pháp nào cân bằng tốt nhất giữa chất lượng và tốc độ? Giải thích.||en:Based on the table below, which method balances quality and speed best? Explain.>>
+\begin{center}
+  \begin{tabular}{l cc}\toprule
+    <<vi:Phương pháp||en:Method>> & PSNR\up & FPS\up \\ \midrule
+    NeRF & 26.1 & 0.1 \\
+    3DGS & 27.4 & 120 \\
+    <<vi:Mới||en:New>> & 28.8 & 95 \\ \bottomrule
+  \end{tabular}
+\end{center}
+\begin{solution}
+<<vi:Phương pháp mới: PSNR cao nhất và vẫn chạy thời gian thực (95 FPS).||en:The new method: highest PSNR while still real time (95 FPS).>>
+\end{solution}
+\fillwithlines{2cm}
+%%ENDIF
+
+% ---------------------------------------------------------------- bonus
+\bonusquestion[1]
+<<vi:Đề xuất một cải tiến cho phương pháp ở câu trên.||en:Propose one improvement to the method above.>>
+\fillwithlines{2cm}
+
+\end{questions}
+
+\end{document}
