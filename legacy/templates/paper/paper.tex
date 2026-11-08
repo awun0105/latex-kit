@@ -1,0 +1,147 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------- Packages ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage[capitalise]{cleveref}
+
+% ---------- Theorem environments ----------
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+% ---------- Handy macros ----------
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+% ---------- Title ----------
+\title{Paper Title Goes Here}
+\author{
+  First Author\thanks{Corresponding author: \texttt{email@example.com}} \\
+  Affiliation \\
+  \and
+  Second Author \\
+  Affiliation
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\todo{One paragraph (150--250 words): context, problem, method, key results, implications.}
+\end{abstract}
+
+\noindent\textbf{Keywords:} keyword one, keyword two, keyword three
+
+% ======================================================
+\section{Introduction}
+\label{sec:intro}
+\todo{Motivation and background.}
+
+\todo{Problem statement and research gap.}
+
+\todo{Contributions of this paper:}
+\begin{itemize}
+  \item Contribution 1.
+  \item Contribution 2.
+  \item Contribution 3.
+\end{itemize}
+
+The rest of the paper is organised as follows: \cref{sec:related} reviews related work,
+\cref{sec:method} describes the method, \cref{sec:experiments} reports experiments,
+\cref{sec:discussion} discusses the findings, and \cref{sec:conclusion} concludes.
+
+% ======================================================
+\section{Related Work}
+\label{sec:related}
+\todo{Group prior work by theme and contrast it with this paper, e.g.\ \citet{example2024}.}
+
+% ======================================================
+\section{Method}
+\label{sec:method}
+
+\subsection{Problem Formulation}
+\begin{definition}
+\todo{Formal definition of the problem.}
+\end{definition}
+
+An example equation:
+\begin{equation}
+  \mathcal{L}(\theta) = \frac{1}{N}\sum_{i=1}^{N} \ell\big(f_\theta(x_i), y_i\big).
+  \label{eq:loss}
+\end{equation}
+
+\subsection{Proposed Approach}
+\todo{Describe the approach; refer to \cref{eq:loss} and \cref{fig:overview}.}
+
+\begin{figure}[t]
+  \centering
+  \fbox{\parbox[c][4cm][c]{0.8\linewidth}{\centering Placeholder figure}}
+  % \includegraphics[width=0.8\linewidth]{figures/overview.pdf}
+  \caption{Overview of the proposed approach.}
+  \label{fig:overview}
+\end{figure}
+
+% ======================================================
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Setup}
+\todo{Datasets, baselines, metrics, implementation details.}
+
+\subsection{Results}
+\todo{Main results; see \cref{tab:results}.}
+
+\begin{table}[t]
+  \centering
+  \caption{Main results. Best values in bold.}
+  \label{tab:results}
+  \begin{tabular}{lccc}
+    \toprule
+    Method        & Metric A       & Metric B       & Metric C \\
+    \midrule
+    Baseline 1    & 0.00           & 0.00           & 0.00 \\
+    Baseline 2    & 0.00           & 0.00           & 0.00 \\
+    Ours          & \textbf{0.00}  & \textbf{0.00}  & \textbf{0.00} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Ablation Study}
+\todo{Effect of each component.}
+
+% ======================================================
+\section{Discussion}
+\label{sec:discussion}
+\todo{Interpretation of results, limitations, threats to validity.}
+
+% ======================================================
+\section{Conclusion}
+\label{sec:conclusion}
+\todo{Summary of contributions and future work.}
+
+% ======================================================
+\section*{Acknowledgements}
+\todo{Funding and acknowledgements.}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\section{Additional Results}
+\label{app:extra}
+\todo{Supplementary material.}
+
+\end{document}

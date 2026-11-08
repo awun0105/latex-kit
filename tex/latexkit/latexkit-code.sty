@@ -1,0 +1,94 @@
+% latexkit-code.sty — code blocks, code from files, terminal sessions.
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-code}[2026/11/08 v0.1 latexkit code]
+
+\RequirePackage[most]{tcolorbox}
+\iflk@minted
+  \tcbuselibrary{minted}
+  \setminted{fontsize=\small, breaklines, autogobble, tabsize=4}
+  \def\lk@codeengine{minted}
+\else
+  \tcbuselibrary{listings}
+  \def\lk@codeengine{listings}
+\fi
+\RequirePackage{listings}
+% lk@lang=<language> picks the language for whichever engine is active
+\iflk@minted
+  \tcbset{lk@lang/.style={minted language=#1, minted options={linenos, numbersep=6pt}}}
+\else
+  \tcbset{lk@lang/.style={listing options={language=#1, numbers=left, numbersep=8pt}}}
+\fi
+\tcbset{
+  lk@titlestyle/.style={coltitle=black!80, colbacktitle=black!6, titlerule=0.4pt,
+    toptitle=1pt, bottomtitle=1pt},
+  lk@title/.code={\ifstrempty{#1}{}{\pgfkeysalso{lk@titlestyle,
+    title={\sffamily\small\bfseries\lkstr{Đoạn code}{Listing}~\thetcbcounter: #1}}}},
+}
+
+\lstdefinelanguage{yaml}{keywords={true,false,null,yes,no}, sensitive=false,
+  comment=[l]{\#}, morestring=[b]', morestring=[b]"}
+\lstdefinelanguage{json}{morestring=[b]", literate={:}{{\textcolor{accent}{:}}}1,
+  keywords={true,false,null}}
+\lstdefinelanguage{dockerfile}{keywords={FROM,RUN,CMD,COPY,ADD,ENV,WORKDIR,EXPOSE,ENTRYPOINT,ARG},
+  sensitive=false, comment=[l]{\#}, morestring=[b]"}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{accent}\bfseries,
+  commentstyle=\color{black!55}\itshape,
+  stringstyle=\color{lkred!80!black},
+  numberstyle=\tiny\color{black!40},
+  breaklines=true, showstringspaces=false, tabsize=4,
+  columns=fullflexible, keepspaces=true, upquote=true, extendedchars=true,
+}
+
+% LuaLaTeX/XeLaTeX: listings 1.9 prints letters above U+00FF before the rest of
+% the word ("Cố" comes out as "ốC"). Registering Latin-1 and Vietnamese letters
+% as listings letters keeps every word in order.
+\ifPDFTeX\else
+\lst@InputCatcodes
+\def\lst@DefEC{\lst@CCECUse\lst@ProcessLetter
+ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçè%
+éêëìíîïðñòóôõöøùúûüýþÿĂăĐđĔĕĨĩĬĭŎŏŨũŬŭŶŷ%
+ƠơƯưṌṍṸṹẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾế%
+ỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủ%
+ỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ%
+  ^^00}
+\lst@RestoreCatcodes
+\fi
+
+% \begin{lkcode}[Python]{Training loop}  ...  \end{lkcode}
+%   1st (optional) argument: language; 2nd: title (may be empty).
+%   Extra tcolorbox keys: \begin{lkcode}[Python][label=lst:train]{Title}
+\NewTCBListing[auto counter]{lkcode}{O{Python} O{} m}{%
+  enhanced, breakable, colback=lkcodebg, colframe=black!15, boxrule=0.5pt, arc=2pt,
+  left=18pt, right=4pt, top=2pt, bottom=2pt,
+  listing only, listing engine=\lk@codeengine,
+  lk@lang=#1,
+  lk@title={#3},
+  #2}
+
+% \lkcodefile[Python][tcolorbox keys]{code/train.py}{optional title}
+\NewDocumentCommand{\lkcodefile}{O{Python} O{} m G{}}{%
+  \tcbinputlisting{enhanced, breakable, colback=lkcodebg, colframe=black!15, boxrule=0.5pt,
+    arc=2pt, left=18pt, right=4pt, top=2pt, bottom=2pt, listing only,
+    listing engine=\lk@codeengine, listing file={#3},
+    lk@lang=#1,
+    lk@titlestyle,
+    title={\small\ttfamily\detokenize{#3}\ifstrempty{#4}{}{\ \textsf{\bfseries--\ #4}}},
+    #2}}
+
+% \begin{lkterminal} $ pip install torch \end{lkterminal}  — dark terminal box
+\NewTCBListing{lkterminal}{!O{}}{%
+  enhanced, breakable, colback=black!85, colframe=black!85, arc=2pt, boxrule=0pt,
+  left=6pt, top=3pt, bottom=3pt, listing only, listing engine=listings,
+  listing options={language=bash, basicstyle=\ttfamily\small\color{white},
+    keywordstyle=\color{white}, commentstyle=\color{black!35}\itshape,
+    stringstyle=\color{otyellow!80}, numbers=none},
+  #1}
+\ifcsname ver@latexkit-diagram.sty\endcsname\else\input{latexkit-opentikz-colors.tex}\fi
+
+% \lkfile{path/to/file.py}: a file name in running text
+\newcommand{\lkfile}[1]{\texttt{\detokenize{#1}}}
+
+\endinput

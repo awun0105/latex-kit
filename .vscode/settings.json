@@ -1,0 +1,17 @@
+{
+  // Each LaTeX project keeps its build output in its own build/ folder
+  "latex-workshop.latex.outDir": "%DIR%/build",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+
+  // Let each project's latexmkrc pick the engine (pdflatex for paper, lualatex for notes)
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk-rc",
+      "command": "latexmk",
+      "args": ["-synctex=1", "-interaction=nonstopmode", "-file-line-error", "-outdir=%OUTDIR%", "%DOC%"]
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    { "name": "latexmk (latexmkrc)", "tools": ["latexmk-rc"] }
+  ]
+}

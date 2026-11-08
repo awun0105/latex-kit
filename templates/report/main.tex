@@ -1,0 +1,29 @@
+% <<vi:Báo cáo nhiều chương — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Multi-chapter report — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Mỗi chương là một file trong chapters/. Thêm chương: tạo file mới rồi thêm \input bên dưới.||en:Each chapter is a file in chapters/. Add one: create the file, then add an \input line below.>>
+\documentclass[11pt,a4paper]{report}
+\usepackage[{{PKGOPTS}}, parskip]{latexkit}
+\setcounter{tocdepth}{1}
+
+\title{{{TITLE}}}
+\subtitle{<<vi:Phụ đề báo cáo||en:Report subtitle>>}
+\institution{<<vi:Đơn vị / nhóm||en:Organisation / team>>}
+\author{{{AUTHOR}}}
+\date{{{DATE}}}
+
+\begin{document}
+\lktitlepage
+\tableofcontents
+
+\part{<<vi:Nền tảng||en:Foundation>>}
+\input{chapters/01_introduction}
+\input{chapters/02_architecture}
+
+\part{<<vi:Kết quả||en:Results>>}
+\input{chapters/03_results}
+\input{chapters/04_conclusion}
+
+\appendix
+\input{chapters/A_appendix}
+
+\lkbibliography
+\end{document}

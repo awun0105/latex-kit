@@ -1,0 +1,27 @@
+% Compile with XeLaTeX from the repository root.
+\documentclass{article}
+\usepackage[a5paper,margin=16mm]{geometry}
+\usepackage{gradbars,booktabs}
+\begin{document}
+\section*{Readable in grayscale}
+Names and numbers retain the category meanings without relying on hue.
+\gradbarsstyle{print}{print,width=60mm,height=15pt,rounded=2pt,
+  stack patterns={diagonal,dots,crosshatch},
+  stack names={Train,Validation,Test},
+  segment labels=value,precision=0,legend=true}
+\begin{center}
+\gradstack[style=print]{60,25,15}
+\end{center}
+\bigskip
+\gradbarssetup{print,precision=0}
+\begin{center}
+\begin{tabular}{@{}cc@{}}
+\toprule
+\multicolumn{1}{c}{Plan} & \multicolumn{1}{c}{Completion / 100}\\
+\midrule
+A & \gradbar[target=80]{72}\\
+B & \gradbar[target=80]{91}\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{document}

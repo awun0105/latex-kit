@@ -1,0 +1,27 @@
+% latexkit-algo.sty — pseudocode with algorithm + algpseudocode.
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-algo}[2026/11/08 v0.1 latexkit algorithms]
+
+\IfFileExists{algpseudocode.sty}{%
+  \RequirePackage{algorithm}
+  \RequirePackage{algpseudocode}
+  \iflk@vi
+    \floatname{algorithm}{Thuật toán}
+    \renewcommand{\listalgorithmname}{Danh sách thuật toán}
+    \algrenewcommand\algorithmicrequire{\textbf{Đầu vào:}}
+    \algrenewcommand\algorithmicensure{\textbf{Đầu ra:}}
+  \else
+    \algrenewcommand\algorithmicrequire{\textbf{Input:}}
+    \algrenewcommand\algorithmicensure{\textbf{Output:}}
+  \fi
+  \algrenewcommand\algorithmiccomment[1]{\hfill{\color{black!55}\(\triangleright\) ##1}}
+}{%
+  \PackageWarning{latexkit}{algpseudocode.sty not found, algorithms show a notice.
+    Install it with: sudo apt install texlive-science (or tlmgr install algorithmicx)}
+  % Keep the document compiling: swallow the pseudocode and show a notice instead.
+  \NewDocumentEnvironment{algorithm}{o +b}{%
+    \begin{center}\fcolorbox{lkred}{lkred!4}{\sffamily\small\color{lkred}%
+      algpseudocode.sty \lkstr{chưa được cài (texlive-science)}{is not installed (texlive-science)}}%
+    \end{center}}{}}
+
+\endinput

@@ -1,0 +1,122 @@
+% <<vi:Bài báo — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Paper — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Khi nộp cho hội nghị, đổi \documentclass sang class của hội nghị (IEEEtran, cvpr, neurips ...)||en:For a venue, swap \documentclass for its class (IEEEtran, cvpr, neurips ...)>>
+% <<vi:và thêm margin=none (giữ lề của class) vào tùy chọn của latexkit.||en:and add margin=none (keep the class margins) to the latexkit options.>>
+\documentclass[11pt,a4paper]{article}
+\usepackage[{{PKGOPTS}}]{latexkit}
+
+\title{{{TITLE}}}
+\author{
+  {{AUTHOR}}\thanks{<<vi:Tác giả liên hệ||en:Corresponding author>>: \texttt{email@example.com}} \\
+  <<vi:Đơn vị||en:Affiliation>>
+}
+\date{{{DATE}}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\todo{<<vi:Một đoạn 150--250 từ: bối cảnh, vấn đề, phương pháp, kết quả chính, ý nghĩa.||en:One paragraph (150--250 words): context, problem, method, key results, implications.>>}
+\end{abstract}
+
+\noindent\textbf{<<vi:Từ khóa||en:Keywords>>:} keyword one, keyword two, keyword three
+
+% ======================================================
+\section{<<vi:Giới thiệu||en:Introduction>>}
+\label{sec:intro}
+\todo{<<vi:Động lực và bối cảnh.||en:Motivation and background.>>}
+
+<<vi:Đóng góp chính||en:Contributions>>:
+\begin{itemize}
+  \item <<vi:Đóng góp 1.||en:Contribution 1.>>
+  \item <<vi:Đóng góp 2.||en:Contribution 2.>>
+\end{itemize}
+
+% ======================================================
+\section{<<vi:Các nghiên cứu liên quan||en:Related Work>>}
+\label{sec:related}
+\todo{<<vi:Nhóm các công trình theo chủ đề và so sánh, ví dụ||en:Group prior work by theme and contrast it, e.g.>> \citet{kerbl2023gaussian}.}
+
+% ======================================================
+\section{<<vi:Phương pháp||en:Method>>}
+\label{sec:method}
+
+%%IF diagram
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[lk]
+    \node[io]                     (in)  {<<vi:Ảnh đầu vào||en:Input images>>};
+    \node[process, right=of in]   (enc) {Encoder};
+    \node[process, right=of enc]  (lat) {$\mathbf{z}$};
+    \node[process, right=of lat]  (dec) {Decoder};
+    \node[io,      right=of dec]  (out) {<<vi:Kết quả||en:Output>>};
+    \draw[flow] (in) -- (enc);
+    \draw[flow] (enc) -- (lat);
+    \draw[flow] (lat) -- (dec);
+    \draw[flow] (dec) -- (out);
+    \draw[dashflow] (enc.north) to[bend left=25] node[elabel, above] {skip} (dec.north);
+    \lkgroup{(enc)(lat)(dec)}{<<vi:Mô hình||en:Model>>}
+  \end{tikzpicture}
+  \caption{<<vi:Tổng quan phương pháp.||en:Overview of the proposed approach.>>}
+  \label{fig:overview}
+\end{figure}
+%%ENDIF
+
+%%IF math
+\begin{definition}
+\todo{<<vi:Định nghĩa bài toán.||en:Formal problem definition.>>}
+\end{definition}
+\begin{equation}
+  \mathcal{L}(\theta) = \frac{1}{N}\sum_{i=1}^{N} \ell\big(f_\theta(x_i), y_i\big).
+  \label{eq:loss}
+\end{equation}
+%%ENDIF
+\todo{<<vi:Mô tả phương pháp; tham chiếu||en:Describe the method; refer to>> \cref{eq:loss,fig:overview}.}
+
+% ======================================================
+\section{<<vi:Thí nghiệm||en:Experiments>>}
+\label{sec:experiments}
+\subsection{<<vi:Thiết lập||en:Setup>>}
+\todo{<<vi:Dataset, baseline, metric, chi tiết cài đặt.||en:Datasets, baselines, metrics, implementation details.>>}
+
+\subsection{<<vi:Kết quả||en:Results>>}
+%%IF table
+\begin{lktable}[t]{<<vi:Kết quả chính. Tốt nhất in đậm, thứ hai gạch chân.||en:Main results. Best in bold, second underlined.>>}{tab:results}{l ccc}
+  <<vi:Phương pháp||en:Method>> & PSNR\up & SSIM\up & LPIPS\down \\ \midrule
+  Baseline 1 & 25.10 & 0.810 & 0.240 \\
+  Baseline 2 & \second{27.40} & \second{0.860} & \second{0.190} \\
+  \lkhl Ours & \best{29.20} & \best{0.890} & \best{0.150} \\
+\end{lktable}
+%%ENDIF
+%%IF plot
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[lkplot, width=0.7\linewidth, height=4.6cm, xlabel={<<vi:Bước||en:Step>>},
+                 ylabel={PSNR (dB)}, legend pos=south east]
+      \addplot table[x=step, y=baseline, col sep=comma] {plots/results.csv};
+      \addplot table[x=step, y=ours, col sep=comma] {plots/results.csv};
+      \legend{Baseline, Ours}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{<<vi:Quá trình huấn luyện.||en:Training curves.>>}
+  \label{fig:curve}
+\end{figure}
+%%ENDIF
+
+\subsection{<<vi:Ablation||en:Ablation Study>>}
+\todo{<<vi:Ảnh hưởng của từng thành phần.||en:Effect of each component.>>}
+
+% ======================================================
+\section{<<vi:Thảo luận||en:Discussion>>}
+\todo{<<vi:Diễn giải kết quả, hạn chế.||en:Interpretation, limitations.>>}
+
+\section{<<vi:Kết luận||en:Conclusion>>}
+\todo{<<vi:Tóm tắt đóng góp và hướng tiếp theo.||en:Summary and future work.>>}
+
+\lkbibliography
+
+\appendix
+\section{<<vi:Kết quả bổ sung||en:Additional Results>>}
+\todo{<<vi:Tài liệu bổ sung.||en:Supplementary material.>>}
+
+\end{document}

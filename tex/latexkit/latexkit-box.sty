@@ -1,0 +1,29 @@
+% latexkit-box.sty — colored boxes for key ideas, notes, tips, warnings ...
+% Every box takes an optional title: \begin{warning}[Cẩn thận] ... \end{warning}
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-box}[2026/11/08 v0.1 latexkit boxes]
+
+\RequirePackage[most]{tcolorbox}
+\tcbset{lkbox/.style={enhanced, breakable, arc=2pt, boxrule=0pt, leftrule=3pt,
+  left=8pt, right=8pt, top=2pt, bottom=5pt, toptitle=5pt, bottomtitle=0pt,
+  fonttitle=\sffamily\bfseries\small, coltitle=#1!75!black, colbacktitle=#1!5,
+  titlerule=0pt, colback=#1!5, colframe=#1!75!black,
+  before upper={\setlength{\parskip}{0.4em}}}}
+
+% \lknewbox{name}{color}{default title vi}{default title en}
+\NewDocumentCommand{\lknewbox}{m m m m}{%
+  \NewTColorBox{#1}{O{\lkstr{#3}{#4}}}{lkbox=#2, title={##1}}}
+
+\lknewbox{keyidea}{accent}{Ý chính}{Key idea}
+\lknewbox{info}{lkblue}{Ghi chú}{Note}
+\lknewbox{tip}{lkgreen}{Mẹo}{Tip}
+\lknewbox{warning}{lkred}{Lưu ý}{Warning}
+\lknewbox{question}{lkorange}{Câu hỏi}{Question}
+\lknewbox{examplebox}{lkteal}{Ví dụ}{Example}
+\lknewbox{summary}{lkpurple}{Tóm tắt}{Summary}
+
+% Plain framed box without title: \begin{lkframe} ... \end{lkframe}
+\NewTColorBox{lkframe}{O{}}{enhanced, breakable, arc=2pt, boxrule=0.5pt,
+  colback=white, colframe=black!20, #1}
+
+\endinput

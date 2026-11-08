@@ -1,0 +1,48 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "fontFamily": "Noto Sans, Arial, sans-serif",
+    "fontSize": "15px",
+    "primaryColor": "#E9EEF5",
+    "primaryBorderColor": "#1F4E79",
+    "primaryTextColor": "#1B1B1B",
+    "lineColor": "#555555",
+    "secondaryColor": "#FFF3E0",
+    "tertiaryColor": "#F2F5F9"
+  },
+  "flowchart": {
+    "curve": "basis",
+    "useMaxWidth": false,
+    "padding": 8,
+    "nodeSpacing": 28,
+    "rankSpacing": 32,
+    "diagramPadding": 6
+  },
+  "sequence": {
+    "useMaxWidth": false
+  },
+  "gantt": {
+    "useMaxWidth": false
+  },
+  "class": {
+    "useMaxWidth": false
+  },
+  "state": {
+    "useMaxWidth": false
+  },
+  "er": {
+    "useMaxWidth": false
+  },
+  "journey": {
+    "useMaxWidth": false
+  },
+  "pie": {
+    "useMaxWidth": false
+  },
+  "mindmap": {
+    "useMaxWidth": false
+  },
+  "timeline": {
+    "useMaxWidth": false
+  }
+}

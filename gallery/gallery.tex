@@ -1,0 +1,254 @@
+% latexkit gallery — every component with the code that makes it.
+% Build: latexkit gallery   (or: latexmk gallery.tex, after `latexkit gallery` wrote catalog.tex)
+\documentclass[10pt,a4paper]{article}
+\usepackage[lang=vi, all, parskip, margin=1.8cm]{latexkit}
+\graphicspath{{../templates/_common/plots/}}
+
+% Code on the left/top, result below
+\NewTCBListing{demo}{!O{}}{enhanced, breakable, colback=white, colframe=black!15, boxrule=0.5pt,
+  arc=2pt, listing above text, listing engine=listings,
+  listing options={language={[LaTeX]TeX}, basicstyle=\ttfamily\footnotesize, numbers=none,
+    keywordstyle=\color{accent}, moretexcs={gradbar,gradrow,gradcolumn,gradspark,gradheat,gradstack,midarrow,lkpipeline,lktimeline,lkdiagram,lktikzfig,
+    lkfig,best,second,cmark,xmark,pmark,lkhl,lkheat,lkbar,lkcodefile,lkgroup,lkbibliography}},
+  colupper=black, segmentation style={black!15}, #1}
+
+% One OpenTikZ asset in the catalog: {type}{id}{name}
+\NewTColorBox{lkasset}{m m m}{enhanced, colback=white, colframe=black!12, boxrule=0.4pt,
+  arc=2pt, halign=center, valign=center, left=3pt, right=3pt,
+  title={\scriptsize\sffamily\bfseries #2 \hfill\mdseries #1},
+  coltitle=black!75, colbacktitle=black!4, toptitle=0.5pt, bottomtitle=0.5pt,
+  after upper={\par\vspace{2pt}{\scriptsize\sffamily\color{black!60} #3}}}
+
+\title{\sffamily\bfseries latexkit — Gallery}
+\author{\sffamily Thành phần dùng chung cho ghi chú, paper, báo cáo, sách và slide}
+\date{\sffamily\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Cài đặt trong tài liệu}
+\begin{lkterminal}
+\usepackage[lang=vi, table, diagram, plot, code, box, math, algo, science]{latexkit}
+\usepackage[lang=en, all]{latexkit}          % every module, English labels
+\usepackage[style=plain, accent=8B0000]{latexkit}  % classic headings, red accent
+\end{lkterminal}
+
+% ===================================================================
+\section{Bảng (\texttt{table})}
+
+\begin{demo}
+\begin{lktable}[H]{Kết quả chính}{tab:demo}{l ccc}
+  Phương pháp & PSNR\up & LPIPS\down & Real time \\ \midrule
+  NeRF        & 26.1          & 0.31          & \xmark \\
+  3DGS        & \second{27.4} & \second{0.22} & \cmark \\
+  \lkhl Ours  & \best{28.8}   & \best{0.18}   & \cmark \\
+\end{lktable}
+\end{demo}
+
+\begin{demo}
+\begin{lktablex}[H]{Bảng giãn hết chiều ngang, ô màu theo giá trị}{tab:heat}{l C C C}
+  Tiêu chí & A & B & C \\ \midrule
+  Chất lượng & \lkheat{0.6} & \lkheat{0.9} & \lkheat{0.4} \\
+  Tốc độ     & \lkbar{0.8}  & \lkbar{0.5}  & \lkbar{0.9} \\
+  LiDAR      & \cmark & \pmark & \xmark \\
+\end{lktablex}
+\end{demo}
+
+\IfFileExists{siunitx.sty}{\input{parts/tblr-siunitx}}{\textit{(Cần siunitx: texlive-science.)}}
+
+\subsection{Đồ họa dữ liệu trong bảng (gradbars)}
+\begin{demo}
+\begin{gradtable}[width=\linewidth, header align=c]
+  \gradcolumn{method}{Phương pháp}
+  \gradcolumn[type=bar, mark=both, options={max=100, precision=1}]{score}{Điểm}
+  \gradcolumn[type=number, mark=best, options={better=lower, precision=1}]{time}{Thời gian / ms}
+  \gradrow{NeRF, 72.4, 18.2}
+  \gradrow{3DGS, 92.7, 11.5}
+  \gradrow{Ours, 88.1, 9.6}
+\end{gradtable}
+
+Trong câu: \gradbar[max=100, width=25mm]{72.4} \quad \gradspark{3,5,2,8,6}
+\quad \gradheat[min=0, max=1]{0.7} \quad \gradstack{30,50,20}
+\end{demo}
+
+% ===================================================================
+\section{Sơ đồ (\texttt{diagram})}
+
+\subsection{Pipeline và timeline nhanh}
+\begin{demo}
+\lkpipeline{Dữ liệu thật, Tái dựng, Mô phỏng, Đánh giá}
+
+\lkpipeline*[node distance=5mm]{Bước 1, Bước 2}
+\end{demo}
+
+\begin{demo}
+\lktimeline{2020/NeRF, 2022/Instant-NGP, 2023/3DGS, 2024/{Street Gaussians}}
+\end{demo}
+
+\subsection{Các style node và cạnh}
+\begin{demo}
+\begin{tikzpicture}[lk]
+  \node[terminal]                 (s) {Bắt đầu};
+  \node[io,        right=of s]    (i) {Đọc ảnh};
+  \node[decision,  right=of i]    (d) {Hợp lệ?};
+  \node[process,   right=of d]    (p) {Xử lý};
+  \node[datastore, below=of p]    (db) {Lưu};
+  \node[note,      below=of i]    (n) {ghi chú};
+  \draw[flow] (s) -- (i);  \draw[flow] (i) -- (d);
+  \draw[flow] (d) -- node[elabel, above] {Có} (p);
+  \draw[flow] (p) -- (db);
+  \draw[loop] (d.south) |- ++(0,-0.9) -| node[elabel, pos=0.25] {Không} (i.south);
+  \lkgroup{(d)(p)}{Lõi}
+\end{tikzpicture}
+\end{demo}
+
+\begin{demo}
+\begin{tikzpicture}[lk]
+  \node[layer=9cm]                                 (a) {Ứng dụng};
+  \node[layer=9cm, below=3mm of a]                 (b) {Mô hình};
+  \node[layer=9cm, below=3mm of b, lkcolor=lkteal] (c) {Dữ liệu};
+  \node[tag, anchor=east] at (a.east) {API};
+\end{tikzpicture}
+\end{demo}
+
+\subsection{Cây phân loại (forest)}
+\begin{demo}
+\begin{forest}
+  for tree={draw=accent, fill=accent!8, rounded corners=2pt, font=\sffamily\small,
+            edge={draw=black!55}, l sep=6mm, s sep=3mm}
+  [Biểu diễn 3D [Tường minh [Mesh] [Gaussians]] [Ẩn [NeRF] [SDF]]]
+\end{forest}
+\end{demo}
+
+\subsection{Sơ đồ tuần tự (pgf-umlsd)}
+\begin{demo}
+\begin{sequencediagram}
+  \newthread{c}{Client}
+  \newinst[2]{s}{Server}
+  \begin{call}{c}{request()}{s}{response}\end{call}
+\end{sequencediagram}
+\end{demo}
+
+\subsection{Sơ đồ từ file: Mermaid, D2, Graphviz, draw.io}
+File nằm trong \lkfile{diagrams/}; latexmk tự chuyển sang PDF.
+\begin{demo}
+\lkdiagram[max height=7cm]{diagrams/pipeline}   % pipeline.mmd
+
+\lkdiagram{diagrams/architecture}                % architecture.d2
+
+\lkdiagram[max width=0.7\linewidth]{diagrams/graph}  % graph.dot
+
+\lkdiagram[max width=0.6\linewidth]{diagrams/sketch} % sketch.drawio
+\end{demo}
+
+\subsection{Hình OpenTikZ}
+\begin{demo}
+\lktikzfig[max height=6cm]{../assets/vendor/opentikz/templates/encoder-decoder/template}
+\end{demo}
+Thêm vào project: \texttt{latexkit asset add encoder-decoder} rồi \verb|\lktikzfig{figures/encoder-decoder}|.
+Toàn bộ thư viện ở \cref{sec:catalog}.
+
+\subsection{Kiến trúc mạng nơ-ron (PlotNeuralNet)}
+\begin{demo}
+\begin{tikzpicture}
+  \pic[shift={(0,0,0)}] at (0,0,0) {RightBandedBox={name=c1, caption=conv1,
+       xlabel={{"64","64"}}, zlabel=224, fill=\ConvColor, bandfill=\ConvReluColor,
+       height=36, width={2,2}, depth=36}};
+  \pic[shift={(0,0,0)}] at (c1-east) {Box={name=p1, fill=\PoolColor, opacity=0.5,
+       height=28, width=1, depth=28}};
+  \pic[shift={(2,0,0)}] at (p1-east) {RightBandedBox={name=c2, caption=conv2,
+       xlabel={{"128","128"}}, zlabel=112, fill=\ConvColor, bandfill=\ConvReluColor,
+       height=28, width={3,3}, depth=28}};
+  \pic[shift={(2,0,0)}] at (c2-east) {Box={name=fc, caption=fc, xlabel={{"10",}},
+       fill=\SoftmaxColor, height=3, width=1.5, depth=20}};
+  \draw[connection] (p1-east) -- node{\midarrow} (c2-west);
+  \draw[connection] (c2-east) -- node{\midarrow} (fc-west);
+\end{tikzpicture}
+\end{demo}
+Hình có sẵn: \texttt{latexkit asset list nn} (AlexNet, VGG16, U-Net, FCN, HED...).
+
+% ===================================================================
+\section{Đồ thị (\texttt{plot})}
+\begin{demo}
+\begin{tikzpicture}
+  \begin{axis}[lkplot, width=0.75\linewidth, height=5cm, xlabel={Bước}, ylabel={PSNR (dB)},
+               legend pos=south east]
+    \addplot table[x=step, y=baseline, col sep=comma] {../templates/_common/plots/results.csv};
+    \addplot table[x=step, y=ours, col sep=comma]     {../templates/_common/plots/results.csv};
+    \legend{Baseline, Ours}
+  \end{axis}
+\end{tikzpicture}
+\end{demo}
+
+\begin{demo}
+\begin{tikzpicture}
+  \begin{axis}[lkbar, symbolic x coords={NeRF, 3DGS, Ours}, ylabel={FPS}, ymin=0,
+               width=0.6\linewidth, height=4.5cm]
+    \addplot coordinates {(NeRF, 0.1) (3DGS, 120) (Ours, 95)};
+  \end{axis}
+\end{tikzpicture}
+\end{demo}
+
+Đồ thị bằng Python dùng style SciencePlots có sẵn trong \lkfile{plots/styles}:
+\begin{lkcode}[Python]{plots/make\_plots.py}
+from latexkit_plot import use_style, save
+use_style("science", "ieee")      # hoặc "nature", "grid", "no-latex", ...
+fig, ax = plt.subplots()
+ax.plot(step, psnr)
+save(fig, "psnr")                 # -> figures/psnr.pdf, chèn bằng \lkfig{psnr}{...}{...}
+\end{lkcode}
+
+% ===================================================================
+\section{Code (\texttt{code})}
+\begin{lkcode}[Python][label=lst:train]{Vòng lặp huấn luyện}
+for epoch in range(num_epochs):     # chú thích tiếng Việt vẫn hiển thị đúng
+    loss = criterion(model(x), y)
+    loss.backward()
+\end{lkcode}
+Viết là \verb|\begin{lkcode}[Python][label=lst:train]{Tiêu đề}|; tham chiếu bằng \cref{lst:train}.
+Lấy code từ file: \verb|\lkcodefile[Python]{code/train.py}|. Lệnh terminal:
+\begin{lkterminal}
+$ latexkit new report bao-cao -t "Báo cáo" -m all
+\end{lkterminal}
+
+% ===================================================================
+\section{Hộp ghi chú (\texttt{box})}
+\begin{demo}
+\begin{keyidea} Ý chính của phần. \end{keyidea}
+\begin{info} Thông tin thêm. \end{info}
+\begin{tip} Mẹo. \end{tip}
+\begin{warning} Lưu ý. \end{warning}
+\begin{question}[Câu hỏi khi đọc] Paper giải quyết vấn đề gì? \end{question}
+\begin{examplebox} Ví dụ. \end{examplebox}
+\begin{summary} Tóm tắt. \end{summary}
+\end{demo}
+
+% ===================================================================
+\section{Toán và thuật toán (\texttt{math}, \texttt{algo}, \texttt{science})}
+\IfFileExists{siunitx.sty}{\input{parts/math-units}}{\textit{(Cần siunitx: texlive-science.)}}
+
+\begin{demo}
+\begin{algorithm}[H]
+  \caption{Gradient descent}
+  \begin{algorithmic}[1]
+    \Require $\theta_0, \eta$
+    \While{chưa hội tụ}
+      \State $\theta \gets \theta - \eta\nabla\mathcal{L}(\theta)$ \Comment{cập nhật}
+    \EndWhile
+  \end{algorithmic}
+\end{algorithm}
+\end{demo}
+
+% ===================================================================
+\clearpage
+\section{Thư viện hình: OpenTikZ và PlotNeuralNet}\label{sec:catalog}
+Mỗi ô là một file \texttt{standalone} trong \lkfile{assets/vendor/opentikz} (hình theo CC0 1.0,
+code theo MIT) hoặc \lkfile{assets/vendor/plotneuralnet} (MIT, loại \texttt{nn}), biên dịch cùng latexkit.
+Thêm vào project bằng \texttt{latexkit asset add <id>}.
+
+\begin{tcbraster}[raster columns=3, raster equal height=rows, raster column skip=6pt, raster row skip=6pt]
+\InputIfFileExists{catalog.tex}{}{\textit{Chạy \texttt{latexkit gallery} để tạo danh mục.}}
+\end{tcbraster}
+
+\end{document}

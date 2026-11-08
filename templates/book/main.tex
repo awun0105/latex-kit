@@ -1,0 +1,33 @@
+% <<vi:Sách / giáo trình — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Book — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+\documentclass[11pt,a4paper,openany]{book}
+\usepackage[{{PKGOPTS}}]{latexkit}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\sffamily\small\leftmark}
+\fancyhead[RO]{\sffamily\small\rightmark}
+\fancyfoot[C]{\sffamily\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\title{{{TITLE}}}
+\subtitle{<<vi:Phụ đề||en:Subtitle>>}
+\author{{{AUTHOR}}}
+\date{{{YEAR}}}
+
+\begin{document}
+\frontmatter
+\lktitlepage
+\chapter{<<vi:Lời nói đầu||en:Preface>>}
+\todo{<<vi:Sách này dành cho ai và cách đọc.||en:Who this book is for and how to read it.>>}
+\tableofcontents
+
+\mainmatter
+\part{<<vi:Cơ bản||en:Basics>>}
+\input{chapters/01_basics}
+
+\part{<<vi:Nâng cao||en:Advanced>>}
+\input{chapters/02_advanced}
+
+\backmatter
+\lkbibliography
+\end{document}

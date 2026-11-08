@@ -1,0 +1,11 @@
+// Graphviz graph. Docs: https://graphviz.org/doc/info/lang.html
+// Used in the document with \lkdiagram{diagrams/graph}
+digraph G {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fillcolor="#E9EEF5", color="#1F4E79",
+        fontname="Helvetica", fontsize=11];
+  edge [color="#555555", fontname="Helvetica", fontsize=10];
+  input -> encoder -> latent -> decoder -> output;
+  latent [shape=ellipse, fillcolor="#FFF3E0", color="#C2410C"];
+  encoder -> decoder [style=dashed, label="skip"];
+}

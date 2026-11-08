@@ -1,0 +1,25 @@
+\chapter{<<vi:Kết quả||en:Results>>}
+\label{ch:results}
+
+%%IF table
+\begin{lktablex}{<<vi:So sánh các phương án||en:Comparison of options>>}{tab:options}{l C C C}
+  <<vi:Tiêu chí||en:Criterion>> & <<vi:Phương án||en:Option>> A & <<vi:Phương án||en:Option>> B & <<vi:Phương án||en:Option>> C \\ \midrule
+  <<vi:Chất lượng||en:Quality>> & \lkheat{0.6} & \lkheat{0.9} & \lkheat{0.4} \\
+  <<vi:Tốc độ||en:Speed>>       & \lkheat{0.8} & \lkheat{0.5} & \lkheat{0.9} \\
+  <<vi:Hỗ trợ LiDAR||en:LiDAR support>> & \cmark & \pmark & \xmark \\
+\end{lktablex}
+%%ENDIF
+
+%%IF plot
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[lkbar, symbolic x coords={A, B, C}, ylabel={FPS}, ymin=0, width=0.6\linewidth, height=5cm]
+      \addplot coordinates {(A, 30) (B, 120) (C, 85)};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{<<vi:Tốc độ render||en:Rendering speed>>}
+\end{figure}
+%%ENDIF
+
+\todo{<<vi:Phân tích kết quả.||en:Discuss the results.>>}

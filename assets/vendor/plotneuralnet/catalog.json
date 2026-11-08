@@ -1,0 +1,133 @@
+[
+ {
+  "id": "nn-alexnet",
+  "name": "AlexNet",
+  "type": "nn",
+  "description": "CNN image classifier, 5 conv + 3 FC layers",
+  "tags": [
+   "cnn",
+   "classification",
+   "alexnet"
+  ],
+  "path": "figures/alexnet",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-lenet",
+  "name": "LeNet",
+  "type": "nn",
+  "description": "Small CNN, 2 conv + 3 FC layers",
+  "tags": [
+   "cnn",
+   "classification",
+   "lenet"
+  ],
+  "path": "figures/lenet",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-vgg16",
+  "name": "VGG16",
+  "type": "nn",
+  "description": "VGG16 with conv blocks, pooling and FC layers",
+  "tags": [
+   "cnn",
+   "classification",
+   "vgg"
+  ],
+  "path": "figures/vgg16",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-fcn8",
+  "name": "FCN-8s",
+  "type": "nn",
+  "description": "Fully convolutional segmentation net with skip connections and an input image",
+  "tags": [
+   "cnn",
+   "segmentation",
+   "fcn",
+   "skip"
+  ],
+  "path": "figures/fcn8",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-fcn32",
+  "name": "FCN-32s",
+  "type": "nn",
+  "description": "Fully convolutional segmentation net, single upsampling",
+  "tags": [
+   "cnn",
+   "segmentation",
+   "fcn"
+  ],
+  "path": "figures/fcn32",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-hed",
+  "name": "HED",
+  "type": "nn",
+  "description": "Holistically-nested edge detection with side outputs",
+  "tags": [
+   "cnn",
+   "edge detection",
+   "side output"
+  ],
+  "path": "figures/hed",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-unet",
+  "name": "U-Net",
+  "type": "nn",
+  "description": "U-Net encoder-decoder drawn in a line, with copy connections",
+  "tags": [
+   "cnn",
+   "segmentation",
+   "unet",
+   "encoder-decoder",
+   "skip"
+  ],
+  "path": "figures/unet",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-unet-ushape",
+  "name": "U-Net (U shape)",
+  "type": "nn",
+  "description": "U-Net drawn as a U, with copy connections",
+  "tags": [
+   "cnn",
+   "segmentation",
+   "unet",
+   "encoder-decoder",
+   "skip"
+  ],
+  "path": "figures/unet-ushape",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ },
+ {
+  "id": "nn-softmax-loss",
+  "name": "Softmax loss",
+  "type": "nn",
+  "description": "Score vector, softmax and loss blocks",
+  "tags": [
+   "loss",
+   "softmax",
+   "classification"
+  ],
+  "path": "figures/softmax-loss",
+  "license": "MIT",
+  "author": "PlotNeuralNet contributors (HarisIqbal88)"
+ }
+]

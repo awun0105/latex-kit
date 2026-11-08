@@ -1,0 +1,181 @@
+% <<vi:Ghi chú — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Notes — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+\documentclass[11pt,a4paper]{article}
+\usepackage[{{PKGOPTS}}]{latexkit}
+
+\title{\sffamily\bfseries {{TITLE}}}
+\author{{{AUTHOR}}}
+\date{{{DATE}}}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+% =====================================================================
+\section{<<vi:Viết nội dung||en:Writing>>}
+
+<<vi:Để sang đoạn mới, để \textbf{một dòng trống}. Chữ có thể \textbf{in đậm}, \emph{in nghiêng} hoặc \texttt{chữ code}. Thuật ngữ cần nhấn mạnh: \lkkey{Gaussian Splatting}. Trích dẫn: \citep{keshav2007read}. Chú thích cuối trang\footnote{Ví dụ chú thích.}.||en:Leave \textbf{one blank line} to start a new paragraph. Text can be \textbf{bold}, \emph{italic} or \texttt{code}. Highlight a term: \lkkey{Gaussian Splatting}. Cite: \citep{keshav2007read}. Footnote\footnote{An example footnote.}.>>
+
+\begin{itemize}
+  \item <<vi:Gạch đầu dòng||en:A bullet>>
+  \begin{itemize}
+    \item <<vi:Cấp 2||en:Level 2>>
+  \end{itemize}
+\end{itemize}
+
+\begin{checklist}
+  \done <<vi:Việc đã xong||en:Finished task>>
+  \item <<vi:Việc còn lại||en:Open task>>
+\end{checklist}
+
+%%IF box
+\begin{keyidea}
+<<vi:Ý quan trọng nhất của phần này, tóm trong một hai câu.||en:The most important idea of this section, in one or two sentences.>>
+\end{keyidea}
+
+\begin{question}[<<vi:Câu hỏi khi đọc||en:Reading question>>]
+<<vi:Paper giải quyết vấn đề gì? Baseline là gì?||en:Which problem does the paper solve? What is the baseline?>>
+\end{question}
+
+\begin{warning}
+<<vi:Kết quả lệch so với paper là bình thường; ghi lại mức lệch.||en:Results that differ from the paper are normal; record the gap.>>
+\end{warning}
+<<vi:Các hộp khác: \texttt{info}, \texttt{tip}, \texttt{examplebox}, \texttt{summary}.||en:Other boxes: \texttt{info}, \texttt{tip}, \texttt{examplebox}, \texttt{summary}.>>
+
+%%ENDIF
+%%IF math
+% =====================================================================
+\section{<<vi:Công thức||en:Math>>}
+
+<<vi:Trong dòng||en:Inline>>: $\mathcal{L} = -\sum_i y_i \log \hat{y}_i$. <<vi:Riêng dòng||en:Display>>:
+\begin{equation}
+  \theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L}(\theta_t)
+  \label{eq:sgd}
+\end{equation}
+<<vi:Tham chiếu||en:Reference>>: \cref{eq:sgd}.
+
+\begin{definition}
+<<vi:Hàm mất mát là||en:The loss is>> $\mathcal{L}(\theta) = \E_{(x,y)}\big[\ell(f_\theta(x), y)\big]$.
+\end{definition}
+
+%%ENDIF
+%%IF table
+% =====================================================================
+\section{<<vi:Bảng||en:Tables>>}
+
+\begin{lktable}{<<vi:So sánh phương pháp||en:Method comparison>>}{tab:compare}{l c c c}
+  <<vi:Phương pháp||en:Method>> & PSNR\up & LPIPS\down & <<vi:Thời gian thực||en:Real time>> \\ \midrule
+  NeRF         & 26.1          & 0.31          & \xmark \\
+  3DGS         & \second{27.4} & \second{0.22} & \cmark \\
+  \lkhl Ours   & \best{28.8}   & \best{0.18}   & \cmark \\
+\end{lktable}
+
+<<vi:Xem \cref{tab:compare}. Bảng giãn hết chiều ngang dùng \texttt{lktablex} với cột \texttt{L}, \texttt{C}, \texttt{R}.||en:See \cref{tab:compare}. A full-width table uses \texttt{lktablex} with \texttt{L}, \texttt{C}, \texttt{R} columns.>>
+
+%%ENDIF
+%%IF diagram
+% =====================================================================
+\section{<<vi:Sơ đồ||en:Diagrams>>}
+
+\subsection{<<vi:Pipeline nhanh||en:Quick pipeline>>}
+\begin{figure}
+  \centering
+  \lkpipeline{<<vi:Dữ liệu thật||en:Real data>>, <<vi:Tái dựng||en:Reconstruction>>, <<vi:Mô phỏng||en:Simulation>>, <<vi:Đánh giá||en:Evaluation>>}
+  \caption{<<vi:Tạo bằng||en:Made with>> \texttt{\textbackslash lkpipeline}}
+\end{figure}
+
+\subsection{Flowchart TikZ}
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[lk]
+    \node[terminal]                 (start) {<<vi:Bắt đầu||en:Start>>};
+    \node[io,       right=of start] (read)  {<<vi:Đọc dữ liệu||en:Read data>>};
+    \node[decision, right=of read]  (ok)    {<<vi:Hợp lệ?||en:Valid?>>};
+    \node[process,  right=of ok]    (run)   {<<vi:Xử lý||en:Process>>};
+    \node[datastore, below=of run]  (db)    {<<vi:Lưu||en:Store>>};
+    \draw[flow] (start) -- (read);
+    \draw[flow] (read) -- (ok);
+    \draw[flow] (ok) -- node[elabel, above] {<<vi:Có||en:Yes>>} (run);
+    \draw[flow] (run) -- (db);
+    \draw[loop] (ok.south) |- ++(0,-1.2) -| node[elabel, pos=0.25] {<<vi:Không||en:No>>} (read.south);
+  \end{tikzpicture}
+  \caption{<<vi:Các style có sẵn||en:Built-in styles>>: terminal, io, decision, process, datastore, flow, loop}
+\end{figure}
+
+\subsection{<<vi:Sơ đồ từ văn bản (Mermaid, D2, Graphviz)||en:Diagrams from text (Mermaid, D2, Graphviz)>>}
+<<vi:Viết sơ đồ trong \lkfile{diagrams/}, latexmk tự chuyển sang PDF.||en:Write the diagram in \lkfile{diagrams/}; latexmk turns it into PDF.>>
+\begin{figure}
+  \centering
+  \lkdiagram[max width=0.9\linewidth]{diagrams/pipeline}
+  \caption{Mermaid: \lkfile{diagrams/pipeline.mmd}}
+\end{figure}
+\begin{figure}
+  \centering
+  \lkdiagram[max width=0.8\linewidth]{diagrams/architecture}
+  \caption{D2: \lkfile{diagrams/architecture.d2}}
+\end{figure}
+
+\subsection{<<vi:Hình từ thư viện OpenTikZ||en:Figures from the OpenTikZ library>>}
+<<vi:Thêm hình mẫu bằng||en:Add a figure with>> \texttt{latexkit asset add flowchart}, <<vi:rồi||en:then>> \verb|\lktikzfig{figures/flowchart}|.
+
+%%ENDIF
+%%IF plot
+% =====================================================================
+\section{<<vi:Đồ thị||en:Plots>>}
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[lkplot, width=0.7\linewidth, height=5cm,
+                 xlabel={<<vi:Bước||en:Step>>}, ylabel={PSNR (dB)}, legend pos=south east]
+      \addplot table[x=step, y=baseline, col sep=comma] {plots/results.csv};
+      \addplot table[x=step, y=ours,     col sep=comma] {plots/results.csv};
+      \legend{Baseline, Ours}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{pgfplots <<vi:đọc thẳng||en:reads>> \lkfile{plots/results.csv}}
+\end{figure}
+
+<<vi:Đồ thị bằng Python (SciencePlots): sửa \lkfile{plots/make_plots.py}, chạy \texttt{latexkit plot}, rồi chèn \lkfile{figures/psnr.pdf} bằng \verb|\lkfig{psnr}{...}{fig:psnr}|.||en:Python plots (SciencePlots): edit \lkfile{plots/make_plots.py}, run \texttt{latexkit plot}, then include \lkfile{figures/psnr.pdf} with \verb|\lkfig{psnr}{...}{fig:psnr}|.>>
+
+%%ENDIF
+%%IF code
+% =====================================================================
+\section{Code}
+
+\begin{lkcode}[Python]{<<vi:Vòng lặp huấn luyện||en:Training loop>>}
+for epoch in range(num_epochs):
+    for x, y in loader:
+        loss = criterion(model(x), y)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+\end{lkcode}
+
+\lkcodefile[Python]{code/example.py}
+
+\begin{lkterminal}
+$ git clone https://github.com/user/repo.git
+$ pip install -r requirements.txt
+\end{lkterminal}
+
+%%ENDIF
+%%IF algo
+% =====================================================================
+\section{<<vi:Thuật toán||en:Algorithms>>}
+
+\begin{algorithm}
+  \caption{<<vi:Gradient descent||en:Gradient descent>>}
+  \begin{algorithmic}[1]
+    \Require $\theta_0$, $\eta$, $T$
+    \For{$t = 0$ \textbf{to} $T-1$}
+      \State $\theta_{t+1} \gets \theta_t - \eta \nabla \mathcal{L}(\theta_t)$ \Comment{<<vi:cập nhật||en:update>>}
+    \EndFor
+    \State \Return $\theta_T$
+  \end{algorithmic}
+\end{algorithm}
+
+%%ENDIF
+\todo{<<vi:viết tiếp||en:keep writing>>}
+
+\lkbibliography
+\end{document}

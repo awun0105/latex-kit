@@ -1,0 +1,40 @@
+\chapter{<<vi:Chủ đề nâng cao||en:Advanced topics>>}
+\label{ch:advanced}
+
+%%IF diagram
+\section{<<vi:Lịch sử phát triển||en:Timeline>>}
+\begin{figure}[htbp]
+  \centering
+  \lktimeline{2020/NeRF, 2021/Mip-NeRF, 2022/Instant-NGP, 2023/3DGS, 2024/{Street Gaussians}}
+  \caption{\texttt{\textbackslash lktimeline}}
+\end{figure}
+
+\section{<<vi:Phân loại||en:Taxonomy>>}
+\begin{figure}[htbp]
+  \centering
+  \begin{forest}
+    for tree={draw=accent, fill=accent!8, rounded corners=2pt, font=\sffamily\small,
+              edge={draw=black!55}, l sep=6mm, s sep=3mm, align=center}
+    [<<vi:Biểu diễn 3D||en:3D representations>>
+      [<<vi:Tường minh||en:Explicit>> [Mesh] [<<vi:Điểm||en:Points>>] [Gaussians]]
+      [<<vi:Ẩn||en:Implicit>> [NeRF] [SDF]]
+    ]
+  \end{forest}
+  \caption{<<vi:Cây phân loại (forest)||en:Taxonomy tree (forest)>>}
+\end{figure}
+%%ENDIF
+
+%%IF algo
+\section{<<vi:Thuật toán||en:Algorithm>>}
+\begin{algorithm}[htbp]
+  \caption{<<vi:Tối ưu Gaussian||en:Gaussian optimisation>>}
+  \begin{algorithmic}[1]
+    \Require <<vi:Ảnh||en:Images>> $\{I_k\}$, <<vi:camera||en:cameras>> $\{P_k\}$
+    \State <<vi:Khởi tạo Gaussian từ SfM||en:Initialise Gaussians from SfM>>
+    \While{<<vi:chưa hội tụ||en:not converged>>}
+      \State $\hat{I} \gets \textsc{Render}(G, P_k)$
+      \State $G \gets G - \eta \nabla \mathcal{L}(\hat{I}, I_k)$
+    \EndWhile
+  \end{algorithmic}
+\end{algorithm}
+%%ENDIF

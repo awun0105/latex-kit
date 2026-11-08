@@ -1,0 +1,85 @@
+% <<vi:Slide thuyết trình — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Slides — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage[{{PKGOPTS}}]{latexkit}
+
+\title{{{TITLE}}}
+\subtitle{<<vi:Phụ đề||en:Subtitle>>}
+\author{{{AUTHOR}}}
+\date{{{DATE}}}
+
+\begin{document}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{<<vi:Nội dung||en:Outline>>}
+  \tableofcontents
+\end{frame}
+
+\section{<<vi:Vấn đề||en:Problem>>}
+\begin{frame}{<<vi:Vấn đề||en:Problem>>}
+  \begin{itemize}
+    \item<1-> <<vi:Ý thứ nhất||en:First point>>
+    \item<2-> <<vi:Ý thứ hai (hiện sau một lần bấm)||en:Second point (appears on click)>>
+  \end{itemize}
+%%IF box
+  \begin{keyidea}
+    <<vi:Một câu tóm tắt cho slide này.||en:One sentence that sums up this slide.>>
+  \end{keyidea}
+%%ENDIF
+\end{frame}
+
+%%IF diagram
+\section{<<vi:Phương pháp||en:Method>>}
+\begin{frame}{Pipeline}
+  \centering
+  \lkpipeline{<<vi:Dữ liệu||en:Data>>, <<vi:Tái dựng||en:Reconstruct>>, Render, <<vi:Đánh giá||en:Evaluate>>}
+  \vspace{1em}
+
+  \lkdiagram[max height=0.55\textheight]{diagrams/architecture}
+\end{frame}
+%%ENDIF
+
+%%IF table|plot
+\section{<<vi:Kết quả||en:Results>>}
+\begin{frame}{<<vi:Kết quả||en:Results>>}
+  \begin{columns}[T]
+%%IF table
+    \begin{column}{0.48\textwidth}
+      \centering\small
+      \begin{tabular}{lcc}\toprule
+        <<vi:Phương pháp||en:Method>> & PSNR\up & FPS\up \\ \midrule
+        NeRF & 26.1 & 0.1 \\
+        3DGS & \second{27.4} & \best{120} \\
+        \lkhl Ours & \best{28.8} & \second{95} \\ \bottomrule
+      \end{tabular}
+    \end{column}
+%%ENDIF
+%%IF plot
+    \begin{column}{0.48\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[lkplot, width=\linewidth, height=4.5cm, legend pos=south east]
+          \addplot table[x=step, y=baseline, col sep=comma] {plots/results.csv};
+          \addplot table[x=step, y=ours, col sep=comma] {plots/results.csv};
+          \legend{Baseline, Ours}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+%%ENDIF
+  \end{columns}
+\end{frame}
+%%ENDIF
+
+%%IF code
+\begin{frame}[fragile]{Code}
+  \begin{lkcode}[Python]{}
+loss = criterion(model(x), y)
+loss.backward()
+  \end{lkcode}
+\end{frame}
+%%ENDIF
+
+\begin{frame}
+  \centering\Huge\sffamily <<vi:Cảm ơn||en:Thank you>>
+\end{frame}
+\end{document}

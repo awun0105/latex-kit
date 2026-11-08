@@ -1,0 +1,46 @@
+% latexkit-plot.sty — pgfplots with one shared look (colors match the diagrams).
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-plot}[2026/11/08 v0.1 latexkit plots]
+
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots, fillbetween, colorbrewer, statistics, dateplot}
+\RequirePackage{pgfplotstable}
+
+% Okabe-Ito colors: readable for color-blind readers and in grayscale print
+\pgfplotscreateplotcyclelist{lkcycle}{
+  {otblue, mark=*, mark size=1.6pt, line width=1pt},
+  {otorange, mark=square*, mark size=1.5pt, line width=1pt},
+  {otteal, mark=triangle*, mark size=1.9pt, line width=1pt},
+  {otvermillion, mark=diamond*, mark size=1.9pt, line width=1pt},
+  {otpurple, mark=pentagon*, mark size=1.7pt, line width=1pt},
+  {otgray, mark=o, mark size=1.6pt, line width=1pt},
+}
+\pgfplotsset{
+  lkplot/.style={
+    width=0.85\linewidth, height=0.5\linewidth,
+    cycle list name=lkcycle,
+    grid=major, grid style={draw=black!10},
+    axis line style={draw=black!50}, tick style={draw=black!50},
+    tick label style={font=\sffamily\footnotesize},
+    label style={font=\sffamily\small},
+    title style={font=\sffamily\small\bfseries},
+    legend style={font=\sffamily\footnotesize, draw=none, fill=white, fill opacity=0.85,
+                  text opacity=1},
+    legend cell align=left,
+    scaled ticks=false,
+  },
+  lkbar/.style={lkplot, ybar, bar width=9pt, enlarge x limits=0.15,
+    cycle list={{fill=otblue!75, draw=otblue!90!black}, {fill=otorange!75, draw=otorange!90!black},
+                {fill=otteal!75, draw=otteal!90!black}, {fill=otpurple!75, draw=otpurple!90!black}},
+    nodes near coords, nodes near coords style={font=\sffamily\scriptsize},
+    xtick=data, ymin=0},
+  lkhbar/.style={lkplot, xbar, bar width=8pt, enlarge y limits=0.3, ytick=data, xmin=0,
+    height=4cm,
+    cycle list={{fill=otblue!75, draw=otblue!90!black}, {fill=otorange!75, draw=otorange!90!black}},
+    nodes near coords, nodes near coords style={font=\sffamily\scriptsize}},
+}
+% The otblue ... colors come from the diagram module; define them when it is off.
+\ifcsname ver@latexkit-diagram.sty\endcsname\else\input{latexkit-opentikz-colors.tex}\fi
+
+\endinput

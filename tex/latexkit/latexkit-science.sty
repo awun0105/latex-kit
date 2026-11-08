@@ -1,0 +1,24 @@
+% latexkit-science.sty — units and numbers (siunitx), chemistry (mhchem).
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-science}[2026/11/08 v0.1 latexkit science]
+
+\newcommand{\lk@missing}[1]{\textcolor{lkred}{\sffamily\footnotesize[#1?]}}
+\IfFileExists{siunitx.sty}{%
+  \RequirePackage{siunitx}
+  \sisetup{group-separator={\,}, detect-weight=true, detect-family=true,
+           uncertainty-mode=separate}
+  \iflk@vi\sisetup{output-decimal-marker={,}}\fi
+}{%
+  \PackageWarning{latexkit}{siunitx.sty not found: sudo apt install texlive-science}
+  % Keep compiling: print the number, flag the unit.
+  \NewDocumentCommand{\SI}{o m o m}{##2\,\lk@missing{siunitx}}
+  \NewDocumentCommand{\qty}{o m m}{##2\,\lk@missing{siunitx}}
+  \NewDocumentCommand{\si}{o m}{\lk@missing{siunitx}}
+  \NewDocumentCommand{\unit}{o m}{\lk@missing{siunitx}}
+  \NewDocumentCommand{\num}{o m}{##2}
+  \NewDocumentCommand{\ang}{o m}{##2\textdegree}
+}
+\IfFileExists{mhchem.sty}{\RequirePackage[version=4]{mhchem}}{%
+  \NewDocumentCommand{\ce}{m}{\lk@missing{mhchem}}}
+
+\endinput

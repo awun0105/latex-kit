@@ -1,0 +1,253 @@
+% latexkit.sty — shared components for notes, papers, reports, books and slides.
+%
+%   \usepackage[lang=vi, table, diagram, code, box, math]{latexkit}
+%
+% Modules (each one is its own file, latexkit-<name>.sty):
+%   table    booktabs, tabularx, multirow, lktable/lktablex, \best, \cmark ...
+%   diagram  TikZ styles (step, decision, arrow ...), \lkpipeline, forest trees,
+%            sequence diagrams, \lkmermaid and \lkgraphviz
+%   plot     pgfplots with a shared look
+%   code     listings with lkcode, lkterminal, \lkcodefile
+%   box      keyidea, info, tip, warning, question, examplebox, summary
+%   math     amsmath, mathtools, theorems, \R, \argmin ...
+%   algo     algorithm + algpseudocode
+%   science  siunitx, mhchem
+%   all      every module above
+%
+% Other options:
+%   lang=vi|en        document language (default vi)
+%   accent=1F4E79     main color, HTML hex
+%   style=modern|plain  modern = colored sans-serif headings
+%   float=here|auto   here = figures and tables stay where they are written
+%   margin=2.5cm      page margins; margin=none keeps the class layout (venue classes)
+%   parskip           blank line between paragraphs, no indent
+%   bib=natbib|biblatex|none,  bibfile=references
+%   minted            use minted instead of listings (needs -shell-escape)
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit}[2026/11/08 v0.1 Shared LaTeX components]
+
+\RequirePackage{iftex}
+\RequirePackage{etoolbox}
+
+% ---------------------------------------------------------------- options
+\newif\iflk@table   \lk@tabletrue
+\newif\iflk@diagram \lk@diagramtrue
+\newif\iflk@plot
+\newif\iflk@code    \lk@codetrue
+\newif\iflk@box     \lk@boxtrue
+\newif\iflk@math    \lk@mathtrue
+\newif\iflk@algo
+\newif\iflk@science
+\newif\iflk@parskip
+\newif\iflk@minted
+\newif\iflk@vi      \lk@vitrue
+
+\def\lk@accent{1F4E79}
+\def\lk@style{modern}
+\def\lk@float{auto}
+\def\lk@bib{natbib}
+\def\lk@bibfile{references}
+\def\lk@margin{2.5cm}
+
+\DeclareKeys[latexkit]{
+  lang.code     = {\ifstrequal{#1}{en}{\lk@vifalse}{\lk@vitrue}},
+  accent.store  = \lk@accent,
+  style.store   = \lk@style,
+  float.store   = \lk@float,
+  bib.store     = \lk@bib,
+  bibfile.store = \lk@bibfile,
+  margin.store  = \lk@margin,
+  parskip.if    = lk@parskip,
+  minted.if     = lk@minted,
+  table.if      = lk@table,
+  diagram.if    = lk@diagram,
+  plot.if       = lk@plot,
+  code.if       = lk@code,
+  box.if        = lk@box,
+  math.if       = lk@math,
+  algo.if       = lk@algo,
+  science.if    = lk@science,
+  all.code      = {\lk@tabletrue\lk@diagramtrue\lk@plottrue\lk@codetrue
+                   \lk@boxtrue\lk@mathtrue\lk@algotrue\lk@sciencetrue},
+  none.code     = {\lk@tablefalse\lk@diagramfalse\lk@plotfalse\lk@codefalse
+                   \lk@boxfalse\lk@mathfalse\lk@algofalse\lk@sciencefalse},
+}
+\ProcessKeyOptions[latexkit]
+
+% \lkstr{tiếng Việt}{English}: picks the text for the current language
+\newcommand{\lkstr}[2]{\iflk@vi#1\else#2\fi}
+
+\newif\iflk@beamer
+\@ifclassloaded{beamer}{\lk@beamertrue}{}
+\newif\iflk@chapters
+\ifdefined\chapter\lk@chapterstrue\fi
+
+% ---------------------------------------------------------------- language and fonts
+\ifPDFTeX
+  \iflk@vi
+    \IfFileExists{t5enc.def}{}{%
+      \PackageError{latexkit}{Vietnamese with pdfLaTeX needs the vntex package}%
+        {Compile with LuaLaTeX instead (latexmkrc from latexkit already does this).}}
+    \RequirePackage[T5]{fontenc}
+    \RequirePackage[vietnamese]{babel}
+  \else
+    \RequirePackage[T1]{fontenc}
+    \RequirePackage[english]{babel}
+  \fi
+  \RequirePackage{lmodern}
+\else
+  \RequirePackage{fontspec}
+  \iflk@vi
+    \RequirePackage[vietnamese,provide=*]{babel}
+  \else
+    \RequirePackage[english]{babel}
+  \fi
+  % Noto first, then TeX Gyre (ships with every TeX distribution, covers Vietnamese)
+  \IfFontExistsTF{Noto Serif}{\setmainfont{Noto Serif}}{%
+    \IfFontExistsTF{TeX Gyre Termes}{\setmainfont{TeX Gyre Termes}}{}}
+  \IfFontExistsTF{Noto Sans}{\setsansfont{Noto Sans}}{%
+    \IfFontExistsTF{TeX Gyre Heros}{\setsansfont{TeX Gyre Heros}}{}}
+  \IfFontExistsTF{Noto Sans Mono}{\setmonofont{Noto Sans Mono}[Scale=0.88, AutoFakeSlant=0.15]}{%
+    \IfFontExistsTF{DejaVu Sans Mono}{\setmonofont{DejaVu Sans Mono}[Scale=0.85, AutoFakeSlant=0.15]}{}}
+\fi
+
+% ---------------------------------------------------------------- colors
+\RequirePackage[table]{xcolor}
+\definecolor{accent}{HTML}{\lk@accent}
+\definecolor{lkblue}{HTML}{2563EB}
+\definecolor{lkteal}{HTML}{0F766E}
+\definecolor{lkgreen}{HTML}{15803D}
+\definecolor{lkorange}{HTML}{C2410C}
+\definecolor{lkred}{HTML}{B91C1C}
+\definecolor{lkpurple}{HTML}{7E22CE}
+\definecolor{lkgray}{HTML}{4B5563}
+\definecolor{lkcodebg}{HTML}{F6F8FA}
+\definecolor{lkstripe}{HTML}{F2F5F9}
+
+% ---------------------------------------------------------------- layout (not for slides)
+\iflk@beamer
+  \setbeamercolor{structure}{fg=accent}
+  \setbeamercolor{title}{fg=accent}
+  \setbeamercolor{frametitle}{fg=accent}
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{footline}[frame number]
+  \setbeamertemplate{itemize items}[circle]
+\else
+  \ifdefstring{\lk@margin}{none}{}{% margin=none: keep the class layout (IEEEtran, cvpr, acmart ...)
+    \@ifpackageloaded{geometry}{}{\RequirePackage[a4paper,margin=\lk@margin]{geometry}}}
+  \iflk@parskip\RequirePackage[parfill]{parskip}\fi
+  \setlength{\emergencystretch}{3em}
+  \RequirePackage{float}
+  \ifdefstring{\lk@float}{here}{%
+    \floatplacement{figure}{H}\floatplacement{table}{H}}{}
+  \ifdefstring{\lk@style}{modern}{%
+    \RequirePackage{titlesec}
+    \iflk@chapters
+      \titleformat{\chapter}[hang]{\huge\bfseries\sffamily\color{accent}\raggedright}%
+        {\chaptertitlename~\thechapter:}{0.5em}{}
+      \titlespacing*{\chapter}{0pt}{0pt}{1.5em}
+    \fi
+    \titleformat{\section}{\Large\bfseries\sffamily\color{accent}}{\thesection}{0.6em}{}
+    \titleformat{\subsection}{\large\bfseries\sffamily}{\thesubsection}{0.6em}{}
+    \titleformat{\subsubsection}{\normalsize\bfseries\sffamily}{\thesubsubsection}{0.6em}{}
+  }{}
+\fi
+
+% ---------------------------------------------------------------- always-on basics
+\RequirePackage{graphicx}
+\graphicspath{{images/}{figures/}}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+\captionsetup{font=small, labelfont={bf,color=accent}}
+\RequirePackage{enumitem}
+\iflk@beamer\else\setlist{itemsep=0.2em, topsep=0.4em, leftmargin=*}\fi
+\newlist{checklist}{itemize}{2}
+\setlist[checklist]{label=$\square$, leftmargin=*}
+\newcommand{\done}{\item[\rlap{$\square$}\hspace{0.08em}\raisebox{0.1ex}{\checkmark}]}
+\RequirePackage{csquotes}
+\RequirePackage{url}
+
+\providecommand{\todo}[1]{\textcolor{lkred}{\sffamily\bfseries[TODO: #1]}}
+\newcommand{\lkkey}[1]{\textsf{\textbf{\color{accent}#1}}}  % highlighted term
+
+% \lkfig[width]{file}{caption}{label}: one image, centered, with caption and label
+\newcommand{\lkfig}[4][0.8]{%
+  \begin{figure}\centering
+    \includegraphics[width=#1\linewidth]{#2}%
+    \caption{#3}\label{#4}%
+  \end{figure}}
+
+% \lkfigs{caption}{label}{file1/caption1, file2/caption2, ...}: images side by side
+\newcommand{\lkfigs}[3]{%
+  \begin{figure}\centering
+    \def\lk@n{0}\foreach \lk@f/\lk@c in {#3}{\xdef\lk@n{\the\numexpr\lk@n+1}}%
+    \foreach \lk@f/\lk@c in {#3}{%
+      \begin{subfigure}[t]{\dimexpr(\linewidth-1em*(\lk@n-1))/\lk@n\relax}\centering
+        \includegraphics[width=\linewidth]{\lk@f}\caption{\lk@c}%
+      \end{subfigure}\hfill}%
+    \caption{#1}\label{#2}%
+  \end{figure}}
+\RequirePackage{pgffor}
+
+% Title page for report and book: \subtitle{} and \institution{} are optional
+\providecommand{\subtitle}[1]{\def\lk@subtitle{#1}}
+\newcommand{\institution}[1]{\def\lk@institution{#1}}
+\newcommand{\lktitlepage}{%
+  \begin{titlepage}\sffamily
+    \ifdefined\lk@institution{\large\lk@institution\par}\fi
+    \vspace*{0.28\textheight}
+    {\color{accent}\rule{\linewidth}{1.5pt}\par}\vspace{1em}
+    {\Huge\bfseries\color{accent}\@title\par}
+    \ifdefined\lk@subtitle\vspace{0.6em}{\Large\lk@subtitle\par}\fi
+    \vspace{1em}{\color{accent}\rule{\linewidth}{0.6pt}\par}
+    \vspace{2em}{\large\begin{tabular}[t]{@{}l@{}}\@author\end{tabular}\par}
+    \vfill{\large\@date\par}
+  \end{titlepage}}
+
+% ---------------------------------------------------------------- modules
+\iflk@table   \RequirePackage{latexkit-table}   \fi
+\iflk@diagram \RequirePackage{latexkit-diagram} \fi
+\iflk@plot    \RequirePackage{latexkit-plot}    \fi
+\iflk@code    \RequirePackage{latexkit-code}    \fi
+\iflk@box     \RequirePackage{latexkit-box}     \fi
+\iflk@math    \RequirePackage{latexkit-math}    \fi
+\iflk@algo    \RequirePackage{latexkit-algo}    \fi
+\iflk@science \RequirePackage{latexkit-science} \fi
+
+% ---------------------------------------------------------------- bibliography
+\ifdefstring{\lk@bib}{natbib}{%
+  \RequirePackage[numbers,sort&compress]{natbib}
+  \newcommand{\lkbibliography}{\bibliographystyle{plainnat}\bibliography{\lk@bibfile}}}{}
+\ifdefstring{\lk@bib}{biblatex}{%
+  \RequirePackage[backend=biber,style=numeric-comp,sorting=none,natbib=true]{biblatex}
+  \addbibresource{\lk@bibfile.bib}
+  \newcommand{\lkbibliography}{\printbibliography}}{}
+\ifdefstring{\lk@bib}{none}{\newcommand{\lkbibliography}{}}{}
+
+% ---------------------------------------------------------------- links (load last)
+\iflk@beamer
+  \hypersetup{colorlinks=true, linkcolor=., urlcolor=accent, citecolor=accent}
+\else
+  \RequirePackage[colorlinks=true,linkcolor=accent,citecolor=accent,urlcolor=accent]{hyperref}
+\fi
+\RequirePackage[capitalise,noabbrev]{cleveref}
+\iflk@vi
+  \crefname{figure}{Hình}{Hình}        \Crefname{figure}{Hình}{Hình}
+  \crefname{table}{Bảng}{Bảng}         \Crefname{table}{Bảng}{Bảng}
+  \crefname{equation}{Công thức}{Công thức} \Crefname{equation}{Công thức}{Công thức}
+  \crefname{section}{Mục}{Mục}         \Crefname{section}{Mục}{Mục}
+  \crefname{subsection}{Mục}{Mục}      \Crefname{subsection}{Mục}{Mục}
+  \crefname{chapter}{Chương}{Chương}   \Crefname{chapter}{Chương}{Chương}
+  \crefname{appendix}{Phụ lục}{Phụ lục}\Crefname{appendix}{Phụ lục}{Phụ lục}
+  \crefname{listing}{Đoạn code}{Đoạn code}\Crefname{listing}{Đoạn code}{Đoạn code}
+  \crefname{lstlisting}{Đoạn code}{Đoạn code}\Crefname{lstlisting}{Đoạn code}{Đoạn code}
+  \crefname{algorithm}{Thuật toán}{Thuật toán}\Crefname{algorithm}{Thuật toán}{Thuật toán}
+  \crefname{theorem}{Định lý}{Định lý} \Crefname{theorem}{Định lý}{Định lý}
+  \crefname{lemma}{Bổ đề}{Bổ đề}       \Crefname{lemma}{Bổ đề}{Bổ đề}
+  \crefname{definition}{Định nghĩa}{Định nghĩa}\Crefname{definition}{Định nghĩa}{Định nghĩa}
+  \crefname{tcb@cnt@lkcode}{Đoạn code}{Đoạn code}\Crefname{tcb@cnt@lkcode}{Đoạn code}{Đoạn code}
+\else
+  \crefname{tcb@cnt@lkcode}{Listing}{Listings}\Crefname{tcb@cnt@lkcode}{Listing}{Listings}
+\fi
+
+\endinput

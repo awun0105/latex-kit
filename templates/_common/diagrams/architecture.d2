@@ -1,0 +1,17 @@
+# D2 architecture diagram. Docs: https://d2lang.com
+# Used in the document with \lkdiagram{diagrams/architecture}
+direction: right
+classes: {
+  svc: { style: { fill: "#E9EEF5"; stroke: "#1F4E79"; border-radius: 4 } }
+  store: { shape: cylinder; style: { fill: "#F2F5F9"; stroke: "#4B5563" } }
+}
+client: <<vi:Người dùng||en:Client>> { shape: person }
+api: API { class: svc }
+worker: Worker { class: svc }
+db: Database { class: store }
+queue: Queue { shape: queue }
+client -> api: HTTP
+api -> queue: <<vi:gửi job||en:enqueue>>
+queue -> worker
+worker -> db: <<vi:ghi||en:write>>
+api -> db: <<vi:đọc||en:read>>

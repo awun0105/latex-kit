@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<!-- Source of the README banner. Render: render.sh banner.html banner.png 1600 500 1.5
+     Fill in: fonts (the <link>), the :root colours, the title / tagline, and ONE visual
+     variant in .visual (keep the one you use, delete the others). -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Work+Sans:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg-1: #FBF8F1;      /* glow behind the visual */
+    --bg-2: #F3EEE2;      /* paper */
+    --bg-3: #E9E2D2;      /* edges */
+    --ink: #1B2430;       /* title */
+    --muted: #4A5462;     /* tagline */
+    --accent: #1F4E79;    /* latexkit accent */
+    --accent-2: #D9822B;  /* the short rule */
+    --title-font: "Fraunces", Georgia, serif;
+    --body-font: "Work Sans", system-ui, sans-serif;
+    --mono-font: ui-monospace, monospace;
+    --W: 1600px; --H: 500px;
+  }
+  html, body { margin: 0; }
+  body { width: var(--W); height: var(--H); overflow: hidden; position: relative; color: var(--ink); font-family: var(--body-font);
+    background: radial-gradient(ellipse at 78% 40%, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%); }
+  /* Fine grain so the background isn't flat. Remove for a clean / corporate look. */
+  .grain { position: absolute; inset: 0; opacity: .06; background-image: radial-gradient(#000 .6px, transparent .6px); background-size: 4px 4px; }
+
+  .text { position: absolute; left: 110px; top: 50%; transform: translateY(-52%); max-width: 760px; }
+  h1 { font-family: var(--title-font); font-weight: 500; font-size: 158px; line-height: .9; margin: 0; letter-spacing: -.02em; white-space: nowrap; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .rule { width: 120px; height: 6px; border-radius: 3px; background: var(--accent-2); margin: 34px 0 22px; }
+  .tagline { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: .26em; line-height: 1.7; text-transform: uppercase; color: var(--muted); }
+
+  .visual { position: absolute; right: 70px; top: 0; width: 760px; height: var(--H); }
+
+  /* Variant A — screenshots fanned like cards on a table (apps, sites, templates, UIs) */
+  .cards img { position: absolute; width: 250px; aspect-ratio: 745 / 1053; object-fit: cover; object-position: top; border-radius: 6px;
+    background: #fff; box-shadow: 0 18px 40px rgba(40,30,10,.22), 0 0 0 1px rgba(0,0,0,.08); }
+
+</style>
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="text">
+    <h1>latex<em>kit</em></h1>
+    <div class="rule"></div>
+    <p class="tagline">Notes · Papers · Reports<br>Books · Slides — one toolkit</p>
+  </div>
+
+  <!-- Real pages of gallery/gallery.pdf (pdftoppm -r 90 -f N -l N -singlefile) -->
+  <div class="visual cards">
+    <img src="page7.png"  style="left:40px;  top:70px;  transform: rotate(-7deg)">
+    <img src="page5.png"  style="left:215px; top:40px;  transform: rotate(-2deg)">
+    <img src="page10.png" style="left:385px; top:62px;  transform: rotate(4deg)">
+    <img src="page14.png" style="left:530px; top:110px; transform: rotate(8deg)">
+  </div>
+
+
+</body>
+</html>

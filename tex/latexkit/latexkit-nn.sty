@@ -1,0 +1,37 @@
+% latexkit-nn.sty — PlotNeuralNet layers (3D boxes for CNN / encoder-decoder figures).
+% Loaded by the diagram module. Source: github.com/HarisIqbal88/PlotNeuralNet (MIT),
+% layer files in plotneuralnet/ (Box, RightBandedBox, Ball), unchanged.
+%   \pic[shift={(1,0,0)}] at (p1-east) {Box={name=c2, caption=conv2, xlabel={{64,}},
+%        zlabel=128, fill=\ConvColor, height=32, width=2, depth=32}};
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-nn}[2026/11/08 v0.1 latexkit PlotNeuralNet layers]
+
+\RequirePackage{tikz}
+\usetikzlibrary{quotes, arrows.meta, positioning, 3d}
+\RequirePackage{Ball}
+\RequirePackage{Box}
+\RequirePackage{RightBandedBox}
+
+% From PlotNeuralNet layers/init.tex and the colors its examples share.
+\providecommand{\edgecolor}{rgb:blue,4;red,1;green,4;black,3}
+\providecommand{\midarrow}{\tikz \draw[-Stealth, line width=0.8mm, draw=\edgecolor] (-0.3,0) -- ++(0.3,0);}
+% PlotNeuralNet files define \copymidarrow with \newcommand in their own preamble,
+% so it is only provided at \begin{document}.
+\AtBeginDocument{\providecommand{\copymidarrow}{\tikz \draw[-Stealth, line width=0.8mm,
+  draw={rgb:blue,4;red,1;green,1;black,3}] (-0.3,0) -- ++(0.3,0);}}
+\providecommand{\ConvColor}{rgb:yellow,5;red,2.5;white,5}
+\providecommand{\ConvReluColor}{rgb:yellow,5;red,5;white,5}
+\providecommand{\PoolColor}{rgb:red,1;black,0.3}
+\providecommand{\UnpoolColor}{rgb:blue,2;green,1;black,0.3}
+\providecommand{\FcColor}{rgb:blue,5;red,2.5;white,5}
+\providecommand{\FcReluColor}{rgb:blue,5;red,5;white,4}
+\providecommand{\SoftmaxColor}{rgb:magenta,5;black,7}
+\providecommand{\SumColor}{rgb:blue,5;green,15}
+\tikzset{
+  connection/.style={ultra thick, every node/.style={sloped, allow upside down},
+                     draw=\edgecolor, opacity=0.7},
+  copyconnection/.style={ultra thick, every node/.style={sloped, allow upside down},
+                         draw={rgb:blue,4;red,1;green,1;black,3}, opacity=0.7},
+}
+
+\endinput

@@ -1,0 +1,154 @@
+% latexkit-diagram.sty — flowcharts, pipelines, architectures, trees, sequence
+% diagrams, timelines, OpenTikZ figures and Mermaid / Graphviz / D2 files.
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-diagram}[2026/11/08 v0.1 latexkit diagrams]
+
+\RequirePackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, fit, backgrounds, matrix, chains,
+  shapes.geometric, shapes.misc, shapes.symbols, shapes.multipart,
+  decorations.pathreplacing, decorations.pathmorphing, mindmap, trees,
+  shadows, patterns, quotes, angles, 3d, svg.path}
+\RequirePackage{adjustbox}
+\RequirePackage{forest}       % trees
+\IfFileExists{pgf-umlsd.sty}{\RequirePackage{pgf-umlsd}}{}   % sequence diagrams
+\input{latexkit-opentikz-colors.tex}   % OpenTikZ palette: otblue, otorange, otteal ...
+\RequirePackage{latexkit-nn}           % PlotNeuralNet layers: Box, RightBandedBox, Ball
+
+% Layers used by figures that are \input from standalone files (their preamble is
+% skipped), e.g. OpenTikZ neural-net draws its edges on 'edges'.
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{edges}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,edges,main,foreground}
+
+% ---------------------------------------------------------------- shared styles
+% Put [lk] on a tikzpicture, then use the node styles below.
+\tikzset{
+  lk/.style={node distance=8mm and 12mm, font=\sffamily\small,
+             >={Stealth[length=2.2mm]}, line width=0.6pt},
+  lkcolor/.style={draw=#1!70!black, fill=#1!12},
+  lkbase/.style={align=center, minimum height=9mm, minimum width=22mm, inner sep=4pt,
+                 font=\sffamily\small},
+  % nodes
+  process/.style={lkbase, lkcolor=accent, rounded corners=2pt},
+  box/.style={process},
+  terminal/.style={lkbase, lkcolor=lkteal, rounded rectangle},
+  decision/.style={lkbase, lkcolor=lkorange, diamond, aspect=2, inner sep=1pt, minimum width=26mm},
+  io/.style={lkbase, lkcolor=lkpurple, trapezium, trapezium left angle=70,
+             trapezium right angle=110, trapezium stretches=true},
+  datastore/.style={lkbase, lkcolor=lkgray, cylinder, shape border rotate=90, aspect=0.22,
+                    minimum width=18mm},
+  note/.style={lkbase, draw=lkgray!70, dashed, fill=yellow!8, font=\sffamily\footnotesize,
+               minimum height=0pt, minimum width=0pt},
+  layer/.style={lkbase, lkcolor=accent, minimum width=#1, rounded corners=2pt},
+  layer/.default=10cm,
+  tag/.style={font=\sffamily\scriptsize\bfseries, fill=accent, text=white,
+              rounded corners=1.5pt, inner sep=2pt},
+  group/.style={draw=lkgray!60, dashed, rounded corners=4pt, fill=lkgray!4, inner sep=3mm},
+  grouplabel/.style={font=\sffamily\footnotesize\bfseries, text=lkgray, anchor=south west},
+  % edges
+  flow/.style={->, draw=black!65, line width=0.8pt},
+  arrow/.style={flow},
+  dashflow/.style={flow, dashed},
+  biflow/.style={<->, draw=black!65, line width=0.8pt},
+  loop/.style={flow, draw=lkpurple},
+  elabel/.style={font=\sffamily\footnotesize, text=lkgray, fill=white, inner sep=1.5pt},
+}
+
+% \begin{tikzpicture}[lk] ... \lkgroup{(a)(b)}{Label} ... \end{tikzpicture}
+% Draws a dashed frame behind the listed nodes, with a label at its top left corner.
+\newcommand{\lkgroup}[3][]{%
+  \begin{scope}[on background layer]
+    \node[group, fit=#2, #1] (lk@grp) {};
+    \node[grouplabel] at (lk@grp.north west) {#3};
+  \end{scope}}
+
+% ---------------------------------------------------------------- quick diagrams
+% \lkpipeline{Dữ liệu, Tiền xử lý, Huấn luyện}   left to right
+% \lkpipeline*{...}                              top to bottom
+% Nodes are named (p1), (p2) ... ; items with commas go in braces.
+\NewDocumentCommand{\lkpipeline}{s O{} m}{%
+  \begin{tikzpicture}[lk, #2]
+    \foreach \lk@t [count=\lk@i] in {#3}{%
+      \ifnum\lk@i=1
+        \node[process] (p1) {\lk@t};
+      \else
+        \pgfmathtruncatemacro\lk@j{\lk@i-1}%
+        \IfBooleanTF{#1}%
+          {\node[process, below=of p\lk@j] (p\lk@i) {\lk@t};}%
+          {\node[process, right=of p\lk@j] (p\lk@i) {\lk@t};}%
+        \draw[flow] (p\lk@j) -- (p\lk@i);
+      \fi}
+  \end{tikzpicture}}
+
+% \lktimeline{2020/NeRF, 2023/3D Gaussian Splatting, 2024/{Street Gaussians}}
+\NewDocumentCommand{\lktimeline}{O{2.6cm} m}{%
+  \begin{tikzpicture}[lk]
+    \foreach \lk@y/\lk@e [count=\lk@i] in {#2}{\xdef\lk@n{\lk@i}}%
+    \draw[line width=1.2pt, draw=accent!60, -{Stealth[length=3mm]}]
+      (-0.5,0) -- ({(\lk@n-1)*#1+0.8cm},0);
+    \foreach \lk@y/\lk@e [count=\lk@i] in {#2}{%
+      \pgfmathsetmacro\lk@x{(\lk@i-1)*#1}%
+      \fill[accent] (\lk@x pt,0) circle (2.2pt);
+      \ifodd\lk@i
+        \node[font=\sffamily\small\bfseries, text=accent, above=1mm] at (\lk@x pt,0) {\lk@y};
+        \node[font=\sffamily\footnotesize, align=center, text width=#1-2mm, below=1.5mm]
+          at (\lk@x pt,0) {\lk@e};
+      \else
+        \node[font=\sffamily\small\bfseries, text=accent, below=1mm] at (\lk@x pt,0) {\lk@y};
+        \node[font=\sffamily\footnotesize, align=center, text width=#1-2mm, above=1.5mm]
+          at (\lk@x pt,0) {\lk@e};
+      \fi}
+  \end{tikzpicture}}
+
+% ---------------------------------------------------------------- figure files
+% \lktikzfig[adjustbox keys]{figures/flowchart}
+%   Inputs a standalone TikZ file (for example an OpenTikZ figure added with
+%   `latexkit asset add`) inside a group: its \newcommand, \usetikzlibrary,
+%   \definecolor and layer lines run, \documentclass and \usepackage are skipped
+%   (latexkit already loads tikz, amsmath, amssymb and the PlotNeuralNet layers).
+%   Text uses the document fonts. The figure shrinks to the text width when it is
+%   too wide. Images beside the figure file are found by \includegraphics.
+\NewDocumentCommand{\lktikzfig}{O{} m}{%
+  \adjustbox{max width=\linewidth, center, #1}{\lk@inputfig{#2}}}
+\newcommand{\lk@inputfig}[1]{%
+  \begingroup
+    \renewcommand{\documentclass}[2][]{}%
+    \renewcommand{\usepackage}[2][]{}%
+    \let\RequirePackage\usepackage
+    \def\document{}\def\enddocument{\endinput}%   text after \end{document} is ignored
+    % A figure's \newcommand may reuse a name the document already has (\up ...):
+    % inside the group it replaces that name instead of stopping with an error.
+    \def\newcommand{\@ifstar{\lk@ncs}{\lk@nc}}%
+    % Images next to the figure file (\includegraphics{cats.jpg}) are found.
+    \filename@parse{#1}%
+    \ifdefined\Ginput@path
+      \edef\Ginput@path{{\filename@area}\unexpanded\expandafter{\Ginput@path}}%
+    \else
+      \edef\Ginput@path{{\filename@area}}%
+    \fi
+    \input{#1}%
+  \endgroup}
+\let\lk@origncmd\newcommand
+\def\lk@nc#1{\let#1\@undefined\lk@origncmd#1}
+\def\lk@ncs#1{\let#1\@undefined\lk@origncmd*#1}
+
+% \lkdiagram[adjustbox keys]{diagrams/pipeline}
+%   Includes diagrams/pipeline.pdf, built from pipeline.mmd (Mermaid),
+%   pipeline.dot / .gv (Graphviz) or pipeline.d2 (D2). latexmk builds the PDF
+%   automatically through the rules in latexmkrc; `latexkit render` does the same.
+\NewDocumentCommand{\lkdiagram}{O{} m}{%
+  \IfFileExists{#2.pdf}%
+    {\adjustbox{max width=\linewidth, max height=0.6\textheight, center, #1}%
+       {\includegraphics{#2.pdf}}}%
+    {\typeout{No file #2.pdf.}% latexmk reads this line and runs the matching rule
+     \begin{center}\fcolorbox{lkred}{lkred!4}{\parbox{0.7\linewidth}{\centering
+       \sffamily\small\color{lkred}\texttt{\detokenize{#2}.pdf}
+       \lkstr{chưa được tạo: chạy \texttt{latexmk} hoặc \texttt{latexkit render}.}%
+             {is not built yet: run \texttt{latexmk} or \texttt{latexkit render}.}}}%
+     \end{center}}}
+\NewCommandCopy{\lkmermaid}{\lkdiagram}
+\NewCommandCopy{\lkgraphviz}{\lkdiagram}
+\NewCommandCopy{\lkdtwo}{\lkdiagram}
+
+\endinput

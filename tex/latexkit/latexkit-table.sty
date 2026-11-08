@@ -1,0 +1,69 @@
+% latexkit-table.sty — tables for results, comparisons and ablations.
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-table}[2026/11/08 v0.1 latexkit tables]
+
+\RequirePackage{array}
+\RequirePackage{booktabs}
+\RequirePackage{tabularx}
+\RequirePackage{multirow}
+\RequirePackage{makecell}
+\RequirePackage{longtable}
+\RequirePackage{threeparttable}
+\RequirePackage{pifont}
+\RequirePackage{tabularray}
+\IfFileExists{siunitx.sty}{%
+  \RequirePackage{siunitx}
+  \UseTblrLibrary{booktabs,siunitx}}{%
+  \UseTblrLibrary{booktabs}}
+% gradbars (github.com/Tape5try/gradbars, MIT, files in gradbars/): data bars, heat
+% cells, sparklines, stacks and box plots in text and table cells, plus gradtable.
+\IfFileExists{gradbars.sty}{%
+  \RequirePackage{gradbars}
+  \UseTblrLibrary{gradbars}}{}
+
+% Column types: L/C/R = left/center/right X columns, P{3cm} = centered fixed width
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ---------------------------------------------------------------- environments
+% \begin{lktable}[placement]{caption}{label}{colspec}  rows  \end{lktable}
+%   Booktabs top and bottom rules are added; write \midrule after the header.
+\NewDocumentEnvironment{lktable}{O{htbp} m m m}
+  {\begin{table}[#1]\centering\caption{#2}\label{#3}%
+   \begin{tabular}{#4}\toprule}
+  {\bottomrule\end{tabular}\end{table}}
+
+% Same, full text width, with X/L/C/R columns that share the free space.
+\NewDocumentEnvironment{lktablex}{O{htbp} m m m +b}
+  {\begin{table}[#1]\centering\caption{#2}\label{#3}%
+   \begin{tabularx}{\linewidth}{#4}\toprule #5\bottomrule\end{tabularx}\end{table}}
+  {}
+
+% tabularray version with header row in bold and booktabs rules:
+% \begin{lktblr}{colspec={lQ[c]Q[c]}} ... \end{lktblr}
+\NewTblrEnviron{lktblr}
+\SetTblrOuter[lktblr]{long=false}
+\SetTblrInner[lktblr]{row{1}={font=\bfseries}, hline{1,Z}={0.08em}, hline{2}={0.05em},
+                      rowsep=2pt}
+
+% ---------------------------------------------------------------- cell helpers
+\newcommand{\best}[1]{\textbf{#1}}                      % best value
+\newcommand{\second}[1]{\underline{#1}}                 % second best
+\newcommand{\cmark}{\textcolor{lkgreen}{\ding{51}}}     % yes
+\newcommand{\xmark}{\textcolor{lkred}{\ding{55}}}       % no
+\newcommand{\pmark}{\textcolor{lkorange}{$\sim$}}       % partly
+\newcommand{\up}{\textcolor{lkgreen}{$\uparrow$}}       % higher is better
+\newcommand{\down}{\textcolor{lkgreen}{$\downarrow$}}   % lower is better
+\newcommand{\lkstripes}{\rowcolors{2}{lkstripe}{white}} % zebra rows for the next table
+\newcommand{\lkhl}{\rowcolor{accent!10}}                % highlight one row, e.g. "Ours"
+% \lkheat{0.73}: cell shaded by value in [0,1], prints the value
+\newcommand{\lkheat}[2][]{\cellcolor{accent!\fpeval{round(#2*45)}}%
+  \ifstrempty{#1}{#2}{#1}}
+% \lkbar{0.73}: small horizontal data bar for values in [0,1]
+\newcommand{\lkbar}[2][1.2cm]{%
+  {\color{accent!70}\rule{\fpeval{#2}\dimexpr#1\relax}{0.7em}}%
+  {\color{lkgray!20}\rule{\fpeval{1-#2}\dimexpr#1\relax}{0.7em}}}
+
+\endinput

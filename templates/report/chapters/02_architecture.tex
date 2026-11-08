@@ -1,0 +1,29 @@
+\chapter{<<vi:Kiến trúc hệ thống||en:System Architecture>>}
+\label{ch:arch}
+
+%%IF diagram
+\section{<<vi:Tổng quan||en:Overview>>}
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[lk]
+    \node[layer=11cm]                 (ui)   {<<vi:Giao diện||en:Interface>>};
+    \node[layer=11cm, below=4mm of ui] (core) {<<vi:Xử lý lõi||en:Core processing>>};
+    \node[layer=11cm, below=4mm of core, lkcolor=lkteal] (data) {<<vi:Dữ liệu||en:Data>>};
+  \end{tikzpicture}
+  \caption{<<vi:Kiến trúc nhiều tầng (style \texttt{layer})||en:Layered architecture (\texttt{layer} style)>>}
+  \label{fig:layers}
+\end{figure}
+
+\section{<<vi:Luồng xử lý||en:Processing flow>>}
+\begin{figure}[htbp]
+  \centering
+  \lkpipeline{<<vi:Thu thập||en:Collect>>, <<vi:Làm sạch||en:Clean>>, <<vi:Huấn luyện||en:Train>>, <<vi:Đánh giá||en:Evaluate>>}
+  \caption{Pipeline}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \lkdiagram{diagrams/architecture}
+  \caption{<<vi:Sơ đồ D2||en:D2 diagram>>: \lkfile{diagrams/architecture.d2}}
+\end{figure}
+%%ENDIF

@@ -1,0 +1,35 @@
+# latexmkrc — written by latexkit. Engine: {{ENGINE}}
+#   latexmk            build build/main.pdf
+#   latexmk -pvc       rebuild on every save
+#   latexmk -c         remove temporary files
+$pdf_mode = {{PDF_MODE}};          # 1 = pdflatex, 4 = lualatex, 5 = xelatex
+$out_dir  = 'build';
+@default_files = ('main.tex');
+$bibtex_use = 2;
+set_tex_cmds('-interaction=nonstopmode -file-line-error -synctex=1 %O %S');
+if ({{SHELL_ESCAPE}}) { set_tex_cmds('-shell-escape -interaction=nonstopmode -file-line-error -synctex=1 %O %S'); }
+
+# Diagram files (diagrams/*.mmd, *.dot, *.gv, *.d2, *.drawio) become PDF on demand:
+# \lkdiagram{diagrams/name} asks for diagrams/name.pdf and these rules build it.
+add_cus_dep('mmd', 'pdf', 0, 'lk_mermaid');
+add_cus_dep('dot', 'pdf', 0, 'lk_graphviz');
+add_cus_dep('gv',  'pdf', 0, 'lk_graphviz');
+add_cus_dep('d2',  'pdf', 0, 'lk_d2');
+add_cus_dep('drawio', 'pdf', 0, 'lk_drawio');
+
+# Try the latexkit command first (it finds a browser for Mermaid), then the tool itself.
+sub lk_run {
+  my ($src, @fallback) = @_;
+  my $pdf = $src; $pdf =~ s/\.\w+$/.pdf/;
+  system("latexkit render --quiet \"$src\"");      # writes a notice PDF if the tool is missing
+  return 0 if -e $pdf;
+  return 0 if system(@fallback) == 0;
+  warn "latexkit: could not build a PDF from $src (tool missing?). The document shows a notice instead.\n";
+  return -2;  # latexmk: not an error, keep building the rest of the document
+}
+sub lk_mermaid  { lk_run("$_[0].mmd", 'mmdc', '-q', '-i', "$_[0].mmd", '-o', "$_[0].pdf"); }
+sub lk_graphviz { my $s = -e "$_[0].dot" ? "$_[0].dot" : "$_[0].gv";
+                  lk_run($s, 'dot', '-Tpdf', $s, '-o', "$_[0].pdf"); }
+sub lk_d2       { lk_run("$_[0].d2", 'd2', '--pad', '10', "$_[0].d2", "$_[0].pdf"); }
+sub lk_drawio   { lk_run("$_[0].drawio", 'drawio', '--export', '--format', 'pdf', '--crop',
+                         '--output', "$_[0].pdf", "$_[0].drawio"); }

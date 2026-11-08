@@ -1,0 +1,42 @@
+% latexkit: macro names prefixed with \pnn (\pnnFill, \pnnCaption ...) so the
+% layers no longer overwrite \fill, \caption, \name and \scale of the document.
+\ProvidesPackage{Ball}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%This Block can draw small Ball
+%Elementwise or reduction operations can be drawn with this
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tikzset{Ball/.pic={\tikzset{/sphere/.cd,#1}	 	
+
+\pgfmathsetmacro{\r}{\pnnRadius*\pnnScale}
+
+\shade[ball color=\pnnFill,opacity=\pnnOpacity] (0,0,0) circle (\r);
+\draw (0,0,0) circle [radius=\r] node[scale=4*\r] {\pnnLogo};
+
+\coordinate (\pnnName-anchor) at ( 0 , 0  , 0) ;
+\coordinate (\pnnName-east)   at ( \r, 0  , 0) ;
+\coordinate (\pnnName-west)   at (-\r, 0  , 0) ;
+\coordinate (\pnnName-north)  at ( 0 , \r , 0) ;
+\coordinate (\pnnName-south)  at ( 0 , -\r, 0) ;
+
+\path (\pnnName-south) + (0,-20pt) coordinate (caption-node) 
+edge ["\textcolor{black}{\bf \pnnCaption}"'] (caption-node); %Ball caption
+
+},
+/sphere/.search also={/tikz},
+/sphere/.cd,
+radius/.store       in=\pnnRadius,
+scale/.store        in=\pnnScale,
+caption/.store      in=\pnnCaption,
+name/.store         in=\pnnName,
+fill/.store         in=\pnnFill,
+logo/.store         in=\pnnLogo,
+opacity/.store      in=\pnnOpacity,
+logo=$\Sigma$,
+fill=green,
+opacity=0.10,
+scale=0.2,
+radius=0.5,
+caption=,
+name=,
+}

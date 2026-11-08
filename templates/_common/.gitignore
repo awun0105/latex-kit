@@ -1,0 +1,13 @@
+build/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+# PDFs made from diagrams/*.mmd, *.dot, *.d2 (rebuilt by latexmk)
+diagrams/*.pdf
+__pycache__/

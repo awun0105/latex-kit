@@ -1,0 +1,8 @@
+%% Mermaid flowchart. Docs: https://mermaid.js.org/syntax/flowchart.html
+%% Used in the document with \lkdiagram{diagrams/pipeline}
+flowchart TD
+  A[<<vi:Dữ liệu||en:Data>>] --> B[<<vi:Tiền xử lý||en:Preprocess>>]
+  B --> C{OK?}
+  C -- <<vi:Có||en:Yes>> --> D[<<vi:Huấn luyện||en:Train>>]
+  C -- <<vi:Không||en:No>> --> B
+  D --> E[(<<vi:Kết quả||en:Results>>)]
