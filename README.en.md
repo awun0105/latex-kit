@@ -35,7 +35,7 @@ latex-kit is a LaTeX package (`latexkit`) and a command (`latexkit`). The comman
 - **Figure library:** 73 OpenTikZ figures and 9 PlotNeuralNet network architectures, added to a project with one command.
 - **Charts:** pgfplots with the `lkplot` style, or matplotlib with the SciencePlots styles bundled in the kit.
 - **Code, boxes, math, algorithms:** `lkcode`, `lkterminal`, `keyidea`, `warning`, `theorem`, `algorithm`, `siunitx`.
-- **Coding-agent skill:** the `latex-kit` skill teaches Claude Code and Codex how to use the kit.
+- **Coding-agent skill:** the `latex-kit` skill teaches Claude Code and Codex how to use the kit. When a request for a table, diagram or chart leaves things open, the agent asks up to 3 questions to pick the right component, and never invents data.
 
 ## Repository Structure
 

@@ -18,7 +18,8 @@ Kit location: `{{KIT}}` (CLI: `{{KIT}}/latexkit.py`, also on PATH as `latexkit` 
    `-m` takes modules: `table,diagram,plot,code,box,math,algo,science` or `all`
    (default: table,diagram,plot,code,box,math). Vietnamese always compiles with LuaLaTeX.
 2. **Edit** `main.tex` (report/book: `chapters/*.tex`). Use the components below instead of
-   raw LaTeX so every document looks the same.
+   raw LaTeX so every document looks the same. Before adding a table, diagram, chart or figure,
+   pass the guard below.
 3. **Build and verify** — always compile after editing and fix every error before finishing:
    ```bash
    cd <folder> && latexmk            # output: build/main.pdf, log: build/main.log
@@ -26,6 +27,38 @@ Kit location: `{{KIT}}` (CLI: `{{KIT}}/latexkit.py`, also on PATH as `latexkit` 
    latexmk turns `diagrams/*.mmd|*.dot|*.d2|*.drawio` into PDF automatically. Check the log with
    `grep -E '^[^ ]+:[0-9]+: ' build/main.log`. Look at pages with `pdftoppm -r 60 -png build/main.pdf /tmp/p`.
 4. `latexkit doctor` lists missing engines, packages and tools.
+
+## Guard: ask before building a table, diagram, chart or figure
+
+Each request maps to one latexkit component; a wrong guess means redrawing. Before writing one:
+
+1. **List what the request leaves open** among the points in the table below. Answer from the
+   request, the surrounding text, the data files in the project and visuals already in the document.
+   Skip any point those settle. The request's wording picks the component ("kết quả", "các phương
+   pháp" → `lktable`); existing visuals set the look (colors, size, wording). When a visual of the
+   same kind already covers the topic, ask whether to edit it or add a new one. Caption, label and
+   placement are not open points: write them from the context.
+2. **Ask about the rest in one round** — at most 3 questions, each with 2–4 concrete options naming
+   the latexkit component, the best fit first and marked recommended (AskUserQuestion when the
+   agent has it, otherwise a short numbered list). Ask in the user's language.
+3. **Never invent data or emphasis.** Numbers, labels or node names that are missing are asked
+   for; when the user says to go ahead without them, mark each placeholder with `\todo{...}`. Add
+   only the marks asked for ("tốt nhất" → `\best`, not `\second` or `\lkhl`).
+4. **Run `latexkit doctor` before asking** and offer Mermaid, D2, Graphviz or draw.io only when
+   the tool is installed; otherwise offer the TikZ equivalent and say which tool is missing.
+5. **Go straight to work** when every point is settled, or the user says to decide ("tự chọn",
+   "just do it"): pick the recommended option and name the choice in one line of the reply.
+
+| Kind | Points to settle | Answer → component |
+|---|---|---|
+| Table | purpose; data source (given, `.csv`, to fill in later); emphasis; width; length | results/ablation → `lktable` + `\best \second \up \down`; criteria matrix or long text cells → `lktablex` (`L C R X`); numbers with units or decimal alignment → `lktblr` + `S` columns; bars, sparklines, ranking inside cells → gradbars (`gradtable`, `\gradbar`) or `\lkheat` `\lkbar`; spans pages → `longtable`; notes under the table → `threeparttable` |
+| Diagram | what it shows; who edits it later; size and direction | steps with decisions or loops → `tikzpicture[lk]` flowchart; straight sequence → `\lkpipeline` (`*` = vertical); stacked layers → `layer` nodes; services and connections, auto layout → D2 (`.d2`); graph or dependency layout → Graphviz (`.dot`); message order between actors → `sequencediagram` (or Mermaid `sequenceDiagram`); taxonomy → `forest`; dated events → `\lktimeline`; CNN / encoder-decoder blocks → PlotNeuralNet asset (`latexkit asset list nn`) or `\pic{Box=...}`; known ML or system figure → OpenTikZ asset (`latexkit asset list <word>`); user wants to drag boxes by hand → draw.io (`.drawio`) |
+| Chart | chart type; data source; look | trend → `axis[lkplot]`; categories → `axis[lkbar]` / `[lkhbar]`; data from code or many points → `plots/*.py` with SciencePlots + `latexkit plot`; match the document fonts → pgfplots |
+| Figure / image | existing file or to draw; one or several | file → `\lkfig`; side by side → `\lkfigs`; to draw → the Diagram row |
+
+Example questions for "vẽ sơ đồ hệ thống": *Sơ đồ thể hiện gì?* (luồng xử lý có rẽ nhánh → flowchart
+TikZ · các thành phần và kết nối → D2 · các tầng chồng nhau → `layer`) and *Sau này sửa bằng gì?*
+(sửa mã trong tài liệu → TikZ/D2 · kéo thả → draw.io).
 
 ## Components (full list with examples: reference.md)
 
@@ -55,7 +88,8 @@ Kit location: `{{KIT}}` (CLI: `{{KIT}}/latexkit.py`, also on PATH as `latexkit` 
 ## Rules
 
 - Colors: use `accent`, `lkblue lkteal lkgreen lkorange lkred lkpurple lkgray` or the OpenTikZ
-  palette `otblue otorange otteal otpurple otvermillion otgray` — never raw hex in the body.
+  palette `otblue otorange otteal otpurple otvermillion otgray` — never raw hex in `.tex` files.
+  Diagram files (`.d2`, `.drawio`, `diagrams/mermaid.json`) keep hex colors close to `accent` (`#1F4E79`).
 - Do not redefine node styles per figure; extend with `lkcolor=<color>`, `minimum width=...`.
 - Do not load geometry after latexkit; use the `margin=` option or load geometry first.
 - Wide Mermaid flowcharts shrink; prefer `flowchart TD`, or draw in TikZ.

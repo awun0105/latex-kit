@@ -35,7 +35,7 @@ latex-kit gồm package LaTeX `latexkit` và lệnh `latexkit`. Lệnh tạo s�
 - **Thư viện hình:** 73 hình OpenTikZ và 9 kiến trúc mạng nơ-ron của PlotNeuralNet, thêm vào project bằng một lệnh.
 - **Đồ thị:** pgfplots với style `lkplot`, hoặc matplotlib dùng style SciencePlots có sẵn trong kit.
 - **Code, hộp ghi chú, toán, thuật toán:** `lkcode`, `lkterminal`, `keyidea`, `warning`, `theorem`, `algorithm`, `siunitx`.
-- **Skill cho coding agent:** skill `latex-kit` hướng dẫn Claude Code và Codex dùng kit.
+- **Skill cho coding agent:** skill `latex-kit` hướng dẫn Claude Code và Codex dùng kit. Khi yêu cầu thêm bảng, sơ đồ hay đồ thị còn thiếu thông tin, agent hỏi lại tối đa 3 câu để chọn đúng thành phần, và không tự bịa số liệu.
 
 ## Cấu trúc kho mã nguồn
 
