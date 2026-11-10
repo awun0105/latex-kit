@@ -24,9 +24,13 @@ TEMPLATES = KIT / "templates"
 COMMON = TEMPLATES / "_common"
 OPENTIKZ = KIT / "assets" / "vendor" / "opentikz"
 PLOTNN = KIT / "assets" / "vendor" / "plotneuralnet"
-ASSET_ROOTS = {"OpenTikZ": OPENTIKZ, "PlotNeuralNet": PLOTNN}
+F4P = KIT / "assets" / "vendor" / "figures4papers"
+ASSET_ROOTS = {"OpenTikZ": OPENTIKZ, "PlotNeuralNet": PLOTNN, "figures4papers": F4P}
 SCIENCEPLOTS = KIT / "assets" / "vendor" / "scienceplots" / "styles"
 PYHELPER = KIT / "assets" / "python" / "latexkit_plot.py"
+F4P_HELPER = F4P / "f4p.py"
+F4P_STYLES = F4P / "styles"
+PLOT_HELPERS = {"latexkit_plot.py", "f4p.py"}  # copied into plots/, not run by `latexkit plot`
 SKILL_SRC = KIT / "skill" / "latex-kit"
 
 TYPES = {
@@ -271,9 +275,7 @@ def cmd_new(a: argparse.Namespace) -> None:
         copy_tree(COMMON, dst, ctx, mods, lang)
     copy_tree(TEMPLATES / a.type, dst, ctx, mods, lang)
     if "plot" in mods and a.type not in MINIMAL_TYPES:
-        (dst / "plots" / "styles").mkdir(parents=True, exist_ok=True)
-        shutil.copytree(SCIENCEPLOTS, dst / "plots" / "styles", dirs_exist_ok=True)
-        shutil.copy2(PYHELPER, dst / "plots" / "latexkit_plot.py")
+        install_plot_helpers(dst / "plots")
     else:
         shutil.rmtree(dst / "plots", ignore_errors=True)
     if "diagram" not in mods:
@@ -481,18 +483,35 @@ def cmd_build(a: argparse.Namespace) -> None:
     sys.exit(r.returncode)
 
 
+def install_plot_helpers(plots: Path, force: bool = True) -> None:
+    """plots/latexkit_plot.py + f4p.py and plots/styles/ (SciencePlots, figures4papers)."""
+    styles = plots / "styles"
+    styles.mkdir(parents=True, exist_ok=True)
+    if force or not any(styles.rglob("science.mplstyle")):
+        shutil.copytree(SCIENCEPLOTS, styles, dirs_exist_ok=True)
+    if force or not (styles / "figures4papers").exists():
+        shutil.copytree(F4P_STYLES, styles / "figures4papers", dirs_exist_ok=True)
+    for src in (PYHELPER, F4P_HELPER):
+        if force or not (plots / src.name).exists():
+            shutil.copy2(src, plots / src.name)
+
+
+def run_plot_script(script: Path, env: dict | None = None) -> bool:
+    if which("uv"):
+        cmd = ["uv", "run", "--quiet", "--with", "matplotlib", "--with", "numpy", "python", script.name]
+    else:
+        cmd = [sys.executable, script.name]
+    r = subprocess.run(cmd, cwd=script.parent, env={**os.environ, **(env or {})})
+    return r.returncode == 0
+
+
 def plot_dir(d: Path) -> bool:
     scripts = sorted((d / "plots").glob("*.py"))
-    scripts = [s for s in scripts if s.name != "latexkit_plot.py"]
+    scripts = [s for s in scripts if s.name not in PLOT_HELPERS]
     ok = True
     for s in scripts:
-        if which("uv"):
-            cmd = ["uv", "run", "--quiet", "--with", "matplotlib", "--with", "numpy", "python", s.name]
-        else:
-            cmd = [sys.executable, s.name]
         say(f"  plot  {s.relative_to(d)}")
-        r = subprocess.run(cmd, cwd=s.parent)
-        if r.returncode != 0:
+        if not run_plot_script(s):
             say("  failed. Needs matplotlib: pip install matplotlib numpy")
             ok = False
     return ok
@@ -502,7 +521,7 @@ def cmd_plot(a: argparse.Namespace) -> None:
     sys.exit(0 if plot_dir(Path(a.dir)) else 1)
 
 
-# ---------------------------------------------------------------- assets (OpenTikZ, PlotNeuralNet)
+# ---------------------------------------------------------------- assets (OpenTikZ, PlotNeuralNet, figures4papers)
 def catalog() -> list[dict]:
     items = []
     for source, root in ASSET_ROOTS.items():
@@ -512,12 +531,18 @@ def catalog() -> list[dict]:
         for i in json.loads(path.read_text(encoding="utf-8")):
             items.append({**i, "source": source})
     if not items:
-        die("asset catalogs are missing (assets/vendor/opentikz, assets/vendor/plotneuralnet)")
+        die("asset catalogs are missing (assets/vendor/opentikz, plotneuralnet, figures4papers)")
     return items
 
 
 def asset_tex(item: dict) -> Path:
+    """The asset's source file: a standalone .tex figure, or a .py script for plot recipes."""
     d = ASSET_ROOTS[item.get("source", "OpenTikZ")] / item["path"]
+    if item.get("type") == "plot":
+        py = d / f"{Path(item['path']).name}.py"
+        if not py.exists():
+            die(f"no plot script {py}")
+        return py
     for name in ("template.tex", "figure.tex", "example.tex", Path(item["path"]).name + ".tex"):
         if (d / name).exists():
             return d / name
@@ -531,7 +556,8 @@ def cmd_asset(a: argparse.Namespace) -> None:
     items = catalog()
     if a.action == "list":
         q = (a.query or "").lower()
-        rows = [i for i in items if not q or q in json.dumps(i).lower()]
+        types = {i["type"] for i in items}
+        rows = [i for i in items if not q or (i["type"] == q if q in types else q in json.dumps(i).lower())]
         for i in rows:
             say(f"{i['type']:8} {i['id']:28} {i['name']}")
         say(f"\n{len(rows)} item(s). Add one: latexkit asset add <id>")
@@ -548,7 +574,10 @@ def cmd_asset(a: argparse.Namespace) -> None:
         say(f"\nsource: {src}")
         return
     # add
-    out_dir = Path(a.to)
+    if item.get("type") == "plot":
+        add_plot_asset(a, item, src)
+        return
+    out_dir = Path(a.to or "figures")
     out_dir.mkdir(parents=True, exist_ok=True)
     name = a.name or item["id"]
     dst = out_dir / f"{name}.tex"
@@ -571,6 +600,24 @@ def cmd_asset(a: argparse.Namespace) -> None:
     say("  \\end{figure}")
     if meta:
         say(f"Edit the \\def parameters at the top of {dst.name}; {name}.meta.json lists them.")
+
+
+def add_plot_asset(a: argparse.Namespace, item: dict, src: Path) -> None:
+    """figures4papers recipe: plots/<name>.py (+ helpers); `latexkit plot` makes figures/<name>.pdf."""
+    out_dir = Path(a.to or "plots")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    name = a.name or item["id"]
+    dst = out_dir / f"{name}.py"
+    if dst.exists() and not a.force:
+        die(f"{dst} exists (use --force to overwrite)")
+    shutil.copy2(src, dst)
+    install_plot_helpers(out_dir, force=False)
+    fig = (out_dir.parent / "figures" / name).as_posix()
+    say(f"Added {dst}  ({item['source']}, {item.get('license')}: attribution, non-commercial)")
+    say(f"Replace the example numbers at the top of {dst.name}, then make the PDF:")
+    say("  latexkit plot          (or: latexkit build)")
+    say("Use it in the document:")
+    say(f"  \\lkfig[1]{{{fig}}}{{{item['name']}}}{{fig:{name}}}")
 
 
 PRELOADED = {"tikz", "amsmath", "amssymb", "xcolor", "graphicx", "latexkit-nn", "import"}
@@ -704,6 +751,7 @@ def cmd_doctor(a: argparse.Namespace) -> None:
         row(f"{source} ({n} figures)", n > 0, "re-clone the latex-kit repo")
     row("gradbars", (TEX_DIR / "gradbars" / "gradbars.sty").exists(), "re-clone the latex-kit repo")
     row("SciencePlots styles", SCIENCEPLOTS.exists(), "re-clone the latex-kit repo")
+    row("figures4papers style (f4p.py)", F4P_HELPER.exists() and F4P_STYLES.exists(), "re-clone the latex-kit repo")
 
 
 def _has_module(name: str) -> bool:
@@ -714,8 +762,20 @@ def _has_module(name: str) -> bool:
 # ---------------------------------------------------------------- gallery
 def cmd_gallery(a: argparse.Namespace) -> None:
     g = KIT / "gallery"
-    lines = ["% Generated by `latexkit gallery`: every OpenTikZ and PlotNeuralNet asset, compiled with latexkit.\n"]
+    lines = ["% Generated by `latexkit gallery`: every OpenTikZ, PlotNeuralNet and figures4papers asset.\n"]
+    plots = g / "plots"
     for item in catalog():
+        if item.get("type") == "plot":   # run the recipe, show its PDF
+            pdf = plots / f"{item['id']}.pdf"
+            if not pdf.exists() or pdf.stat().st_mtime < asset_tex(item).stat().st_mtime:
+                say(f"  plot  {item['id']}")
+                run_plot_script(asset_tex(item), {"LATEXKIT_FIGURES": str(plots), "PYTHONPATH": str(F4P)})
+            body = ("\\adjustbox{max width=\\linewidth, max height=4.2cm}{\\includegraphics{plots/%s}}"
+                    % item["id"]
+                    if pdf.exists() else "\\textit{(needs matplotlib)}")
+            lines.append("\\begin{lkasset}{%s}{%s}{%s}\n  %s\n\\end{lkasset}\n"
+                         % (item["type"], item["id"], item["name"].replace("&", "\\&"), body))
+            continue
         rel = os.path.relpath(asset_tex(item).with_suffix(""), g).replace(os.sep, "/")
         lines.append(
             "\\begin{lkasset}{%s}{%s}{%s}\n  \\lktikzfig[max height=4.2cm]{%s}\n\\end{lkasset}\n"
@@ -774,14 +834,14 @@ def main(argv: list[str] | None = None) -> None:
     b.add_argument("-f", "--force", action="store_true", help="force a full rebuild")
     b.set_defaults(func=cmd_build)
 
-    pl = sub.add_parser("plot", help="run plots/*.py (SciencePlots styles) to make figures/*.pdf")
+    pl = sub.add_parser("plot", help="run plots/*.py (SciencePlots, figures4papers styles) to make figures/*.pdf")
     pl.add_argument("dir", nargs="?", default=".")
     pl.set_defaults(func=cmd_plot)
 
-    s = sub.add_parser("asset", help="figure library (OpenTikZ, PlotNeuralNet): list, show, add")
+    s = sub.add_parser("asset", help="figure library (OpenTikZ, PlotNeuralNet, figures4papers plots): list, show, add")
     s.add_argument("action", choices=["list", "show", "add"])
     s.add_argument("query", nargs="?", help="search text (list) or asset id (show, add)")
-    s.add_argument("--to", default="figures", help="folder for `add` (default figures/)")
+    s.add_argument("--to", help="folder for `add` (default figures/; plot recipes: plots/)")
     s.add_argument("--name", help="file name for `add` (default: asset id)")
     s.add_argument("-f", "--force", action="store_true")
     s.set_defaults(func=cmd_asset)

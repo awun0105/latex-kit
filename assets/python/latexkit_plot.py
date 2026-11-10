@@ -7,7 +7,8 @@
 
 The SciencePlots style files (MIT license, github.com/garrettj403/SciencePlots)
 live next to this file in styles/, so SciencePlots itself does not need to be
-installed. List them with: python latexkit_plot.py
+installed. The figures4papers style is there too: use_style("figures4papers"),
+or the helpers in f4p.py. List them with: python latexkit_plot.py
 """
 from __future__ import annotations
 

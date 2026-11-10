@@ -1,0 +1,9 @@
+# figures4papers, large comparison bars (ImmunoStruct, Brainteaser): font 24, spines 3.
+# Use after "figures4papers": use_style("figures4papers", "figures4papers-large").
+font.size: 24
+axes.linewidth: 3
+xtick.major.width: 2.5
+ytick.major.width: 2.5
+xtick.major.size: 8
+ytick.major.size: 8
+lines.linewidth: 3

@@ -199,6 +199,37 @@ ax.plot(step, psnr)
 save(fig, "psnr")                 # -> figures/psnr.pdf, chèn bằng \lkfig{psnr}{...}{...}
 \end{lkcode}
 
+\subsection{Phong cách figures4papers}
+Bảng màu và kiểu trình bày lấy từ \href{https://github.com/ChenLiu-1996/figures4papers}{figures4papers}
+(Chen Liu, CC BY-NC 4.0): xanh đậm cho phương pháp đề xuất, xanh lá cho cải tiến, đỏ hồng cho
+baseline, chỉ giữ trục trái và trục dưới. Dùng được cho cả pgfplots (\texttt{lkf4p},
+\texttt{lkf4pbar}, màu \texttt{f4pblue}, \texttt{f4pgreenA..C}, \texttt{f4predA..B}, \texttt{f4pred},
+\texttt{f4pgray}) và matplotlib (\lkfile{plots/f4p.py}).
+\begin{demo}
+\begin{tikzpicture}
+  \begin{axis}[lkf4pbar, symbolic x coords={AUROC, AUPRC, F1}, ylabel={Điểm}, ymin=0.3, ymax=0.95,
+               width=0.75\linewidth, height=5cm, bar width=8pt, legend columns=3,
+               legend style={at={(0.5,1.03)}, anchor=south}]
+    \addplot coordinates {(AUROC, 0.71) (AUPRC, 0.38) (F1, 0.33)};
+    \addplot coordinates {(AUROC, 0.77) (AUPRC, 0.52) (F1, 0.40)};
+    \addplot[fill=f4pblue, draw=black] coordinates {(AUROC, 0.84) (AUPRC, 0.63) (F1, 0.49)};
+    \legend{Baseline A, Baseline B, Ours}
+  \end{axis}
+\end{tikzpicture}
+\end{demo}
+
+Bằng Python: \texttt{latexkit asset add f4p-bars-comparison} chép script mẫu vào \lkfile{plots/},
+sửa số liệu ở đầu file rồi chạy \texttt{latexkit plot}. Có 12 mẫu (\texttt{latexkit asset list plot}),
+xem ở \cref{sec:catalog}.
+\begin{lkcode}[Python]{plots/ket\_qua.py}
+from f4p import PALETTE, LARGE, apply_publication_style, make_grouped_bar, finalize_figure
+apply_publication_style(LARGE)            # font 24, trục dày 3: hình so sánh lớn
+fig, ax = plt.subplots(figsize=(12, 5))
+make_grouped_bar(ax, ["A", "B"], [[0.78, 0.80], [0.92, 0.88]], ["Baseline", "Ours"],
+                 colors=[PALETTE["red_1"], PALETTE["blue_main"]], hatches=["//", ""], annotate=True)
+finalize_figure(fig, "ket_qua")           # -> figures/ket_qua.pdf
+\end{lkcode}
+
 % ===================================================================
 \section{Code (\texttt{code})}
 \begin{lkcode}[Python][label=lst:train]{Vòng lặp huấn luyện}
@@ -242,9 +273,11 @@ $ latexkit new report bao-cao -t "Báo cáo" -m all
 
 % ===================================================================
 \clearpage
-\section{Thư viện hình: OpenTikZ và PlotNeuralNet}\label{sec:catalog}
+\section{Thư viện hình: OpenTikZ, PlotNeuralNet và figures4papers}\label{sec:catalog}
 Mỗi ô là một file \texttt{standalone} trong \lkfile{assets/vendor/opentikz} (hình theo CC0 1.0,
-code theo MIT) hoặc \lkfile{assets/vendor/plotneuralnet} (MIT, loại \texttt{nn}), biên dịch cùng latexkit.
+code theo MIT) hoặc \lkfile{assets/vendor/plotneuralnet} (MIT, loại \texttt{nn}), biên dịch cùng latexkit,
+hoặc một script matplotlib trong \lkfile{assets/vendor/figures4papers} (CC BY-NC 4.0: ghi nguồn, không dùng
+cho mục đích thương mại; loại \texttt{plot}, số liệu chỉ là ví dụ).
 Thêm vào project bằng \texttt{latexkit asset add <id>}.
 
 \begin{tcbraster}[raster columns=3, raster equal height=rows, raster column skip=6pt, raster row skip=6pt]

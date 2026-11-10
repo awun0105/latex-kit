@@ -13,3 +13,4 @@ __pycache__/
 *.listing
 gallery/diagrams/*.pdf
 gallery/catalog.tex
+gallery/plots/

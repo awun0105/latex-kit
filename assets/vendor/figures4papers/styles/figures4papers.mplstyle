@@ -1,0 +1,30 @@
+# figures4papers house style (Chen Liu, github.com/ChenLiu-1996/figures4papers, CC BY-NC 4.0),
+# packaged for latexkit. Compact panels: font 16, spines 2.5. Large bar panels: add
+# "figures4papers-large" after this one.
+font.family: sans-serif
+font.sans-serif: Helvetica, Arial, Liberation Sans, TeX Gyre Heros, Nimbus Sans, DejaVu Sans, sans-serif
+font.size: 16
+mathtext.fontset: dejavusans
+
+axes.spines.right: False
+axes.spines.top: False
+axes.linewidth: 2.5
+axes.grid: False
+axes.prop_cycle: cycler('color', ['0F4D92', '8BCF8B', 'B64342', '42949E', '9A4D8E', 'CFCECE'])
+
+xtick.major.width: 2
+ytick.major.width: 2
+xtick.major.size: 6
+ytick.major.size: 6
+
+lines.linewidth: 2.5
+lines.markersize: 8
+
+legend.frameon: False
+
+figure.facecolor: white
+savefig.facecolor: white
+savefig.dpi: 300
+svg.fonttype: none
+pdf.fonttype: 42
+ps.fonttype: 42

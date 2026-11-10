@@ -180,6 +180,33 @@ save(fig, "psnr")                     # -> figures/psnr.pdf
 ```
 Run `latexkit plot` (uses `uv run --with matplotlib` when uv exists), then `\lkfig{psnr}{Caption}{fig:psnr}`.
 
+### figures4papers style (paper figures with a "proposed vs. baselines" color story)
+
+Palette and look from figures4papers (Chen Liu, CC BY-NC 4.0 — credit it, no commercial use).
+Full guide: `figures4papers.md` next to this file.
+
+- pgfplots: `axis[lkf4p]` (lines, left/bottom axes only, no grid), `axis[lkf4pbar]` (bars with black
+  edges; baselines light red/green, give the proposed series `fill=f4pblue, draw=black`), hatch a bar
+  with `f4phatch`. Colors: `f4pblue f4pbluelight f4pgreenA f4pgreenB f4pgreenC f4predA f4predB f4pred
+  f4pgray f4pteal f4pviolet f4pmagenta f4pgold`.
+- matplotlib: `plots/f4p.py` (copied by `latexkit new` with the plot module, or by `asset add`):
+  ```python
+  from f4p import PALETTE, LARGE, COMPACT, FigureStyle, apply_publication_style, finalize_figure
+  from f4p import make_grouped_bar, make_trend, make_heatmap, make_radar, legend_panel, alpha_ramp, tight_ylim
+  apply_publication_style(LARGE)   # LARGE: font 24 / spines 3 (big bars); COMPACT: 15 / 2
+  ...
+  finalize_figure(fig, "name")     # -> figures/name.pdf (tight_layout pad=2, 300 dpi, TrueType fonts)
+  ```
+  Or only the rcParams: `use_style("figures4papers")` (+ `"figures4papers-large"`).
+- Ready-made scripts (type `plot`): `latexkit asset list plot` → `latexkit asset add <id> [--name x]`
+  → `plots/<id>.py`; replace the example numbers at its top, `latexkit plot`, then
+  `\lkfig[1]{figures/<id>}{Caption}{fig:x}`. Ids: `f4p-bars-comparison` (metrics side by side + legend
+  panel), `f4p-bars-ablation` (horizontal, opacity ramp), `f4p-bars-grouped` (hatched, values on top),
+  `f4p-bars-panels` (one panel per category), `f4p-bars-log` (speed, log axis), `f4p-trend-cumulative`
+  (areas over months + event arrows), `f4p-trend-panels` (train/val bands + legend panel),
+  `f4p-lines-sweep`, `f4p-lines-gradient` (fading curves), `f4p-radar` (per-benchmark scales),
+  `f4p-heatmap` (annotated counts), `f4p-sphere` (concept: points on a sphere).
+
 ## code
 
 ```latex

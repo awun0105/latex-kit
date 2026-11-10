@@ -1,6 +1,6 @@
 ---
 name: latex-kit
-description: Create and edit LaTeX notes, papers, reports, books and beamer slides with the latexkit package and CLI — shared tables with gradbars data bars, TikZ flowcharts/pipelines/architectures, OpenTikZ and PlotNeuralNet figure assets, Mermaid/D2/Graphviz/draw.io diagrams, pgfplots and SciencePlots charts, code blocks, note boxes, theorems and algorithms, in Vietnamese or English. Use when the user wants a new LaTeX document or template, or asks to add a table, diagram, flowchart, chart, code listing or figure to a latexkit project (main.tex with \usepackage{latexkit}).
+description: Create and edit LaTeX notes, papers, reports, books and beamer slides with the latexkit package and CLI — shared tables with gradbars data bars, TikZ flowcharts/pipelines/architectures, OpenTikZ and PlotNeuralNet figure assets, Mermaid/D2/Graphviz/draw.io diagrams, pgfplots, SciencePlots and figures4papers-style publication charts (bars, ablations, radar, heatmaps, trends), code blocks, note boxes, theorems and algorithms, in Vietnamese or English. Use when the user wants a new LaTeX document or template, or asks to add a table, diagram, flowchart, chart, code listing or figure to a latexkit project (main.tex with \usepackage{latexkit}).
 ---
 
 # latex-kit
@@ -57,7 +57,7 @@ Each request maps to one latexkit component; a wrong guess means redrawing. Befo
 |---|---|---|
 | Table | purpose; data source (given, `.csv`, to fill in later); emphasis; width; length | results/ablation → `lktable` + `\best \second \up \down`; criteria matrix or long text cells → `lktablex` (`L C R X`); numbers with units or decimal alignment → `lktblr` + `S` columns; bars, sparklines, ranking inside cells → gradbars (`gradtable`, `\gradbar`) or `\lkheat` `\lkbar`; spans pages → `longtable`; notes under the table → `threeparttable` |
 | Diagram | what it shows; who edits it later; size and direction | steps with decisions or loops → `tikzpicture[lk]` flowchart; straight sequence → `\lkpipeline` (`*` = vertical); stacked layers → `layer` nodes; services and connections, auto layout → D2 (`.d2`); graph or dependency layout → Graphviz (`.dot`); message order between actors → `sequencediagram` (or Mermaid `sequenceDiagram`); taxonomy → `forest`; dated events → `\lktimeline`; CNN / encoder-decoder blocks → PlotNeuralNet asset (`latexkit asset list nn`) or `\pic{Box=...}`; known ML or system figure → OpenTikZ asset (`latexkit asset list <word>`); user wants to drag boxes by hand → draw.io (`.drawio`) |
-| Chart | chart type; data source; look | trend → `axis[lkplot]`; categories → `axis[lkbar]` / `[lkhbar]`; data from code or many points → `plots/*.py` with SciencePlots + `latexkit plot`; match the document fonts → pgfplots |
+| Chart | chart type; data source; look | trend → `axis[lkplot]`; categories → `axis[lkbar]` / `[lkhbar]`; data from code or many points → `plots/*.py` with SciencePlots + `latexkit plot`; match the document fonts → pgfplots; paper results that single out the proposed method (comparison or ablation bars, radar, heatmap, sweep) → figures4papers recipe (`latexkit asset list plot`) or `axis[lkf4p]` / `[lkf4pbar]` |
 | Figure / image | existing file or to draw; one or several | file → `\lkfig`; side by side → `\lkfigs`; to draw → the Diagram row |
 
 Example questions for "vẽ sơ đồ hệ thống": *Sơ đồ thể hiện gì?* (luồng xử lý có rẽ nhánh → flowchart
@@ -83,6 +83,7 @@ TikZ · các thành phần và kết nối → D2 · các tầng chồng nhau �
 | Image | `\lkfig[0.8]{file}{Caption}{fig:x}`; side by side `\lkfigs{Caption}{fig:x}{a/Left, b/Right}` |
 | pgfplots chart | `\begin{axis}[lkplot, ...]` or `[lkbar, symbolic x coords={...}]` |
 | Python chart | edit `plots/make_plots.py` (`use_style("science","ieee")`, `save(fig,"name")`), run `latexkit plot`, include `figures/name.pdf` |
+| Publication chart (figures4papers) | `latexkit asset add f4p-bars-comparison` (list: `latexkit asset list plot`) → replace the example numbers in `plots/<id>.py` → `latexkit plot` → `\lkfig[1]{figures/<id>}{...}{...}`; own script: `from f4p import ...` (figures4papers.md); pgfplots: `axis[lkf4p]`, `[lkf4pbar]` |
 | Code | `\begin{lkcode}[Python]{Title}...\end{lkcode}`, `\lkcodefile[Python]{code/x.py}`, `lkterminal` |
 | Boxes | `keyidea info tip warning question examplebox summary`, optional `[Title]` |
 | Math | `theorem lemma definition example remark proof`, `\R \E \argmin \norm{} \abs{} \vect{} \mat{} \T` |
@@ -92,8 +93,12 @@ TikZ · các thành phần và kết nối → D2 · các tầng chồng nhau �
 
 ## Rules
 
-- Colors: use `accent`, `lkblue lkteal lkgreen lkorange lkred lkpurple lkgray` or the OpenTikZ
-  palette `otblue otorange otteal otpurple otvermillion otgray` — never raw hex in `.tex` files.
+- Colors: use `accent`, `lkblue lkteal lkgreen lkorange lkred lkpurple lkgray`, the OpenTikZ
+  palette `otblue otorange otteal otpurple otvermillion otgray` or the figures4papers palette
+  `f4pblue f4pgreenA..C f4predA..B f4pred f4pgray` — never raw hex in `.tex` files. In figures4papers
+  charts blue = the proposed method, greens/reds = baselines; keep that mapping across figures.
+- figures4papers files are CC BY-NC 4.0: when a document uses them, keep the credit line at the top
+  of the script and do not suggest them for commercial work.
   Diagram files (`.d2`, `.drawio`, `diagrams/mermaid.json`) keep hex colors close to `accent` (`#1F4E79`).
 - Do not redefine node styles per figure; extend with `lkcolor=<color>`, `minimum width=...`.
 - Do not load geometry after latexkit; use the `margin=` option or load geometry first.

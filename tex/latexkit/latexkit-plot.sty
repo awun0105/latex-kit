@@ -40,6 +40,41 @@
     cycle list={{fill=otblue!75, draw=otblue!90!black}, {fill=otorange!75, draw=otorange!90!black}},
     nodes near coords, nodes near coords style={font=\sffamily\scriptsize}},
 }
+% figures4papers palette (Chen Liu, github.com/ChenLiu-1996/figures4papers): blue = proposed
+% method, greens = improvements, reds = baselines, gray = reference. Same colors as plots/f4p.py,
+% so pgfplots charts and matplotlib figures in one document match.
+\definecolor{f4pblue}{HTML}{0F4D92}     \definecolor{f4pbluelight}{HTML}{3775BA}
+\definecolor{f4pgreenA}{HTML}{DDF3DE}   \definecolor{f4pgreenB}{HTML}{AADCA9}
+\definecolor{f4pgreenC}{HTML}{8BCF8B}   \definecolor{f4predA}{HTML}{F6CFCB}
+\definecolor{f4predB}{HTML}{E9A6A1}     \definecolor{f4pred}{HTML}{B64342}
+\definecolor{f4pgray}{HTML}{CFCECE}     \definecolor{f4pgold}{HTML}{FFD700}
+\definecolor{f4pteal}{HTML}{42949E}     \definecolor{f4pviolet}{HTML}{9A4D8E}
+\definecolor{f4pmagenta}{HTML}{EA84DD}
+\pgfplotscreateplotcyclelist{f4pcycle}{
+  {f4pblue, mark=*, mark size=1.8pt, line width=1.4pt},
+  {f4pred, mark=*, mark size=1.8pt, line width=1.4pt},
+  {f4pgreenC!80!black, mark=*, mark size=1.8pt, line width=1.4pt},
+  {f4pteal, mark=*, mark size=1.8pt, line width=1.4pt},
+  {f4pviolet, mark=*, mark size=1.8pt, line width=1.4pt},
+  {black!45, mark=*, mark size=1.8pt, line width=1.4pt},
+}
+\pgfplotsset{
+  % figures4papers look: left/bottom axes only, thick axis lines, no grid, frameless legend
+  lkf4p/.style={lkplot, cycle list name=f4pcycle, grid=none,
+    axis lines*=left, axis line style={draw=black, line width=1pt},
+    tick style={draw=black, line width=0.8pt}, tick align=outside,
+    legend style={draw=none, fill=none}},
+  % bars: black edges, baselines in light green/red, the last series (ours) in blue
+  lkf4pbar/.style={lkf4p, ybar, bar width=9pt, enlarge x limits=0.15, xtick=data,
+    xtick style={draw=none},
+    cycle list={{fill=f4predA, draw=black}, {fill=f4pgreenB, draw=black},
+                {fill=f4pgreenC, draw=black}, {fill=f4predB, draw=black}, {fill=f4pblue, draw=black}},
+    nodes near coords, nodes near coords style={font=\sffamily\scriptsize}},
+  % hatched variant for grayscale print (needs the patterns library, loaded below)
+  f4phatch/.style={postaction={pattern=north east lines, pattern color=black!70}},
+}
+\usetikzlibrary{patterns}
+
 % The otblue ... colors come from the diagram module; define them when it is off.
 \ifcsname ver@latexkit-diagram.sty\endcsname\else\input{latexkit-opentikz-colors.tex}\fi
 

@@ -34,7 +34,7 @@ latex-kit has two parts: the LaTeX package `latexkit` and the `latexkit` termina
 - **11 document types:** notes, paper, report, book, slides, thesis, proposal, poster, exam, CV and letter. Labels, box titles, `\cref` names and theorems follow the chosen language.
 - **Tables:** results tables with best values marked, full-width tables, data bars and sparklines inside cells (gradbars).
 - **Diagrams:** flowcharts, pipelines, architectures and timelines in TikZ; diagrams written in Mermaid, D2, Graphviz or drawn in draw.io, turned into PDF automatically.
-- **Figure library:** 73 OpenTikZ figures and 9 PlotNeuralNet network architectures, added to a project with one command.
+- **Figure library:** 73 OpenTikZ figures, 9 PlotNeuralNet network architectures and 12 paper chart recipes in the figures4papers style (comparison and ablation bars, radar, heatmap, trends), added to a project with one command.
 - **Charts, code, note boxes, math, algorithms** with the same look in every document.
 - **Coding-agent skill:** Claude Code and Codex use the kit the right way. When a request for a table or diagram leaves things open, the agent asks up to 3 questions to pick the right component, and never invents data.
 
@@ -45,7 +45,7 @@ latex-kit has two parts: the LaTeX package `latexkit` and the `latexkit` termina
 | `latexkit.py` | The `latexkit` command (Python, standard library only) |
 | `tex/latexkit/` | `latexkit.sty`, 8 modules, the CV package, gradbars and the PlotNeuralNet 3D blocks |
 | `templates/` | One folder per document type; `_common/` holds files every project gets |
-| `assets/vendor/` | Bundled assets: OpenTikZ, PlotNeuralNet, gradbars, SciencePlots |
+| `assets/vendor/` | Bundled assets: OpenTikZ, PlotNeuralNet, gradbars, SciencePlots, figures4papers |
 | `gallery/` | Document showing every component with its code |
 | `skill/latex-kit/` | Coding-agent skill and the `reference.md` lookup sheet |
 
@@ -144,7 +144,7 @@ A module is one part of the package. Loading only what a document needs keeps bu
 | `latexkit build [folder]` | Run the chart scripts, then build |
 | `latexkit render [file]` | Turn `.mmd`, `.d2`, `.dot`, `.drawio` diagrams into PDF |
 | `latexkit plot` | Run `plots/*.py` to draw Python charts |
-| `latexkit asset list [word]` | Search the figure library; `asset add <id>` copies a figure into the project |
+| `latexkit asset list [word]` | Search the figure library (`asset list plot`: figures4papers chart recipes); `asset add <id>` copies a figure or plot script into the project |
 | `latexkit bundle [folder]` | Copy the package into the project, for Overleaf |
 | `latexkit gallery` | Rebuild `gallery/gallery.pdf` |
 
@@ -223,6 +223,7 @@ Each row is a common task and the command for it. Full examples of every command
 | Diagram written as text or drawn in draw.io | create `diagrams/x.d2` (or `.mmd`, `.dot`, `.drawio`), then `\lkdiagram{diagrams/x}` | `diagram` |
 | Library figure | `latexkit asset add nn-unet`, then `\lktikzfig{figures/nn-unet}` | `diagram` |
 | Chart from a CSV file | `\begin{axis}[lkplot] \addplot table[...] {plots/x.csv}; \end{axis}` | `plot` |
+| Paper comparison chart (figures4papers) | `latexkit asset add f4p-bars-comparison`, edit the numbers in `plots/f4p-bars-comparison.py`, run `latexkit plot`, then `\lkfig[1]{figures/f4p-bars-comparison}{Caption}{fig:cmp}`; in pgfplots: `\begin{axis}[lkf4pbar]` | `plot` |
 | Code block | `\begin{lkcode}[Python]{Title} ... \end{lkcode}` | `code` |
 | Highlight box | `\begin{keyidea} ... \end{keyidea}`, or `warning`, `tip`, `summary` | `box` |
 | Existing image | `\lkfig{images/photo}{Caption}{fig:photo}` | core |
@@ -274,10 +275,10 @@ Every folder in `templates/` with a `main.tex` is a document type. `latexkit` pi
 
 ## Acknowledgments
 
-The kit bundles [OpenTikZ](https://github.com/opentikz/opentikz), [PlotNeuralNet](https://github.com/HarisIqbal88/PlotNeuralNet), [gradbars](https://github.com/Tape5try/gradbars) and [SciencePlots](https://github.com/garrettj403/SciencePlots). Diagram files use [Mermaid](https://github.com/mermaid-js/mermaid-cli), [D2](https://github.com/d2lang/d2), [Graphviz](https://graphviz.org) and [draw.io](https://github.com/jgraph/drawio-desktop). The poster template uses [tikzposter](https://ctan.org/pkg/tikzposter) and the exam template uses [exam](https://ctan.org/pkg/exam).
+The kit bundles [OpenTikZ](https://github.com/opentikz/opentikz), [PlotNeuralNet](https://github.com/HarisIqbal88/PlotNeuralNet), [gradbars](https://github.com/Tape5try/gradbars), [SciencePlots](https://github.com/garrettj403/SciencePlots) and Chen Liu's [figures4papers](https://github.com/ChenLiu-1996/figures4papers) (palette, figure style and plotting scripts published in Nature Machine Intelligence, ICML, NeurIPS and ECCV). Diagram files use [Mermaid](https://github.com/mermaid-js/mermaid-cli), [D2](https://github.com/d2lang/d2), [Graphviz](https://graphviz.org) and [draw.io](https://github.com/jgraph/drawio-desktop). The poster template uses [tikzposter](https://ctan.org/pkg/tikzposter) and the exam template uses [exam](https://ctan.org/pkg/exam).
 
 ## License
 
-The latex-kit code is released under the [MIT License](LICENSE). Bundled assets keep their own licenses: OpenTikZ figures are CC0 1.0; OpenTikZ code, PlotNeuralNet, gradbars and SciencePlots are MIT.
+The latex-kit code is released under the [MIT License](LICENSE). Bundled assets keep their own licenses: OpenTikZ figures are CC0 1.0; OpenTikZ code, PlotNeuralNet, gradbars and SciencePlots are MIT. Everything in `assets/vendor/figures4papers/` (including `f4p.py` and the chart recipes rewritten from the original scripts) is [CC BY-NC 4.0](assets/vendor/figures4papers/LICENSE): use and adapt it with credit, not for commercial purposes.
 
 [Back to Top](#top)

@@ -34,7 +34,7 @@ latex-kit gồm hai phần: package LaTeX `latexkit` và lệnh `latexkit` chạ
 - **11 loại tài liệu:** ghi chú, paper, báo cáo, sách, slide, luận văn, đề cương, poster, đề thi, CV và thư. Nhãn, tiêu đề hộp, `\cref` và định lý đổi theo ngôn ngữ đã chọn.
 - **Bảng:** bảng kết quả có đánh dấu tốt nhất, bảng giãn hết chiều ngang, thanh dữ liệu và sparkline trong ô (gradbars).
 - **Sơ đồ:** flowchart, pipeline, kiến trúc và mốc thời gian bằng TikZ; sơ đồ viết bằng Mermaid, D2, Graphviz hoặc vẽ trong draw.io, được tự chuyển sang PDF.
-- **Thư viện hình:** 73 hình OpenTikZ và 9 kiến trúc mạng nơ-ron PlotNeuralNet, thêm vào project bằng một lệnh.
+- **Thư viện hình:** 73 hình OpenTikZ, 9 kiến trúc mạng nơ-ron PlotNeuralNet và 12 mẫu đồ thị cho bài báo theo phong cách figures4papers (cột so sánh, ablation, radar, heatmap, đường xu hướng), thêm vào project bằng một lệnh.
 - **Đồ thị, code, hộp ghi chú, toán, thuật toán** với cùng một kiểu trình bày cho mọi tài liệu.
 - **Skill cho coding agent:** Claude Code và Codex dùng kit đúng cách. Khi yêu cầu vẽ bảng hay sơ đồ còn thiếu thông tin, agent hỏi lại tối đa 3 câu để chọn đúng thành phần và không tự bịa số liệu.
 
@@ -45,7 +45,7 @@ latex-kit gồm hai phần: package LaTeX `latexkit` và lệnh `latexkit` chạ
 | `latexkit.py` | Lệnh `latexkit` (Python, chỉ dùng thư viện chuẩn) |
 | `tex/latexkit/` | Package `latexkit.sty`, 8 module, gói CV, gradbars và các khối 3D của PlotNeuralNet |
 | `templates/` | Mỗi thư mục là một loại tài liệu; `_common/` chứa các file mọi project đều có |
-| `assets/vendor/` | Asset đóng gói kèm: OpenTikZ, PlotNeuralNet, gradbars, SciencePlots |
+| `assets/vendor/` | Asset đóng gói kèm: OpenTikZ, PlotNeuralNet, gradbars, SciencePlots, figures4papers |
 | `gallery/` | Tài liệu giới thiệu mọi thành phần kèm code |
 | `skill/latex-kit/` | Skill cho coding agent và bảng tra cứu `reference.md` |
 
@@ -144,7 +144,7 @@ Module là một phần của package. Chỉ nạp phần cần dùng thì tài 
 | `latexkit build [thư mục]` | Chạy các script vẽ đồ thị rồi biên dịch |
 | `latexkit render [file]` | Chuyển sơ đồ `.mmd`, `.d2`, `.dot`, `.drawio` sang PDF |
 | `latexkit plot` | Chạy `plots/*.py` để vẽ đồ thị bằng Python |
-| `latexkit asset list [từ khóa]` | Tìm hình trong thư viện; `asset add <id>` chép hình vào project |
+| `latexkit asset list [từ khóa]` | Tìm hình trong thư viện (`asset list plot`: mẫu đồ thị figures4papers); `asset add <id>` chép hình hoặc script vẽ vào project |
 | `latexkit bundle [thư mục]` | Chép package vào project, để dùng trên Overleaf |
 | `latexkit gallery` | Biên dịch lại `gallery/gallery.pdf` |
 
@@ -223,6 +223,7 @@ Mỗi dòng dưới đây là một việc thường làm và lệnh tương ứ
 | Sơ đồ viết bằng văn bản hoặc vẽ trong draw.io | tạo `diagrams/x.d2` (hoặc `.mmd`, `.dot`, `.drawio`), rồi `\lkdiagram{diagrams/x}` | `diagram` |
 | Hình có sẵn trong thư viện | `latexkit asset add nn-unet`, rồi `\lktikzfig{figures/nn-unet}` | `diagram` |
 | Đồ thị từ file CSV | `\begin{axis}[lkplot] \addplot table[...] {plots/x.csv}; \end{axis}` | `plot` |
+| Đồ thị so sánh cho bài báo (figures4papers) | `latexkit asset add f4p-bars-comparison`, sửa số liệu trong `plots/f4p-bars-comparison.py`, chạy `latexkit plot`, rồi `\lkfig[1]{figures/f4p-bars-comparison}{Chú thích}{fig:ss}`; trong pgfplots: `\begin{axis}[lkf4pbar]` | `plot` |
 | Khung code | `\begin{lkcode}[Python]{Tiêu đề} ... \end{lkcode}` | `code` |
 | Hộp nhấn mạnh | `\begin{keyidea} ... \end{keyidea}`, hoặc `warning`, `tip`, `summary` | `box` |
 | Ảnh có sẵn | `\lkfig{images/anh}{Chú thích}{fig:anh}` | lõi |
@@ -274,10 +275,10 @@ Mỗi thư mục trong `templates/` có file `main.tex` là một loại tài li
 
 ## Lời cảm ơn
 
-Kit đóng gói kèm [OpenTikZ](https://github.com/opentikz/opentikz), [PlotNeuralNet](https://github.com/HarisIqbal88/PlotNeuralNet), [gradbars](https://github.com/Tape5try/gradbars) và [SciencePlots](https://github.com/garrettj403/SciencePlots). Sơ đồ từ file dùng [Mermaid](https://github.com/mermaid-js/mermaid-cli), [D2](https://github.com/d2lang/d2), [Graphviz](https://graphviz.org) và [draw.io](https://github.com/jgraph/drawio-desktop). Template poster dùng [tikzposter](https://ctan.org/pkg/tikzposter), template đề thi dùng [exam](https://ctan.org/pkg/exam).
+Kit đóng gói kèm [OpenTikZ](https://github.com/opentikz/opentikz), [PlotNeuralNet](https://github.com/HarisIqbal88/PlotNeuralNet), [gradbars](https://github.com/Tape5try/gradbars), [SciencePlots](https://github.com/garrettj403/SciencePlots) và [figures4papers](https://github.com/ChenLiu-1996/figures4papers) của Chen Liu (bảng màu, kiểu trình bày và các script vẽ hình đã đăng ở Nature Machine Intelligence, ICML, NeurIPS, ECCV). Sơ đồ từ file dùng [Mermaid](https://github.com/mermaid-js/mermaid-cli), [D2](https://github.com/d2lang/d2), [Graphviz](https://graphviz.org) và [draw.io](https://github.com/jgraph/drawio-desktop). Template poster dùng [tikzposter](https://ctan.org/pkg/tikzposter), template đề thi dùng [exam](https://ctan.org/pkg/exam).
 
 ## Bản quyền
 
-Code của latex-kit phát hành theo giấy phép [MIT](LICENSE). Asset đóng gói kèm giữ giấy phép gốc: hình OpenTikZ theo CC0 1.0; code OpenTikZ, PlotNeuralNet, gradbars và SciencePlots theo MIT.
+Code của latex-kit phát hành theo giấy phép [MIT](LICENSE). Asset đóng gói kèm giữ giấy phép gốc: hình OpenTikZ theo CC0 1.0; code OpenTikZ, PlotNeuralNet, gradbars và SciencePlots theo MIT. Mọi file trong `assets/vendor/figures4papers/` (gồm `f4p.py` và các mẫu đồ thị viết lại từ script gốc) theo [CC BY-NC 4.0](assets/vendor/figures4papers/LICENSE): được dùng và sửa khi ghi nguồn, không được dùng cho mục đích thương mại.
 
 [Về đầu trang](#top)

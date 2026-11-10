@@ -1,0 +1,205 @@
+[
+ {
+  "id": "f4p-bars-comparison",
+  "name": "Comparison bars, one panel per metric",
+  "type": "plot",
+  "description": "Methods compared on several metrics, error bars, tight y-range, legend panel",
+  "tags": [
+   "bar",
+   "comparison",
+   "results",
+   "errorbar",
+   "multi-metric"
+  ],
+  "path": "recipes/f4p-bars-comparison",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_ImmunoStruct/plot_bars.py"
+ },
+ {
+  "id": "f4p-bars-ablation",
+  "name": "Ablation bars (opacity ramp)",
+  "type": "plot",
+  "description": "Horizontal ablation bars, one blue whose opacity grows with each added component",
+  "tags": [
+   "bar",
+   "ablation",
+   "horizontal",
+   "components"
+  ],
+  "path": "recipes/f4p-bars-ablation",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_ImmunoStruct/plot_bars.py"
+ },
+ {
+  "id": "f4p-bars-grouped",
+  "name": "Grouped bars with hatching",
+  "type": "plot",
+  "description": "Grouped bars with black edges, hatches for grayscale print and values on top",
+  "tags": [
+   "bar",
+   "grouped",
+   "hatch",
+   "annotated",
+   "datasets"
+  ],
+  "path": "recipes/f4p-bars-grouped",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "scientific-figure-making/references/tutorials.md"
+ },
+ {
+  "id": "f4p-bars-panels",
+  "name": "Bar panels per category",
+  "type": "plot",
+  "description": "Grid of small bar panels, one per category, same methods and colors, legend panel",
+  "tags": [
+   "bar",
+   "category",
+   "breakdown",
+   "grid",
+   "llm"
+  ],
+  "path": "recipes/f4p-bars-panels",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_Brainteaser/plot_correctness_by_category.py"
+ },
+ {
+  "id": "f4p-bars-log",
+  "name": "Throughput bars, log scale",
+  "type": "plot",
+  "description": "Speed or throughput on a log axis with values above bars and a two-column legend",
+  "tags": [
+   "bar",
+   "log",
+   "speed",
+   "throughput",
+   "runtime"
+  ],
+  "path": "recipes/f4p-bars-log",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_RNAGenScape/plot_comparison_speed.py"
+ },
+ {
+  "id": "f4p-trend-cumulative",
+  "name": "Cumulative trend with events",
+  "type": "plot",
+  "description": "Cumulative counts over months as filled areas, arrows marking release events",
+  "tags": [
+   "trend",
+   "area",
+   "cumulative",
+   "time",
+   "events",
+   "survey"
+  ],
+  "path": "recipes/f4p-trend-cumulative",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_ophthal_review/plot_trend.py"
+ },
+ {
+  "id": "f4p-trend-panels",
+  "name": "Train/validation curves + legend panel",
+  "type": "plot",
+  "description": "Curves with uncertainty bands in several panels and a legend-only panel",
+  "tags": [
+   "trend",
+   "line",
+   "training",
+   "uncertainty",
+   "band"
+  ],
+  "path": "recipes/f4p-trend-panels",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "scientific-figure-making/references/tutorials.md"
+ },
+ {
+  "id": "f4p-lines-sweep",
+  "name": "Hyper-parameter sweep lines",
+  "type": "plot",
+  "description": "Small panels per metric, thick lines with round markers over a sweep",
+  "tags": [
+   "line",
+   "sweep",
+   "hyperparameter",
+   "marker"
+  ],
+  "path": "recipes/f4p-lines-sweep",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_RNAGenScape/plot_sweep.py"
+ },
+ {
+  "id": "f4p-lines-gradient",
+  "name": "Fading training curves",
+  "type": "plot",
+  "description": "Curves whose opacity grows over steps, dashed reference line",
+  "tags": [
+   "line",
+   "training",
+   "post-training",
+   "gradient",
+   "reference"
+  ],
+  "path": "recipes/f4p-lines-gradient",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_VIGIL/plot_posttraining.py"
+ },
+ {
+  "id": "f4p-radar",
+  "name": "Radar chart, per-benchmark scales",
+  "type": "plot",
+  "description": "Radar with one spoke per model/benchmark, each benchmark on its own scale",
+  "tags": [
+   "radar",
+   "polar",
+   "spider",
+   "benchmark",
+   "comparison"
+  ],
+  "path": "recipes/f4p-radar",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_VIGIL/plot_comparison_radar.py"
+ },
+ {
+  "id": "f4p-heatmap",
+  "name": "Annotated count heatmap",
+  "type": "plot",
+  "description": "Count matrix with values in cells and row/column totals, no seaborn",
+  "tags": [
+   "heatmap",
+   "matrix",
+   "composition",
+   "counts",
+   "survey"
+  ],
+  "path": "recipes/f4p-heatmap",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_ophthal_review/plot_composition.py"
+ },
+ {
+  "id": "f4p-sphere",
+  "name": "Points on a shaded sphere (concept)",
+  "type": "plot",
+  "description": "Concept panels: embeddings spread on a sphere vs. collapsed",
+  "tags": [
+   "concept",
+   "sphere",
+   "illustration",
+   "embedding",
+   "geometry"
+  ],
+  "path": "recipes/f4p-sphere",
+  "license": "CC-BY-NC-4.0",
+  "author": "Chen Liu (figures4papers), adapted for latexkit",
+  "origin": "figure_Dispersion/plot_idea.py"
+ }
+]

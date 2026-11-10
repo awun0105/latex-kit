@@ -13,6 +13,8 @@ from latexkit_plot import use_style, save
 # "science" + "ieee" = paper look; "no-latex" avoids needing LaTeX inside matplotlib.
 # <<vi:Bỏ "no-latex" để chữ trong hình dùng font LaTeX.||en:Drop "no-latex" to render text with LaTeX.>>
 use_style("science", "grid", "no-latex")
+# <<vi:Phong cách figures4papers (xanh = phương pháp đề xuất): use_style("figures4papers") hoặc "from f4p import ...".||en:figures4papers look (blue = proposed method): use_style("figures4papers") or "from f4p import ...".>>
+# <<vi:Mẫu có sẵn||en:Ready-made recipes>>: latexkit asset list plot
 
 rows = list(csv.DictReader(open(Path(__file__).with_name("results.csv"))))
 step = [int(r["step"]) for r in rows]
