@@ -27,18 +27,61 @@
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
+% ---------------------------------------------------------------- bold header and first column
+% In lktable and lktablex the rows above the first \midrule (the header) are bold.
+% \lkboldfirstcoltrue also sets the first column in bold (default in style=guide):
+% use it for attribute tables, \lkboldfirstcolfalse for results tables.
+\newif\iflkboldfirstcol
+\iflk@guide\lkboldfirstcoltrue\fi
+\newif\iflk@inhead
+\newcommand{\lk@cellhead}{\iflk@inhead\bfseries\fi}
+\newcommand{\lk@cellfirst}{\iflk@inhead\bfseries\else\iflkboldfirstcol\bfseries\fi\fi}
+\let\lk@origmidrule\midrule
+\newcommand{\lk@endhead}{\noalign{\global\lk@inheadfalse}}
+% \lk@colspec{l c c} -> >{\lk@cellfirst}l >{\lk@cellhead}c >{\lk@cellhead}c
+% (letters in braces or [options] are left alone)
+\def\lk@scanend{\lk@scanend@}
+\newcommand{\lk@colspec}[1]{%
+  \def\lk@spec{}\def\lk@first{1}\lk@scan#1\lk@scanend}
+\newcommand{\lk@scan}{\@ifnextchar\bgroup{\lk@scangroup}{\lk@scantok}}
+\newcommand{\lk@scangroup}[1]{\lk@addspec{{#1}}\lk@scan}
+\newcommand{\lk@addspec}[1]{\expandafter\def\expandafter\lk@spec\expandafter{\lk@spec#1}}
+\newcommand{\lk@scantok}[1]{%
+  \let\lk@next\lk@scan
+  \ifx\lk@scanend#1\let\lk@next\relax
+  \else\ifx[#1\let\lk@next\lk@scanopt
+  \else
+    \in@{#1}{lcrXLCRSPpmbQ}%
+    \ifin@
+      \ifnum\lk@first=1 \lk@addspec{>{\lk@cellfirst}#1}\def\lk@first{0}%
+      \else\lk@addspec{>{\lk@cellhead}#1}\fi
+    \else\lk@addspec{#1}\fi
+  \fi\fi
+  \lk@next}
+\def\lk@scanopt#1]{\lk@addspec{[#1]}\lk@scan}
+% header cells written with \multicolumn are bold too
+\let\lk@origmulticolumn\multicolumn
+\newcommand{\lk@starthead}{\noalign{\global\lk@inheadtrue}}
+\newcommand{\lk@tablesetup}{%
+  \global\lk@inheadtrue
+  \def\midrule{\lk@endhead\lk@origmidrule}%
+  \def\multicolumn##1##2##3{\lk@origmulticolumn{##1}{##2}{\lk@cellhead##3}}}
+
 % ---------------------------------------------------------------- environments
 % \begin{lktable}[placement]{caption}{label}{colspec}  rows  \end{lktable}
 %   Booktabs top and bottom rules are added; write \midrule after the header.
 \NewDocumentEnvironment{lktable}{O{htbp} m m m}
   {\begin{table}[#1]\centering\caption{#2}\label{#3}%
-   \begin{tabular}{#4}\toprule}
-  {\bottomrule\end{tabular}\end{table}}
+   \lk@tablesetup\lk@colspec{#4}%
+   \expandafter\tabular\expandafter{\lk@spec}\lk@starthead\toprule}
+  {\bottomrule\endtabular\end{table}}
 
 % Same, full text width, with X/L/C/R columns that share the free space.
 \NewDocumentEnvironment{lktablex}{O{htbp} m m m +b}
   {\begin{table}[#1]\centering\caption{#2}\label{#3}%
-   \begin{tabularx}{\linewidth}{#4}\toprule #5\bottomrule\end{tabularx}\end{table}}
+   \lk@tablesetup\lk@colspec{#4}%
+   \edef\lk@x{\noexpand\begin{tabularx}{\noexpand\linewidth}{\expandafter\unexpanded\expandafter{\lk@spec}}}%
+   \lk@x\lk@starthead\toprule #5\bottomrule\end{tabularx}\end{table}}
   {}
 
 % tabularray version with header row in bold and booktabs rules:

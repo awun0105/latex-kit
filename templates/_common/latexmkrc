@@ -7,6 +7,8 @@ $out_dir  = 'build';
 @default_files = ('main.tex');
 $bibtex_use = 2;
 set_tex_cmds('-interaction=nonstopmode -file-line-error -synctex=1 %O %S');
+# LuaLaTeX rewrites its font cache (*.luc) on some runs; do not treat that as a change
+$hash_calc_ignore_pattern{'luc'} = '.*';
 if ({{SHELL_ESCAPE}}) { set_tex_cmds('-shell-escape -interaction=nonstopmode -file-line-error -synctex=1 %O %S'); }
 
 # Diagram files (diagrams/*.mmd, *.dot, *.gv, *.d2, *.drawio) become PDF on demand:

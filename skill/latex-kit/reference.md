@@ -73,6 +73,11 @@ with the guide body and footer. Their default author is generic (`Nguyễn Minh 
   Ours & 28.8 & 0.893 \\
 \end{lktblr}
 ```
+
+In `lktable`/`lktablex` the rows above the first `\midrule` are bold (also `\multicolumn`
+cells there); do not add `\textbf` to header cells. With `style=guide` the first column
+(the attribute column) is bold too: `\lkboldfirstcolfalse` before a table turns that off,
+`\lkboldfirstcoltrue` turns it on in other styles.
 ### gradbars (data graphics in text and cells; docs: `assets/vendor/gradbars/docs/api.md`)
 ```latex
 \gradbar[max=100, width=25mm, precision=1]{72.4}   \gradspark{3,5,2,8,6}

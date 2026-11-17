@@ -43,9 +43,14 @@
 \def\lk@footL{}
 \newcommand{\lkheader}[2]{\def\lk@headL{#1}\def\lk@headR{#2}}
 \newcommand{\lkfooter}[1]{\def\lk@footL{#1}}
+% no \title or \author: the kernel defaults raise an error or warning, so leave them empty
 \AtBeginDocument{%
   \let\lk@doctitle\@title
-  \let\lk@docauthor\@author}
+  \let\lk@docauthor\@author
+  \expandafter\in@\expandafter\@latex@error\expandafter{\@title}%
+  \ifin@\let\lk@doctitle\@empty\fi
+  \expandafter\in@\expandafter\@latex@warning@no@line\expandafter{\@author}%
+  \ifin@\let\lk@docauthor\@empty\fi}
 \newcommand{\lk@hf}[1]{{\small\bfseries\color{accent}\def\and{\unskip, }\def\\{ }#1}}
 \fancypagestyle{lkguide}{%
   \fancyhf{}%
