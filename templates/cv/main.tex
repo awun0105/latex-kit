@@ -1,53 +1,61 @@
-% <<vi:CV một cột — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:One-column CV — made with latexkit. Build: latexmk (output in build/main.pdf).>>
-% <<vi:Bố cục thân thiện với hệ thống lọc hồ sơ (ATS): một cột, chữ thường, không icon. Giữ trong 1 trang.||en:ATS-friendly layout: one column, plain text, no icons. Keep it to 1 page.>>
+% <<vi:CV một cột theo mẫu tham chiếu. Thay mọi phần trong ngoặc vuông trước khi gửi.||en:One-column CV based on the reference. Replace every bracketed field before sending.>>
+% <<vi:Tên và thông tin liên hệ dưới đây là boilerplate, không phải hồ sơ thật.||en:The name and contact details below are boilerplate, not a real profile.>>
 \documentclass[a4paper,11pt]{article}
-\usepackage[a4paper, left=1.8cm, right=1.8cm, top=1.6cm, bottom=1.6cm]{geometry}
+\usepackage[a4paper,left=1.83cm,right=1.83cm,top=1.5cm,bottom=1.5cm]{geometry}
 \usepackage[{{PKGOPTS}}]{latexkit}
 \usepackage{latexkit-cv}
 \pagestyle{empty}
+\hypersetup{hidelinks}
 \setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.045}
 \raggedright
+\raggedbottom
 
 \begin{document}
-
 \cvheader{{{AUTHOR}}}
-  {<<vi:Vị trí mong muốn \textbar{} Lĩnh vực 1 \textbar{} Lĩnh vực 2||en:Target role \textbar{} Field 1 \textbar{} Field 2>>}
-  {+84 900 000 000, \href{mailto:email@example.com}{email@example.com},
+  {<<vi:[Vị trí mong muốn] \textbar{} [Chuyên môn chính] \textbar{} [Lĩnh vực quan tâm]||en:[Target role] \textbar{} [Main expertise] \textbar{} [Area of interest]>>}
+  {+84 900 000 000, \href{mailto:alex@example.com}{alex@example.com},
    \href{https://linkedin.com/in/username}{linkedin.com/in/username},
    \href{https://github.com/username}{github.com/username}}
 
-\cvsection{<<vi:Tóm tắt||en:Summary>>}
-{\small <<vi:[Hai đến ba câu: chuyên môn chính, số năm kinh nghiệm, thế mạnh nổi bật và loại công việc muốn làm.]||en:[Two or three sentences: main expertise, years of experience, strongest skills and the kind of work wanted.]>>}
+\cvsection{<<vi:Tóm tắt chuyên môn||en:Professional Summary>>}
+{\small <<vi:[Viết hai đến ba câu về nền tảng học tập, chuyên môn và công việc mong muốn. Chỉ nêu kỹ năng có thể giải thích bằng một dự án hoặc kinh nghiệm cụ thể.]||en:[Write two or three sentences about your academic background, expertise and target role. Include only skills supported by a specific project or experience.]>>}
 
-\cvsection{<<vi:Học vấn||en:Education>>}
-\cventry{<<vi:Trường Đại học ABC||en:ABC University>>}{<<vi:TP. Hồ Chí Minh||en:City, Country>>}
-        {<<vi:Cử nhân Công nghệ Thông tin, GPA 3.5/4||en:B.Sc. in Computer Science, GPA 3.5/4>>}{2022 -- 2026}
+\cvsection{<<vi:Học vấn và đào tạo||en:Education and Training>>}
+\cventry{<<vi:[Tên trường]||en:[University name]>>}{<<vi:[Thành phố]||en:[City]>>}
+        {<<vi:[Bằng cấp, ngành học và chuyên ngành]||en:[Degree, major and specialisation]>>}{20XX -- 20XX}
+\begin{cvitems}
+  \item {}<<vi:[Môn học, đồ án hoặc hướng nghiên cứu liên quan đến vị trí ứng tuyển.]||en:[Relevant coursework, capstone project or research area.]>>
+\end{cvitems}
 
 \cvsection{<<vi:Kinh nghiệm||en:Experience>>}
-\cventry{<<vi:Kỹ sư AI||en:AI Engineer>>}{<<vi:Công ty XYZ||en:XYZ Company>>}
-        {<<vi:Thực tập, nhóm Thị giác máy tính||en:Intern, Computer Vision team>>}{<<vi:06/2025 -- nay||en:Jun 2025 -- Present>>}
+\cventry{<<vi:[Chức danh]||en:[Role]>>}{<<vi:[Tên đơn vị]||en:[Organisation]>>}
+        {<<vi:[Nhóm hoặc hình thức làm việc]||en:[Team or employment type]>>}{20XX -- 20XX}
 \begin{cvitems}
-  \item <<vi:Tối ưu mô hình phát hiện vật thể bằng TensorRT, giảm 30\% thời gian suy luận. (Mỗi dòng: việc đã làm, công cụ, kết quả đo được.)||en:Optimised an object detector with TensorRT, cutting inference time by 30\%. (Each line: what was done, tools, measured result.)>>
-  \item <<vi:Xây dựng pipeline gán nhãn dữ liệu cho 50.000 ảnh. (Bắt đầu bằng động từ: xây dựng, thiết kế, triển khai...)||en:Built a labelling pipeline for 50,000 images. (Start with a verb: built, designed, deployed...)>>
+  \item {}<<vi:[Mô tả việc đã làm, công cụ đã dùng và phạm vi trách nhiệm của bản thân.]||en:[Describe your work, tools and individual responsibilities.]>>
+  \item {}<<vi:[Nêu kết quả và cách kiểm chứng. Chỉ điền số liệu đã đo; xóa dòng này nếu chưa có bằng chứng.]||en:[State the outcome and how it was verified. Use measured figures only; delete this line if evidence is unavailable.]>>
 \end{cvitems}
 
-\cvsection{<<vi:Dự án||en:Projects>>}
-\cvproject{\href{https://github.com/username/project}{<<vi:Tên dự án||en:Project name>>}}{Python, PyTorch, FastAPI}{2025}
+\cvsection{<<vi:Dự án tiêu biểu||en:Selected Projects>>}
+\cvproject{\href{https://example.com/project}{<<vi:[Tên dự án]||en:[Project name]>>}}
+  {<<vi:[Vai trò] \textbar{} [Công nghệ chính]||en:[Role] \textbar{} [Main technologies]>>}{20XX -- 20XX}
 \begin{cvitems}
-  \item <<vi:Hệ thống tìm kiếm ảnh theo mô tả văn bản; trưởng nhóm 4 người; độ chính xác Recall@10 đạt 85\%.||en:Text-to-image search system; led a team of 4; reached 85\% Recall@10.>>
-  \item <<vi:Chỉ mục FAISS cho 1 triệu vector, trả kết quả dưới 50 ms.||en:FAISS index over 1 million vectors, answering in under 50 ms.>>
+  \item {}<<vi:[Giới thiệu vấn đề dự án giải quyết và người sử dụng dự kiến.]||en:[Introduce the problem addressed and the intended users.]>>
+  \item {}<<vi:[Nêu phần tự thiết kế hoặc triển khai, rồi mô tả kết quả có thể kiểm tra qua demo, mã nguồn hoặc báo cáo.]||en:[Describe what you designed or implemented, then an outcome verifiable through a demo, source code or report.]>>
 \end{cvitems}
-\cvproject{<<vi:Dự án thứ hai||en:Second project>>}{React, PostgreSQL}{2024}
+\cvproject{<<vi:[Dự án thứ hai, có thể xóa]||en:[Optional second project]>>}
+  {<<vi:[Vai trò] \textbar{} [Công nghệ chính]||en:[Role] \textbar{} [Main technologies]>>}{20XX}
 \begin{cvitems}
-  \item <<vi:Ứng dụng quản lý công việc cho 200 người dùng nội bộ.||en:Task manager used by 200 internal users.>>
+  \item {}<<vi:[Một đến hai đóng góp liên quan trực tiếp đến vị trí ứng tuyển.]||en:[One or two contributions directly relevant to the target role.]>>
 \end{cvitems}
 
-\cvsection{<<vi:Kỹ năng||en:Skills>>}
-\cvskill{<<vi:Ngôn ngữ lập trình||en:Languages>>}{Python, C++, SQL}
-\cvskill{<<vi:Công cụ và framework||en:Tools and frameworks>>}{PyTorch, OpenCV, Docker, Git}
-\cvskill{<<vi:Ngoại ngữ||en:Spoken languages>>}{<<vi:Tiếng Anh (IELTS 6.5)||en:Vietnamese (native), English (IELTS 6.5)>>}
+\cvsection{<<vi:Kỹ năng||en:Technical Skills>>}
+\cvskill{<<vi:Ngôn ngữ lập trình||en:Programming>>}{<<vi:[Ngôn ngữ đã sử dụng trong dự án]||en:[Languages used in your projects]>>}
+\cvskill{<<vi:Công cụ và chuyên môn||en:Tools and expertise>>}{<<vi:[Framework, công cụ và phương pháp quen thuộc]||en:[Frameworks, tools and familiar methods]>>}
+\cvskill{<<vi:Ngoại ngữ||en:Languages>>}{<<vi:[Ngôn ngữ, mức độ sử dụng hoặc chứng chỉ còn phù hợp]||en:[Language, proficiency or relevant certification]>>}
 
-\cvsection{<<vi:Chứng chỉ \& giải thưởng||en:Certifications \& Awards>>}
-\cventry{<<vi:Tên chứng chỉ hoặc giải thưởng||en:Certificate or award name>>}{2025}{<<vi:Đơn vị cấp||en:Issuer>>}{}
-
+\cvsection{<<vi:Chứng chỉ và giải thưởng||en:Certifications and Awards>>}
+\cventry{<<vi:[Tên chứng chỉ hoặc giải thưởng]||en:[Certificate or award]>>}{20XX}
+        {<<vi:[Đơn vị cấp; liên kết xác minh nếu có]||en:[Issuer; verification link if available]>>}{}
 \end{document}

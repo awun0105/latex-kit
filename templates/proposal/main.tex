@@ -1,11 +1,15 @@
 % <<vi:Đề cương nghiên cứu — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Research proposal — made with latexkit. Build: latexmk (output in build/main.pdf).>>
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 \usepackage[{{PKGOPTS}}]{latexkit}
 \usepackage{pgfgantt}   % <<vi:biểu đồ Gantt cho kế hoạch||en:Gantt chart for the schedule>>
 
-\title{\sffamily\bfseries {{TITLE}}}
+\title{{{TITLE}}}
 \author{{{AUTHOR}}}
 \date{{{DATE}}}
+
+% <<vi:Tùy chọn: đặt nhãn ngắn cho header và thông tin ở footer.||en:Optional: short header labels and footer text.>>
+% \lkheader{<<vi:Tên tài liệu||en:Document title>>}{{{AUTHOR}}}
+% \lkfooter{email@example.com}
 
 \begin{document}
 \maketitle
@@ -27,6 +31,7 @@
 % ======================================================
 \section{<<vi:Đặt vấn đề||en:Background and motivation>>}
 \label{sec:background}
+<<vi:Đặt vấn đề bằng một tình huống cụ thể: ai đang gặp khó khăn, cách làm hiện tại vướng ở đâu và vì sao cần nghiên cứu thêm. Phân biệt điều đã có bằng chứng với điều mới là giả thuyết của đề tài.||en:Start with a concrete situation: who faces the problem, where the current approach falls short and why further research is needed. Separate established evidence from the proposal’s hypotheses.>>
 \todo{<<vi:Bối cảnh, vấn đề cần giải quyết và lý do vấn đề quan trọng.||en:Context, the problem to solve and why it matters.>>}
 
 % ======================================================
@@ -50,6 +55,12 @@
 % ======================================================
 \section{<<vi:Phương pháp nghiên cứu||en:Methodology>>}
 \label{sec:method}
+<<vi:Mỗi bước nghiên cứu cần gắn với một câu hỏi và một sản phẩm có thể kiểm tra. Mô tả dữ liệu đầu vào, cách xây dựng baseline (phương pháp mốc để so sánh) và tiêu chí xác định kết quả có đáp ứng mục tiêu hay không.||en:Connect each research step to a question and a verifiable output. Describe the input data, the baseline used for comparison and the criteria for deciding whether the objectives are met.>>
+%%IF box
+\begin{keyidea}[<<vi:Nguyên tắc đánh giá||en:Evaluation principle>>]
+<<vi:Chốt cách đánh giá trước khi chạy thí nghiệm. Ghi rõ tập dữ liệu, chỉ số đo và điều kiện chạy để tránh thay đổi tiêu chí theo kết quả thuận lợi.||en:Fix the evaluation plan before running experiments. Record the dataset, metrics and run conditions so the criteria do not shift toward favourable results.>>
+\end{keyidea}
+%%ENDIF
 %%IF diagram
 \begin{figure}[H]
   \centering
@@ -63,6 +74,7 @@
 % ======================================================
 \section{<<vi:Kế hoạch thực hiện||en:Work plan>>}
 \label{sec:plan}
+<<vi:Lịch sáu tháng bên dưới là ví dụ bố cục. Điều chỉnh thời lượng theo nguồn lực thực tế và ghi rõ sản phẩm bàn giao ở mỗi mốc; một công việc chỉ hoàn thành khi sản phẩm đó được kiểm tra.||en:The six-month schedule below illustrates the layout. Adjust it to the available resources and define a deliverable for each milestone. A task is complete when that deliverable has been checked.>>
 \begin{center}
 \begin{ganttchart}[
     hgrid, vgrid, x unit=1.5cm, y unit chart=0.7cm, bar height=0.55,

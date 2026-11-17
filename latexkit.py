@@ -56,14 +56,16 @@ TYPE_MODULES = {
 }
 # Extra package options per type.
 TYPE_OPTS = {
-    "notes": ["parskip", "float=here"],
+    "notes": ["style=guide", "parskip", "float=here"],
+    "report": ["style=guide"],
+    "book": ["style=guide"],
     "paper": ["style=plain"],
     "thesis": ["float=here"],
-    "proposal": ["parskip"],
+    "proposal": ["style=guide", "parskip"],
     "poster": ["style=plain", "margin=none", "float=here"],
     "exam": ["style=plain"],
-    "cv": ["style=plain", "margin=none"],
-    "letter": ["style=plain", "margin=none"],
+    "cv": ["style=plain", "font=lm", "margin=none"],
+    "letter": ["style=guide"],
 }
 DEFAULT_TITLES = {
     "notes": ("Ghi chú", "Notes"), "paper": ("Tên bài báo", "Paper Title"),
@@ -255,7 +257,8 @@ def cmd_new(a: argparse.Namespace) -> None:
         opts.append("minted")
     ctx = {
         "TITLE": title,
-        "AUTHOR": a.author or default_author(),
+        "AUTHOR": a.author or (("Nguyễn Minh An" if lang == "vi" else "Alex Nguyen")
+                                if a.type in MINIMAL_TYPES else default_author()),
         "DATE": r"\today",
         "YEAR": str(_dt.date.today().year),
         "PKGOPTS": ", ".join(opts),

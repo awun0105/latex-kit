@@ -1,5 +1,5 @@
 % latexkit-cv.sty — one-column CV and letter layout (ATS friendly: plain text order,
-% no icons, no layout tables except one tabularx row per entry).
+% selectable text, no layout tables except one tabularx row per entry).
 %   \cvheader{Name}{Headline}{item 1, item 2, \href{https://...}{site}}
 %   \letterheader{Name}{item 1, item 2, ...}        gray band across the top
 %   \cvsection{Title}
@@ -14,10 +14,11 @@
 \RequirePackage{xcolor}
 \RequirePackage{tikz}
 \RequirePackage{needspace}
+\RequirePackage{latexkit-icons}
 
 \providecolor{lkgray}{HTML}{4B5563}
 \colorlet{cvrule}{black!70}
-\colorlet{cvband}{black!8}
+\colorlet{cvband}{black!12}
 
 % "a, b, c" -> "a | b | c"
 \newcommand{\lkcv@sep}{\quad\textbar\quad}
@@ -48,10 +49,11 @@
   \end{tabularx}\par}
 
 \newcommand{\cvproject}[3]{%
-  \par\Needspace{3\baselineskip}\vspace{3pt}%
+  \par\Needspace{4\baselineskip}\vspace{3pt}%
   \noindent\begin{tabularx}{\linewidth}[t]{@{}X@{\hspace{1em}}r@{}}
-    \textbf{#1}\ifblank{#2}{}{\enspace\textbar\enspace\textit{\small #2}} & \small #3 \\
-  \end{tabularx}\par}
+    \textbf{#1} & \small #3 \\
+  \end{tabularx}\par\nobreak
+  \ifblank{#2}{}{\noindent{\small\itshape #2}\par\nobreak}}
 
 \newenvironment{cvitems}
   {\begin{itemize}[leftmargin=1.4em, topsep=2pt, itemsep=1pt, parsep=0pt,
@@ -65,12 +67,12 @@
 \newcommand{\letterheader}[2]{%
   \begin{tikzpicture}[remember picture, overlay]
     \fill[cvband] (current page.north west) rectangle
-      ([yshift=-3.1cm]current page.north east);
+      ([yshift=-3.8cm]current page.north east);
   \end{tikzpicture}%
-  \vspace*{-1.2cm}
+  \vspace*{-1.3cm}
   \begin{center}
-    {\fontsize{26}{30}\selectfont\scshape #1}\par\vspace{1.1cm}
+    {\fontsize{30}{36}\selectfont\scshape #1}\par\vspace{10pt}
     {\small\lkcv@list{#2}}
-  \end{center}\vspace{6pt}}
+  \end{center}\vspace{1cm}}
 
 \endinput

@@ -1,20 +1,16 @@
 % <<vi:Sách / giáo trình — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Book — made with latexkit. Build: latexmk (output in build/main.pdf).>>
-\documentclass[11pt,a4paper,openany]{book}
+\documentclass[12pt,a4paper,oneside,openany]{book}
 \usepackage{imakeidx}   % <<vi:chỉ mục: đánh dấu từ bằng \index{từ}||en:index: mark a term with \index{term}>>
 \makeindex[intoc, title=<<vi:Chỉ mục||en:Index>>]
 \usepackage[{{PKGOPTS}}]{latexkit}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[LE]{\sffamily\small\leftmark}
-\fancyhead[RO]{\sffamily\small\rightmark}
-\fancyfoot[C]{\sffamily\small\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
-
 \title{{{TITLE}}}
 \subtitle{<<vi:Phụ đề||en:Subtitle>>}
 \author{{{AUTHOR}}}
 \date{{{YEAR}}}
+
+% <<vi:Tùy chọn: đặt nhãn ngắn cho header và thông tin ở footer.||en:Optional: short header labels and footer text.>>
+% \lkheader{<<vi:Tên tài liệu||en:Document title>>}{{{AUTHOR}}}
+% \lkfooter{email@example.com}
 
 \begin{document}
 \frontmatter
@@ -22,8 +18,13 @@
 \chapter{<<vi:Lời nói đầu||en:Preface>>}
 \todo{<<vi:Sách này dành cho ai và cách đọc.||en:Who this book is for and how to read it.>>}
 \tableofcontents
+%%IF diagram|plot
 \listoffigures
-\listoftables
+%%ENDIF
+%%IF table
+% <<vi:Bỏ chú thích khi đã thêm bảng.||en:Uncomment once tables have been added.>>
+% \listoftables
+%%ENDIF
 
 \mainmatter
 \part{<<vi:Cơ bản||en:Basics>>}

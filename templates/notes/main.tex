@@ -1,55 +1,85 @@
-% <<vi:Ghi chú đọc paper — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Paper reading notes — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Ghi chú học tập, đọc paper — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Study and paper reading notes — made with latexkit. Build: latexmk (output in build/main.pdf).>>
+% <<vi:Style "guide": Latin Modern 12pt, header và footer có đường kẻ, mục đánh số I, II, chú thích hình trong khung, hộp ghi chú có nhãn.||en:"guide" style: Latin Modern 12pt, ruled header and footer, sections I, II, framed captions, tabbed note boxes.>>
 % <<vi:Xóa mục không cần. Mỗi mục có sẵn ví dụ cú pháp của latexkit.||en:Delete what you do not need. Each section holds a latexkit syntax example.>>
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 \usepackage[{{PKGOPTS}}]{latexkit}
 
-\title{\sffamily\bfseries {{TITLE}}}
+\title{{{TITLE}}}
+\subtitle{<<vi:Ghi chú đọc paper||en:Paper reading notes>>}
 \author{{{AUTHOR}}}
 \date{{{DATE}}}
+% <<vi:Tùy chọn: logo và tên đơn vị trên đầu trang tiêu đề||en:Optional: logo and organisation above the title>>
+% \lklogo{images/logo}
+% \institution[<<vi:Dòng phụ||en:Tagline>>]{<<vi:TÊN ĐƠN VỊ||en:ORGANISATION>>}
+% <<vi:Header: trái, phải (mặc định là tiêu đề và tác giả). Footer: chữ bên trái, bên phải là số trang.||en:Header: left, right (default: title and author). Footer: left text; the page number is on the right.>>
+% \lkheader{<<vi:Ghi chú đọc paper||en:Reading notes>>}{{{AUTHOR}}}
+% \lkfooter{email@example.com}
 
 \begin{document}
 \maketitle
 
+% =====================================================================
+\section{<<vi:Giới thiệu||en:Introduction>>}
+<<vi:Phần mở đầu nói ngắn gọn ghi chú này dùng để làm gì và người đọc sẽ rút ra được gì. Mỗi mục nên mở đầu bằng một hai câu giới thiệu như vậy, rồi mới đi vào chi tiết.||en:The opening says in a few lines what these notes are for and what the reader will take away. Start every section with one or two such sentences before the details.>>
+
+%%IF table
+\begin{center}
 \begin{tabular}{@{}ll@{}}
-  \textbf{<<vi:Paper||en:Paper>>}             & \todo{<<vi:tên paper||en:paper title>>} \\
+  \toprule
+  \textbf{Paper}                              & \todo{<<vi:tên paper||en:paper title>>} \\
   \textbf{<<vi:Tác giả||en:Authors>>}         & \todo{<<vi:tác giả||en:authors>>} \\
-  \textbf{<<vi:Hội nghị / tạp chí||en:Venue>>} & \todo{<<vi:ví dụ CVPR 2024||en:e.g. CVPR 2024>>} \\
+  \textbf{<<vi:Hội nghị, tạp chí||en:Venue>>} & \todo{<<vi:ví dụ CVPR 2024||en:e.g. CVPR 2024>>} \\
   \textbf{Link}                               & \url{https://arxiv.org/abs/0000.00000} \\
   \textbf{Code}                               & \url{https://github.com/user/repo} \\
+  \bottomrule
 \end{tabular}
+\end{center}
+%%ENDIF
+
+<<vi:Khi một thuật ngữ tiếng Anh xuất hiện lần đầu, in đậm và giải thích ngay bằng tiếng Việt, ví dụ \textbf{ablation study}, tức thí nghiệm bỏ lần lượt từng thành phần để xem thành phần nào thật sự có ích. Từ lần sau chỉ cần dùng thuật ngữ đó.||en:When a technical term first appears, set it in bold and explain it right away, for example an \textbf{ablation study}, an experiment that removes one component at a time to see which ones actually help. Afterwards, just use the term.>>
 
 \tableofcontents
 
 % =====================================================================
 \section{<<vi:Tóm tắt trong ba câu||en:Summary in three sentences>>}
+<<vi:Ba câu trả lời ba câu hỏi: paper giải quyết vấn đề gì, giải bằng cách nào, và kết quả chính là gì. Nếu chưa viết được ba câu này thì chưa nên đọc tiếp phần chi tiết.||en:Three sentences answer three questions: what problem the paper solves, how, and what the main result is. If these three sentences cannot be written yet, the details can wait.>>
 \todo{<<vi:Vấn đề, cách giải, kết quả.||en:Problem, approach, result.>>}
-<<vi:Trích dẫn||en:Cite>>: \citep{keshav2007read}.
+<<vi:Trích dẫn||en:Citation>>: \citep{keshav2007read}.
 
 %%IF box
-\begin{keyidea}
-<<vi:Ý quan trọng nhất của paper, tóm trong một hai câu.||en:The most important idea of the paper, in one or two sentences.>>
+\begin{keyidea}[<<vi:Nguyên tắc||en:Principle>>]
+\textbf{<<vi:Mỗi con số ghi lại phải có nguồn.||en:Every number written down needs a source.>>} <<vi:Ghi rõ con số lấy từ bảng nào, hình nào trong paper, hay từ lần chạy lại của chính mình.||en:Note whether it comes from a table or figure in the paper, or from a run of one's own.>>
 \end{keyidea}
 %%ENDIF
 
 % =====================================================================
 \section{<<vi:Vấn đề và động lực||en:Problem and motivation>>}
-<<vi:Thuật ngữ cần nhớ||en:Key term>>: \lkkey{Gaussian Splatting}. <<vi:Chú thích cuối trang||en:Footnote>>\footnote{<<vi:Ví dụ chú thích.||en:An example footnote.>>}.
+<<vi:Phần này trả lời câu hỏi vì sao vấn đề đáng giải. Nêu cách làm trước đây, chỗ còn thiếu, và lý do chỗ thiếu đó quan trọng. Thuật ngữ cần nhớ có thể đánh dấu bằng||en:This section answers why the problem is worth solving: the earlier approach, what it misses, and why that gap matters. Mark a key term with>> \lkkey{Gaussian Splatting}.<<vi: Chú thích cuối trang dùng cho ý phụ||en: A footnote holds side remarks>>\footnote{<<vi:Ví dụ chú thích cuối trang.||en:An example footnote.>>}.
 
-\section{<<vi:Đóng góp||en:Contributions>>}
+\subsection{<<vi:Đóng góp||en:Contributions>>}
+<<vi:Liệt kê đóng góp bằng các ý ngắn, mỗi ý mở đầu bằng cụm in đậm rồi giải thích:||en:List the contributions as short items, each starting with a bold phrase and then an explanation:>>
 \begin{itemize}
-  \item <<vi:Đóng góp 1||en:Contribution 1>>
-  \item <<vi:Đóng góp 2||en:Contribution 2>>
+  \item \textbf{<<vi:Đóng góp 1||en:Contribution 1>>:} <<vi:một câu giải thích điều mới so với các cách làm trước.||en:one sentence on what is new compared with earlier work.>>
+  \item \textbf{<<vi:Đóng góp 2||en:Contribution 2>>:} <<vi:một câu giải thích và bằng chứng đi kèm.||en:one sentence of explanation and the evidence for it.>>
 \end{itemize}
 
 % =====================================================================
 \section{<<vi:Phương pháp||en:Method>>}
-\todo{<<vi:Pipeline, thành phần chính, giả định.||en:Pipeline, main components, assumptions.>>}
-
 %%IF diagram
+<<vi:Giới thiệu hình trước khi đưa hình vào, ví dụ \Cref{fig:pipeline} cho thấy các bước chính của phương pháp. Chú thích hình nên tự đủ nghĩa: câu đầu nói hình vẽ gì, câu sau nói người đọc cần rút ra điều gì.||en:Introduce a figure before it appears, for example \Cref{fig:pipeline} shows the main steps of the method. A caption should stand on its own: the first sentence says what is drawn, the next one what to take from it.>>
+
 \begin{figure}
   \centering
-  \lkpipeline{<<vi:Dữ liệu||en:Data>>, Encoder, <<vi:Biểu diễn 3D||en:3D representation>>, Render}
-  \caption{<<vi:Pipeline của paper, vẽ bằng||en:The paper's pipeline, drawn with>> \texttt{\textbackslash lkpipeline}}
+  \begin{tikzpicture}[node distance=4mm]
+    \node[cardgray]                 (data) {\textbf{<<vi:Dữ liệu||en:Data>>}\\<<vi:ảnh và tư thế camera||en:images and camera poses>>};
+    \node[cardblue, right=of data]  (enc)  {\textbf{Encoder}\\<<vi:trích đặc trưng||en:extracts features>>};
+    \node[cardkey, right=of enc]    (rep)  {\textbf{<<vi:Biểu diễn 3D||en:3D representation>>}\\<<vi:phần mới của paper||en:the paper's novelty>>};
+    \node[cardorange, right=of rep] (out)  {\textbf{Render}\\<<vi:ảnh ở góc nhìn mới||en:novel views>>};
+    \draw[flow] (data) -- (enc);
+    \draw[flow] (enc) -- (rep);
+    \draw[flow] (rep) -- (out);
+  \end{tikzpicture}
+  \caption{<<vi:Pipeline của paper. Khung viền đậm là thành phần mới; các bước còn lại kế thừa từ công trình trước.||en:The paper's pipeline. The bold box is the new component; the other steps come from earlier work.>>}
   \label{fig:pipeline}
 \end{figure}
 
@@ -67,23 +97,24 @@
     \draw[flow] (run) -- (db);
     \draw[loop] (ok.south) |- ++(0,-1.2) -| node[elabel, pos=0.25] {<<vi:Không||en:No>>} (read.south);
   \end{tikzpicture}
-  \caption{<<vi:Flowchart TikZ với các style có sẵn||en:TikZ flowchart with the built-in styles>>}
+  \caption{<<vi:Flowchart TikZ với các style có sẵn (terminal, io, decision, process, datastore).||en:TikZ flowchart with the built-in styles (terminal, io, decision, process, datastore).>>}
 \end{figure}
 
 \begin{figure}
   \centering
   \lkdiagram[max width=0.9\linewidth]{diagrams/pipeline}
-  \caption{<<vi:Sơ đồ Mermaid từ||en:Mermaid diagram from>> \lkfile{diagrams/pipeline.mmd}}
+  \caption{<<vi:Sơ đồ Mermaid từ||en:Mermaid diagram from>> \lkfile{diagrams/pipeline.mmd}.}
 \end{figure}
 <<vi:Hình có sẵn trong thư viện||en:Library figures>>: \texttt{latexkit asset list}, <<vi:rồi||en:then>> \texttt{latexkit asset add flowchart} <<vi:và||en:and>> \verb|\lktikzfig{figures/flowchart}|.
 %%ENDIF
 
 %%IF math
+\subsection{<<vi:Công thức chính||en:Key equation>>}
+<<vi:Viết công thức kèm một câu giải thích từng ký hiệu. Ở \cref{eq:sgd}, $\theta_t$ là tham số ở bước $t$, $\eta$ là learning rate, tức độ dài mỗi bước cập nhật.||en:Give each equation a sentence that explains its symbols. In \cref{eq:sgd}, $\theta_t$ are the parameters at step $t$ and $\eta$ is the learning rate, the size of each update.>>
 \begin{equation}
   \theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L}(\theta_t)
   \label{eq:sgd}
 \end{equation}
-<<vi:Tham chiếu||en:Reference>>: \cref{eq:sgd}.
 
 \begin{definition}
 <<vi:Hàm mất mát là||en:The loss is>> $\mathcal{L}(\theta) = \E_{(x,y)}\big[\ell(f_\theta(x), y)\big]$.
@@ -105,48 +136,54 @@
 
 % =====================================================================
 \section{<<vi:Thí nghiệm và kết quả||en:Experiments and results>>}
-\todo{<<vi:Dataset, metric, baseline, con số chính.||en:Datasets, metrics, baselines, headline numbers.>>}
+<<vi:Ghi dataset, metric, baseline và con số chính. Bảng dùng để so sánh; câu ngay sau bảng nói điều quan trọng nhất mà bảng cho thấy.||en:Record datasets, metrics, baselines and the headline numbers. Tables are for comparison; the sentence right after a table states its most important point.>>
 
 %%IF table
-\begin{lktable}{<<vi:Kết quả trong paper||en:Results reported in the paper>>}{tab:compare}{l c c c}
+<<vi:Các giá trị sau chỉ là dữ liệu minh họa cho template. Khi dùng để ghi chú một paper thật, thay cả số liệu lẫn câu diễn giải bằng thông tin có nguồn trong paper.||en:The following values are template examples only. For a real paper, replace both the numbers and the interpretation with sourced information.>>
+
+\begin{lktable}{<<vi:Ví dụ bố cục bảng kết quả||en:Example results-table layout>>}{tab:compare}{l c c c}
   <<vi:Phương pháp||en:Method>> & PSNR\up & LPIPS\down & <<vi:Thời gian thực||en:Real time>> \\ \midrule
   NeRF         & 26.1          & 0.31          & \xmark \\
   3DGS         & \second{27.4} & \second{0.22} & \cmark \\
   \lkhl Ours   & \best{28.8}   & \best{0.18}   & \cmark \\
 \end{lktable}
-<<vi:Xem||en:See>> \cref{tab:compare}.
+
+<<vi:Với các số minh họa ở \cref{tab:compare}, chênh lệch PSNR giữa Ours và 3DGS là 1.4 dB. Khi thay bằng kết quả thật, cần nêu rõ số liệu do tác giả báo cáo hay do mình tự chạy lại.||en:With the example values in \cref{tab:compare}, the PSNR gap between Ours and 3DGS is 1.4 dB. For real results, state whether the figures are reported by the authors or reproduced independently.>>
 %%ENDIF
 
 %%IF plot
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \begin{axis}[lkplot, width=0.7\linewidth, height=5cm,
+    \begin{axis}[lkf4p, width=0.7\linewidth, height=5cm,
                  xlabel={<<vi:Bước||en:Step>>}, ylabel={PSNR (dB)}, legend pos=south east]
-      \addplot table[x=step, y=baseline, col sep=comma] {plots/results.csv};
       \addplot table[x=step, y=ours,     col sep=comma] {plots/results.csv};
-      \legend{Baseline, Ours}
+      \addplot table[x=step, y=baseline, col sep=comma] {plots/results.csv};
+      \legend{Ours, Baseline}
     \end{axis}
   \end{tikzpicture}
-  \caption{<<vi:Đồ thị pgfplots đọc thẳng||en:pgfplots chart reading>> \lkfile{plots/results.csv}}
+  \caption{<<vi:PSNR theo số bước huấn luyện, đọc thẳng từ||en:PSNR over training steps, read from>> \lkfile{plots/results.csv}. <<vi:Khoảng cách giữa hai đường giữ ổn định sau bước 2000.||en:The gap between the curves stays stable after step 2000.>>}
 \end{figure}
+%%ENDIF
+
+%%IF box
+\begin{info}
+<<vi:Kết quả tự chạy lại lệch so với paper là chuyện bình thường. Ghi lại mức lệch, seed và phiên bản code để lần sau có thể đối chiếu.||en:A reproduction that differs from the paper is normal. Record the gap, the seed and the code version so it can be checked later.>>
+\end{info}
 %%ENDIF
 
 % =====================================================================
 \section{<<vi:Đánh giá||en:Assessment>>}
 \begin{itemize}
-  \item \textbf{<<vi:Điểm mạnh||en:Strengths>>}: \todo{...}
-  \item \textbf{<<vi:Hạn chế||en:Limitations>>}: \todo{...}
+  \item \textbf{<<vi:Điểm mạnh||en:Strengths>>:} \todo{...}
+  \item \textbf{<<vi:Hạn chế||en:Limitations>>:} \todo{...}
+  \item \textbf{<<vi:Giả định ngầm||en:Hidden assumptions>>:} <<vi:điều paper không nói ra nhưng kết quả phụ thuộc vào, ví dụ dữ liệu sạch hay camera đã hiệu chỉnh.||en:what the results depend on without saying so, for example clean data or calibrated cameras.>>
 \end{itemize}
 
 %%IF box
 \begin{question}[<<vi:Câu hỏi còn mở||en:Open questions>>]
-<<vi:Phần nào chưa rõ? Thí nghiệm nào còn thiếu?||en:What is unclear? Which experiment is missing?>>
+<<vi:Phần nào chưa rõ? Thí nghiệm nào còn thiếu để tin vào kết luận?||en:What is unclear? Which experiment is missing before the conclusion can be trusted?>>
 \end{question}
-
-\begin{warning}
-<<vi:Kết quả tự chạy lại lệch so với paper là bình thường; ghi lại mức lệch.||en:Results that differ from the paper are normal; record the gap.>>
-\end{warning}
 %%ENDIF
 
 % =====================================================================
@@ -158,7 +195,7 @@
 \end{checklist}
 
 %%IF code
-\begin{lkcode}[Python]{<<vi:Đoạn code đáng chú ý||en:Notable code>>}
+\begin{lkcode}[Python]{train.py (<<vi:trích đoạn||en:excerpt>>)}
 for x, y in loader:
     loss = criterion(model(x), y)
     optimizer.zero_grad()
@@ -166,10 +203,26 @@ for x, y in loader:
     optimizer.step()
 \end{lkcode}
 
-\begin{lkterminal}
-$ git clone https://github.com/user/repo.git
-$ pip install -r requirements.txt
+\begin{lkterminal}[title=<<vi:Cài đặt||en:Setup>>]
+# <<vi:tải code và cài thư viện||en:get the code and install the libraries>>
+git clone https://github.com/user/repo.git
+pip install -r requirements.txt
 \end{lkterminal}
+
+\begin{lkprompt}{<<vi:Prompt đọc paper||en:Paper reading prompt>>}
+<<vi:Đọc full text của paper này và viết một paper card.||en:Read the full text of this paper and write a paper card.>>
+<<vi:Mỗi con số phải kèm vị trí trong paper (section, table, figure).||en:Every number must come with its place in the paper (section, table, figure).>>
+<<vi:Tách riêng kết luận của tác giả và evidence thực sự cho thấy.||en:Keep the authors' claims apart from what the evidence shows.>>
+\end{lkprompt}
+%%ENDIF
+
+%%IF box
+\begin{summary}
+\begin{itemize}
+  \item <<vi:Ý thứ nhất cần nhớ từ paper.||en:First takeaway from the paper.>>
+  \item <<vi:Ý thứ hai, kèm điều kiện để ý đó đúng.||en:Second takeaway, with the conditions under which it holds.>>
+\end{itemize}
+\end{summary}
 %%ENDIF
 
 \lkbibliography

@@ -1,0 +1,174 @@
+% latexkit-guide.sty — "guide" look for notes, reports, proposals, books and letters.
+% Loaded by \usepackage[style=guide]{latexkit}; do not load it on its own.
+%
+%   Page     A4, Latin Modern 12pt (set 12pt in \documentclass), margins 2.2 cm, no indent,
+%            space between paragraphs
+%   Header   left/right text in bold accent over an accent rule; footer text and
+%            "Trang N" under a thin rule.   \lkheader{left}{right}   \lkfooter{left}
+%            Defaults: title | author, empty footer text. \lkheader{}{} clears them.
+%   Titles   \maketitle (article) and \lktitlepage (report, book): optional \lklogo{file},
+%            \institution[tagline]{name}, \subtitle{...}
+%   Sections article: I., II.; I.1., I.2.   report/book: Chương 1, 1.1, 1.1.1
+%   Captions inside a rounded frame, "Hình 1: ..."
+%   Notes    keyidea, info, tip, warning, question, examplebox, summary: tabbed boxes
+%            (latexkit-box); \begin{lkpanel}{Title} ... for a titled panel
+%   Code     lkcode / \lkcodefile with a dark title bar, lkprompt for prompts,
+%            lkterminal[title=...] (latexkit-code)
+%   Diagrams card, cardgray, cardblue, cardgreen, cardorange, cardkey (TikZ node styles)
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-guide}[2026/11/16 v0.1 latexkit guide style]
+
+\RequirePackage{fancyhdr}
+\RequirePackage{titlesec}
+\RequirePackage{titletoc}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{latexkit-icons}
+
+% ---------------------------------------------------------------- colors
+\definecolor{lkgdark}{HTML}{0F2412}     % headings
+\definecolor{lkgnote}{HTML}{FFFEE6}     % note background
+\definecolor{lkgorange}{HTML}{E57300}   % note frame and tab
+\definecolor{lkgborder}{HTML}{ACACAC}   % card and code borders
+\definecolor{lkggray}{HTML}{F2F2F2}
+\definecolor{lkgblue}{HTML}{E1F0FF}
+\definecolor{lkggreen}{HTML}{E1F5E8}
+\definecolor{lkgpeach}{HTML}{FFEFDC}
+\definecolor{lkgterm}{HTML}{262626}     % terminal background
+\definecolor{lkgtermfg}{HTML}{00D933}
+\definecolor{lkgtermcm}{HTML}{009824}
+
+% ---------------------------------------------------------------- header and footer
+\def\lk@headL{\lk@doctitle}
+\def\lk@headR{\lk@docauthor}
+\def\lk@footL{}
+\newcommand{\lkheader}[2]{\def\lk@headL{#1}\def\lk@headR{#2}}
+\newcommand{\lkfooter}[1]{\def\lk@footL{#1}}
+\AtBeginDocument{%
+  \let\lk@doctitle\@title
+  \let\lk@docauthor\@author}
+\newcommand{\lk@hf}[1]{{\small\bfseries\color{accent}\def\and{\unskip, }\def\\{ }#1}}
+\fancypagestyle{lkguide}{%
+  \fancyhf{}%
+  \fancyhead[L]{\lk@hf{\lk@headL}}%
+  \fancyhead[R]{\lk@hf{\lk@headR}}%
+  \fancyfoot[L]{\lk@hf{\lk@footL}}%
+  \fancyfoot[R]{\lk@hf{\lkstr{Trang}{Page}~\thepage}}%
+  \renewcommand{\headrule}{{\color{accent}\hrule\@height 0.8pt\@width\headwidth\vskip-0.8pt}}%
+  \renewcommand{\footrule}{{\vskip-\footruleskip\vskip-0.4pt
+    \color{black!70}\hrule\@height 0.4pt\@width\headwidth\vskip\footruleskip}}}
+% chapter and title pages: footer only
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[L]{\lk@hf{\lk@footL}}%
+  \fancyfoot[R]{\lk@hf{\lkstr{Trang}{Page}~\thepage}}%
+  \renewcommand{\headrule}{}%
+  \renewcommand{\footrule}{{\vskip-\footruleskip\vskip-0.4pt
+    \color{black!70}\hrule\@height 0.4pt\@width\headwidth\vskip\footruleskip}}}
+\renewcommand{\footruleskip}{0.55\normalbaselineskip}
+\pagestyle{lkguide}
+
+% ---------------------------------------------------------------- headings
+\iflk@chapters
+  \titleformat{\chapter}[display]{\bfseries\color{lkgdark}\raggedright}%
+    {\large\color{accent}\chaptertitlename~\thechapter}{0.3em}{\huge}%
+    [\vspace{0.4em}{\color{accent}\titlerule[1.2pt]}]
+  \titleformat{name=\chapter,numberless}[block]{\bfseries\color{lkgdark}\raggedright}%
+    {}{0pt}{\huge}[\vspace{0.4em}{\color{accent}\titlerule[1.2pt]}]
+  \titlespacing*{\chapter}{0pt}{0pt}{1.6em}
+  \titleformat{\section}{\Large\bfseries\color{lkgdark}}{\thesection}{0.7em}{}
+  \titleformat{\subsection}{\large\bfseries\color{lkgdark}}{\thesubsection}{0.7em}{}
+\else
+  % article: I., II. ... and I.1., I.2. ...
+  \renewcommand{\thesection}{\Roman{section}}
+  \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+  \titleformat{\section}{\Large\bfseries\color{lkgdark}}{\thesection.}{0.7em}{}
+  \titleformat{\subsection}{\large\bfseries\color{lkgdark}}{\thesubsection.}{0.7em}{}
+  % table of contents: sections bold, subsections small, labels with a dot
+  \titlecontents{section}[2.8em]{\addvspace{0.25em}\bfseries}%
+    {\contentslabel[\thecontentslabel.]{2.8em}}{\hspace*{-2.8em}}%
+    {\titlerule*[0.6pc]{.}\contentspage}
+  \titlecontents{subsection}[5.6em]{\small}%
+    {\contentslabel[\thecontentslabel.]{2.8em}}{\hspace*{-2.8em}}%
+    {\titlerule*[0.6pc]{.}\contentspage}
+\fi
+\titleformat{\subsubsection}{\normalsize\bfseries\color{lkgdark}}{\thesubsubsection}{0.6em}{}
+\titleformat{\paragraph}[runin]{\normalsize\bfseries\color{lkgdark}}{}{0pt}{}[.]
+\titlespacing*{\section}{0pt}{1.8em plus 0.4em minus 0.2em}{0.8em}
+\titlespacing*{\subsection}{0pt}{1.4em plus 0.3em minus 0.2em}{0.6em}
+\titlespacing*{\subsubsection}{0pt}{1.1em plus 0.3em}{0.4em}
+
+\renewcommand{\lkkey}[1]{\textbf{#1}}
+
+% ---------------------------------------------------------------- title block
+% Logo and institution row, thick accent rule, title, subtitle, thin rule, authors.
+\newcommand{\lk@brand}{%
+  \ifdefined\lk@institution
+    \noindent
+    \ifdefined\lk@logo
+      \raisebox{-0.5\height}{\includegraphics[height=1.5cm]{\lk@logo}}\hspace{0.8em}%
+      {\color{accent}\vrule width 0.8pt height 0.65cm depth 0.65cm}\hspace{0.8em}%
+    \fi
+    \begin{tabular}[c]{@{}l@{}}
+      {\large\bfseries\color{accent}\lk@institution}%
+      \ifdefined\lk@tagline\\[-1pt]{\small\lk@tagline}\fi
+    \end{tabular}\par\vspace{1.2em}%
+  \else
+    \ifdefined\lk@logo\noindent\includegraphics[height=1.5cm]{\lk@logo}\par\vspace{1.2em}\fi
+  \fi}
+\newcommand{\lk@titleblock}{%
+  {\color{accent}\hrule height 2.6pt}\vspace{1.4em}%
+  \begin{center}
+    {\fontsize{24}{29}\selectfont\@title\par}%
+    \ifdefined\lk@subtitle\vspace{0.35em}{\large\bfseries\lk@subtitle\par}\fi
+  \end{center}\vspace{0.6em}%
+  \hrule height 0.4pt\vspace{1.4em}%
+  \begin{center}\bfseries
+    \begin{tabular}[t]{c}\@author\end{tabular}\par
+    \ifx\@date\@empty\else\vspace{0.4em}{\normalfont\@date\par}\fi
+  \end{center}}
+\renewcommand{\maketitle}{%
+  \begingroup
+    \thispagestyle{plain}%
+    \lk@brand
+    \lk@titleblock
+    \vspace{1.6em}%
+  \endgroup}
+\renewcommand{\lktitlepage}{%
+  \begin{titlepage}
+    \lk@brand
+    \vspace*{0.18\textheight}%
+    \lk@titleblock
+    \vfill
+  \end{titlepage}}
+
+% ---------------------------------------------------------------- captions
+\newsavebox{\lk@capbox}
+\DeclareCaptionFormat{lkboxed}{%
+  \begin{tcolorbox}[enhanced, colback=white, colframe=black, boxrule=0.6pt, arc=3pt,
+    left=6pt, right=6pt, top=3pt, bottom=3pt, before skip=0pt, after skip=0pt]
+    \parindent=0pt
+    \sbox\lk@capbox{#1#2#3}%
+    \ifdim\wd\lk@capbox<\linewidth \centering\else
+      % long caption: full lines, each one centered
+      \leftskip=0pt plus 4em\rightskip=0pt plus 4em\parfillskip=0pt\hbadness=10000
+      \spaceskip=\fontdimen2\font plus 0.08em minus \fontdimen4\font\fi
+    #1#2#3%
+  \end{tcolorbox}}
+\captionsetup{format=lkboxed, font=normalsize, labelfont={}, labelsep=colon,
+  justification=justified, singlelinecheck=false, skip=8pt}
+\captionsetup[sub]{format=plain, font=small, skip=4pt}
+
+% ---------------------------------------------------------------- TikZ cards (Figure 2 style)
+\RequirePackage{tikz}
+\tikzset{
+  card/.style={draw=lkgborder, fill=white, rounded corners=3pt, align=center,
+    inner sep=5pt, font=\small, text width=#1},
+  card/.default=2.9cm,
+  cardgray/.style={card=#1, fill=lkggray},    cardgray/.default=2.9cm,
+  cardblue/.style={card=#1, fill=lkgblue},    cardblue/.default=2.9cm,
+  cardgreen/.style={card=#1, fill=lkggreen},  cardgreen/.default=2.9cm,
+  cardorange/.style={card=#1, fill=lkgpeach}, cardorange/.default=2.9cm,
+  cardkey/.style={card=#1, fill=lkggreen, draw=accent, line width=1pt}, cardkey/.default=2.9cm,
+}
+
+\endinput

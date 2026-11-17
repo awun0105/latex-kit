@@ -1,42 +1,38 @@
-% <<vi:Thư xin việc / thư trang trọng — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Cover / formal letter — made with latexkit. Build: latexmk (output in build/main.pdf).>>
-% <<vi:Thay các đoạn trong ngoặc vuông bằng nội dung thật. Giữ thư trong 1 trang.||en:Replace the bracketed paragraphs with real text. Keep the letter to 1 page.>>
-\documentclass[a4paper,11pt]{article}
-\usepackage[a4paper, left=2.3cm, right=2.3cm, top=1.5cm, bottom=2cm]{geometry}
+% <<vi:Thư ứng tuyển: dải tên xám theo mẫu CV, thân thư theo style guide.||en:Cover letter: gray name band from the CV reference, guide-style body.>>
+% <<vi:Đây là boilerplate. Thay các phần trong ngoặc vuông và giữ thư trong một trang.||en:This is boilerplate. Replace all bracketed fields and keep the letter to one page.>>
+\documentclass[a4paper,12pt]{article}
 \usepackage[{{PKGOPTS}}]{latexkit}
 \usepackage{latexkit-cv}
-\pagestyle{empty}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.7em}
+\hypersetup{hidelinks}
+\title{{{TITLE}}}
+\author{{{AUTHOR}}}
+\date{{{DATE}}}
+\lkheader{<<vi:Thư ứng tuyển||en:Cover letter>>}{{{AUTHOR}}}
+\lkfooter{}
+\setlength{\parskip}{0.65em}
 
 \begin{document}
-
+\thispagestyle{plain}
 \letterheader{{{AUTHOR}}}
-  {\href{mailto:email@example.com}{email@example.com},
-   \href{https://linkedin.com/in/username}{linkedin.com/in/username},
-   +84 900 000 000, <<vi:TP. Hồ Chí Minh||en:City, Country>>}
+  {\href{mailto:alex@example.com}{\faEnvelope\enspace alex@example.com},
+   \href{https://linkedin.com/in/username}{\faLinkedinIn\enspace username},
+   \faPhone\enspace +84 900 000 000,
+   \faMapMarker\enspace <<vi:[Thành phố]||en:[City]>>}
 
-\hfill <<vi:TP. Hồ Chí Minh, ngày \today||en:\today>>
+\hfill {{DATE}}
 
-<<vi:Kính gửi: Ban Tuyển dụng Công ty XYZ||en:Hiring Team\\ XYZ Company\\ 123 Example Street, City>>
+\textbf{<<vi:Kính gửi Ban Tuyển dụng [Tên đơn vị],||en:Dear Hiring Manager at [Organisation],>>}
 
-\textbf{<<vi:V/v: Ứng tuyển vị trí [tên vị trí]||en:Re: Application for [position title]>>}
+<<vi:Tôi là {{AUTHOR}}, ứng tuyển vị trí [tên vị trí] tại [tên đơn vị]. Tôi quan tâm đến [sản phẩm hoặc hướng phát triển cụ thể] vì [lý do gắn với chuyên môn và định hướng của bản thân].||en:My name is {{AUTHOR}}, and I am applying for [position] at [organisation]. I am interested in [specific product or direction] because [reason connected to my expertise and goals].>>
 
-%%IF en
-Dear Hiring Manager,
-%%ENDIF
+<<vi:Trong quá trình [học tập hoặc làm việc], tôi tập trung vào [lĩnh vực chính]. Ở dự án [tên dự án], tôi phụ trách [phần việc cụ thể], sử dụng [công cụ hoặc phương pháp] để giải quyết [vấn đề]. Kết quả là [kết quả đã kiểm chứng, kèm phạm vi đánh giá]. Kinh nghiệm này giúp tôi hiểu rõ hơn cách chuyển một yêu cầu thành giải pháp có thể sử dụng và kiểm tra.||en:During [my studies or previous role], I focused on [main field]. In [project], I was responsible for [specific contribution], using [tools or methods] to address [problem]. The result was [verified outcome and evaluation scope]. This experience helped me turn a requirement into a solution that can be used and evaluated.>>
 
-<<vi:[Đoạn 1: vị trí ứng tuyển, nơi biết đến tin tuyển dụng và lý do quan tâm đến công ty.]||en:[Paragraph 1: the position, where the posting was found and why the company is of interest.]>>
+<<vi:Tôi có thể đóng góp cho nhóm ở [kỹ năng phù hợp với mô tả công việc]. Khi gặp vấn đề chưa quen, tôi thường [cách tìm hiểu, thử nghiệm và trao đổi với đồng đội]. Tôi mong được phát triển thêm về [năng lực muốn học], đồng thời chịu trách nhiệm rõ ràng với phần việc được giao.||en:I can contribute through [skills relevant to the role]. When facing an unfamiliar problem, I [approach to learning, experimentation and collaboration]. I would like to develop [capability to learn] while taking clear responsibility for my work.>>
 
-<<vi:[Đoạn 2: hai hoặc ba kinh nghiệm, dự án phù hợp nhất với yêu cầu công việc, kèm kết quả cụ thể.]||en:[Paragraph 2: two or three experiences or projects that best match the requirements, with concrete results.]>>
+<<vi:Cảm ơn quý đơn vị đã dành thời gian xem xét hồ sơ. Tôi đính kèm CV và [liên kết portfolio nếu có], và mong có dịp trao đổi thêm về mức độ phù hợp với vị trí này.||en:Thank you for considering my application. I have attached my CV and [portfolio link, if available], and would welcome a conversation about how my background fits the role.>>
 
-<<vi:[Đoạn 3: điều có thể đóng góp cho nhóm và lý do phù hợp với văn hóa công ty.]||en:[Paragraph 3: what can be contributed to the team and why it fits the company culture.]>>
-
-<<vi:[Đoạn 4: cảm ơn, mong có buổi phỏng vấn, nhắc CV đính kèm.]||en:[Paragraph 4: thanks, hope for an interview, mention the attached CV.]>>
-
-\vspace{1em}
 \begin{flushright}
-  <<vi:Trân trọng,||en:Sincerely,>>\\[2.5em]
-  {{AUTHOR}}
+  <<vi:Trân trọng,||en:Sincerely,>>\\[1.5em]
+  \textbf{{{AUTHOR}}}
 \end{flushright}
-
 \end{document}

@@ -38,6 +38,27 @@ latex-kit gồm hai phần: package LaTeX `latexkit` và lệnh `latexkit` chạ
 - **Đồ thị, code, hộp ghi chú, toán, thuật toán** với cùng một kiểu trình bày cho mọi tài liệu.
 - **Skill cho coding agent:** Claude Code và Codex dùng kit đúng cách. Khi yêu cầu vẽ bảng hay sơ đồ còn thiếu thông tin, agent hỏi lại tối đa 3 câu để chọn đúng thành phần và không tự bịa số liệu.
 
+### Phong cách tài liệu
+
+Các project mới thuộc loại `notes`, `report`, `proposal`, `book` và `letter` dùng
+`style=guide`: Latin Modern 12pt, tiêu đề xanh đậm, header/footer có đường kẻ,
+caption có khung và hộp ghi chú có nhãn. Lề trái/phải 2,2 cm, trên 2,9 cm, dưới 2,7 cm.
+Đây là bố cục trung tính, không kèm logo hoặc thông tin doanh nghiệp.
+
+```latex
+\lkheader{Tiêu đề ngắn}{Tên tác giả}
+\lkfooter{email@example.com}
+% \institution[Dòng phụ]{Tên nhóm}  % tùy chọn
+% \lklogo{images/logo}              % tùy chọn
+```
+
+`cv` dùng Latin Modern 11pt với bố cục một cột và lề gọn theo mẫu hồ sơ;
+`letter` kết hợp dải tên xám với thân thư và footer của guide. Nếu không truyền `-a`,
+hai mẫu dùng tên `Nguyễn Minh An` (Việt) hoặc `Alex Nguyen` (Anh). Nội dung trong
+ngoặc vuông là boilerplate cần thay trước khi gửi, không chứa thành tích cá nhân có sẵn.
+Với tài liệu đã tạo, thêm `style=guide` vào tùy chọn package và đặt `12pt` trong
+`\documentclass` để dùng cùng phong cách. Xem API trong [reference.md](skill/latex-kit/reference.md#guide-style).
+
 ## Cấu trúc kho mã nguồn
 
 | Đường dẫn | Nội dung |

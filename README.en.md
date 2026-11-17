@@ -38,6 +38,27 @@ latex-kit has two parts: the LaTeX package `latexkit` and the `latexkit` termina
 - **Charts, code, note boxes, math, algorithms** with the same look in every document.
 - **Coding-agent skill:** Claude Code and Codex use the kit the right way. When a request for a table or diagram leaves things open, the agent asks up to 3 questions to pick the right component, and never invents data.
 
+### Document style
+
+New `notes`, `report`, `proposal`, `book` and `letter` projects use `style=guide`:
+Latin Modern 12pt, dark green headings, ruled headers/footers, framed captions and
+note boxes with icon tabs. Margins are 2.2 cm left/right, 2.9 cm top and 2.7 cm bottom.
+The layout includes no organisation branding.
+
+```latex
+\lkheader{Short title}{Author}
+\lkfooter{email@example.com}
+% \institution[Optional tagline]{Group name}
+% \lklogo{images/logo}
+```
+
+`cv` uses Latin Modern 11pt, a compact one-column layout and generic bracketed fields.
+`letter` combines the gray name band with the guide body and footer. Without `-a`,
+both use `Alex Nguyen` (English) or `Nguyễn Minh An` (Vietnamese). Replace all bracketed
+fields before sending; no personal achievements are included. For existing documents,
+add `style=guide` to the package options and use `12pt` in `\documentclass`.
+See [reference.md](skill/latex-kit/reference.md#guide-style) for the API.
+
 ## Repository Structure
 
 | Path | Contents |

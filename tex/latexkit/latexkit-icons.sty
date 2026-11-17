@@ -1,0 +1,49 @@
+% latexkit-icons.sty — icons for notes, CV and letter headers.
+% Loads fontawesome5 when it is installed (TeX Live: texlive-fonts-extra, Overleaf: yes).
+% Without it, the commands used by latexkit are drawn with TikZ, so documents still build:
+%   \faLightbulb \faExclamationTriangle \faQuestionCircle \faPen \faEnvelope \faPhone
+%   \faLinkedinIn \faGithub \faMapMarker \faGlobe
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesPackage{latexkit-icons}[2026/11/16 v0.1 latexkit icons]
+
+\newif\iflk@fa
+\IfFileExists{fontawesome5.sty}{\lk@fatrue}{}
+\iflk@fa
+  \RequirePackage{fontawesome5}
+\else
+  \RequirePackage{tikz}%
+  \newcommand{\lk@icon}[1]{\raisebox{-0.12em}{\tikz[x=0.9em, y=0.9em, line width=0.09em,
+    line cap=round, line join=round]{#1}}}%
+  \providecommand{\faLightbulb}{\lk@icon{%
+    \fill (0.5,0.62) circle (0.36); \fill (0.32,0.08) rectangle (0.68,0.3);
+    \fill (0.38,0.0) rectangle (0.62,0.06);}}%
+  \providecommand{\faExclamationTriangle}{\lk@icon{%
+    \fill (0,0) -- (1,0) -- (0.5,0.9) -- cycle;
+    \fill[white] (0.46,0.3) rectangle (0.54,0.66); \fill[white] (0.5,0.16) circle (0.05);}}%
+  \providecommand{\faQuestionCircle}{\lk@icon{%
+    \fill (0.5,0.45) circle (0.48);
+    \node[white, font=\bfseries\scriptsize, inner sep=0pt] at (0.5,0.45) {?};}}%
+  \providecommand{\faPen}{\lk@icon{%
+    \fill (0.1,0.05) -- (0.25,0.05) -- (0.95,0.75) -- (0.8,0.9) -- (0.1,0.2) -- cycle;}}%
+  \providecommand{\faEnvelope}{\lk@icon{%
+    \draw (0,0.05) rectangle (1,0.75); \draw (0,0.75) -- (0.5,0.35) -- (1,0.75);}}%
+  \providecommand{\faPhone}{\lk@icon{%
+    \draw (0.25,0) rectangle (0.75,0.9); \fill (0.5,0.12) circle (0.05);}}%
+  \providecommand{\faLinkedinIn}{\lk@icon{%
+    \fill (0,0) rectangle (0.2,0.6); \fill (0.1,0.8) circle (0.11);
+    \fill (0.32,0) rectangle (0.5,0.6);
+    \fill (0.5,0.35) arc (180:0:0.22) -- (0.94,0) -- (0.76,0) -- (0.76,0.35)
+      arc (0:180:0.04) -- (0.68,0) -- (0.5,0) -- cycle;}}%
+  \providecommand{\faGithub}{\lk@icon{%
+    \fill (0.5,0.45) circle (0.48);
+    \fill[white] (0.5,0.42) circle (0.24); \fill[white] (0.3,0.6) -- (0.3,0.82) -- (0.45,0.66);
+    \fill[white] (0.7,0.6) -- (0.7,0.82) -- (0.55,0.66);}}%
+  \providecommand{\faMapMarker}{\lk@icon{%
+    \fill (0.5,0) -- (0.18,0.5) arc (200:-20:0.34) -- cycle;
+    \fill[white] (0.5,0.62) circle (0.12);}}%
+  \providecommand{\faGlobe}{\lk@icon{%
+    \draw (0.5,0.45) circle (0.45); \draw (0.5,0.45) ellipse (0.2 and 0.45);
+    \draw (0.05,0.45) -- (0.95,0.45);}}%
+\fi
+
+\endinput

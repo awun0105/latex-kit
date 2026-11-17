@@ -23,7 +23,17 @@
     toptitle=1pt, bottomtitle=1pt},
   lk@title/.code={\ifstrempty{#1}{}{\pgfkeysalso{lk@titlestyle,
     title={\sffamily\small\bfseries\lkstr{Đoạn code}{Listing}~\thetcbcounter: #1}}}},
+  lk@box/.style={colback=lkcodebg, colframe=black!15, boxrule=0.5pt, arc=2pt},
 }
+% style=guide: white body, gray rounded frame, accent title bar holding only the title
+\iflk@guide
+\tcbset{
+  lk@titlestyle/.style={coltitle=white, colbacktitle=accent, titlerule=0pt,
+    toptitle=2pt, bottomtitle=2pt, lefttitle=8pt, fonttitle=\sffamily\bfseries\small},
+  lk@title/.code={\ifstrempty{#1}{}{\pgfkeysalso{lk@titlestyle, title={#1}}}},
+  lk@box/.style={colback=white, colframe=black!35, boxrule=0.6pt, arc=4pt},
+}
+\fi
 
 \lstdefinelanguage{yaml}{keywords={true,false,null,yes,no}, sensitive=false,
   comment=[l]{\#}, morestring=[b]', morestring=[b]"}
@@ -61,7 +71,7 @@
 %   1st (optional) argument: language; 2nd: title (may be empty).
 %   Extra tcolorbox keys: \begin{lkcode}[Python][label=lst:train]{Title}
 \NewTCBListing[auto counter]{lkcode}{O{Python} O{} m}{%
-  enhanced, breakable, colback=lkcodebg, colframe=black!15, boxrule=0.5pt, arc=2pt,
+  enhanced, breakable, lk@box,
   left=18pt, right=4pt, top=2pt, bottom=2pt,
   listing only, listing engine=\lk@codeengine,
   lk@lang=#1,
@@ -70,8 +80,7 @@
 
 % \lkcodefile[Python][tcolorbox keys]{code/train.py}{optional title}
 \NewDocumentCommand{\lkcodefile}{O{Python} O{} m G{}}{%
-  \tcbinputlisting{enhanced, breakable, colback=lkcodebg, colframe=black!15, boxrule=0.5pt,
-    arc=2pt, left=18pt, right=4pt, top=2pt, bottom=2pt, listing only,
+  \tcbinputlisting{enhanced, breakable, lk@box, left=18pt, right=4pt, top=2pt, bottom=2pt, listing only,
     listing engine=\lk@codeengine, listing file={#3},
     lk@lang=#1,
     lk@titlestyle,
@@ -79,12 +88,32 @@
     #2}}
 
 % \begin{lkterminal} $ pip install torch \end{lkterminal}  — dark terminal box
+% \begin{lkterminal}[title=Cài đặt] ... \end{lkterminal}  — with a title bar
+\colorlet{lk@termbg}{black!85}\colorlet{lk@termfg}{white}\colorlet{lk@termcm}{black!35}
+\iflk@guide\colorlet{lk@termbg}{lkgterm}\colorlet{lk@termfg}{lkgtermfg}\colorlet{lk@termcm}{lkgtermcm}\fi
 \NewTCBListing{lkterminal}{!O{}}{%
-  enhanced, breakable, colback=black!85, colframe=black!85, arc=2pt, boxrule=0pt,
+  enhanced, breakable, colback=lk@termbg, colframe=lk@termbg, arc=3pt, boxrule=0pt,
+  colbacktitle=accent, coltitle=white, fonttitle=\sffamily\bfseries\small,
+  toptitle=2pt, bottomtitle=2pt,
   left=6pt, top=3pt, bottom=3pt, listing only, listing engine=listings,
-  listing options={language=bash, basicstyle=\ttfamily\small\color{white},
-    keywordstyle=\color{white}, commentstyle=\color{black!35}\itshape,
-    stringstyle=\color{otyellow!80}, numbers=none},
+  listing options={language=bash, basicstyle=\ttfamily\small\color{lk@termfg},
+    keywordstyle=\color{lk@termfg}, commentstyle=\color{lk@termcm},
+    stringstyle=\color{lk@termfg}, numbers=none},
+  #1}
+
+% \begin{lkprompt}{Prompt kiểm tra kết quả} ... \end{lkprompt}
+%   text sent to an AI agent or a chatbot: gray panel, accent title bar, the prompt
+%   in a framed white box with line numbers. Optional first argument: tcolorbox keys.
+\NewTCBListing{lkprompt}{O{} m}{%
+  enhanced, breakable, colback=black!5, colframe=black!35, boxrule=0.6pt, arc=3pt,
+  colbacktitle=accent, coltitle=white, fonttitle=\sffamily\bfseries\small,
+  toptitle=2pt, bottomtitle=2pt, title={#2},
+  left=6pt, right=6pt, top=5pt, bottom=5pt, listing only, listing engine=listings,
+  listing options={basicstyle=\ttfamily\footnotesize, numbers=left,
+    numberstyle=\tiny\color{black!45}, numbersep=5pt, frame=single, framerule=0.7pt,
+    rulecolor=\color{black}, backgroundcolor=\color{white}, xleftmargin=14pt,
+    framexleftmargin=12pt, framesep=4pt, breaklines=true, columns=fullflexible,
+    keywordstyle={}, commentstyle={}, stringstyle={}},
   #1}
 \ifcsname ver@latexkit-diagram.sty\endcsname\else\input{latexkit-opentikz-colors.tex}\fi
 

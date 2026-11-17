@@ -1,7 +1,10 @@
 % latexkit-box.sty — colored boxes for key ideas, notes, tips, warnings ...
 % Every box takes an optional title: \begin{warning}[Cẩn thận] ... \end{warning}
+% style=guide: the boxes become tabbed notes (light yellow body, orange frame, a tab with
+% an icon and the title on the top border).
+%   \begin{lkpanel}{Title} ... \end{lkpanel}   panel with an accent title bar (any style)
 \NeedsTeXFormat{LaTeX2e}[2022-06-01]
-\ProvidesPackage{latexkit-box}[2026/11/08 v0.1 latexkit boxes]
+\ProvidesPackage{latexkit-box}[2026/11/16 v0.2 latexkit boxes]
 
 \RequirePackage[most]{tcolorbox}
 \tcbset{lkbox/.style={enhanced, breakable, arc=2pt, boxrule=0pt, leftrule=3pt,
@@ -10,20 +13,55 @@
   titlerule=0pt, colback=#1!5, colframe=#1!75!black,
   before upper={\setlength{\parskip}{0.4em}}}}
 
-% \lknewbox{name}{color}{default title vi}{default title en}
-\NewDocumentCommand{\lknewbox}{m m m m}{%
-  \NewTColorBox{#1}{O{\lkstr{#3}{#4}}}{lkbox=#2, title={##1}}}
+\iflk@guide
+  \providecolor{lkgnote}{HTML}{FFFEE6}
+  \providecolor{lkgorange}{HTML}{E57300}
+  % lkgbox={frame color}{icon}: tab on the top border, body in light yellow
+  \tcbset{lkgbox/.style 2 args={enhanced, breakable, arc=3pt, boxrule=0.8pt,
+    colback=lkgnote, colframe=#1, left=8pt, right=8pt, top=9pt, bottom=6pt,
+    before skip=1.4em, after skip=1em,
+    attach boxed title to top left={xshift=4mm, yshift=-2.2mm, yshifttext=-1.2mm},
+    boxed title style={colback=#1, colframe=#1, arc=2pt, boxrule=0pt,
+      left=4pt, right=5pt, top=1.5pt, bottom=1.5pt},
+    fonttitle=\bfseries\small, coltitle=white,
+    before title={#2\enspace},
+    before upper={\setlength{\parskip}{0.4em}}}}
+  % \lknewbox[icon]{name}{color}{default title vi}{default title en}
+  \NewDocumentCommand{\lknewbox}{O{\faLightbulb} m m m m}{%
+    \NewTColorBox{#2}{O{\lkstr{#4}{#5}}}{lkgbox={#3}{#1}, title={##1}}}
+\else
+  \NewDocumentCommand{\lknewbox}{O{} m m m m}{%
+    \NewTColorBox{#2}{O{\lkstr{#4}{#5}}}{lkbox=#3, title={##1}}}
+\fi
 
-\lknewbox{keyidea}{accent}{Ý chính}{Key idea}
-\lknewbox{info}{lkblue}{Ghi chú}{Note}
-\lknewbox{tip}{lkgreen}{Mẹo}{Tip}
-\lknewbox{warning}{lkred}{Lưu ý}{Warning}
-\lknewbox{question}{lkorange}{Câu hỏi}{Question}
-\lknewbox{examplebox}{lkteal}{Ví dụ}{Example}
-\lknewbox{summary}{lkpurple}{Tóm tắt}{Summary}
+\iflk@guide
+  \lknewbox[\faLightbulb]{keyidea}{lkgorange}{Nguyên tắc}{Key idea}
+  \lknewbox[\faLightbulb]{info}{lkgorange}{Lưu ý}{Note}
+  \lknewbox[\faLightbulb]{tip}{lkgorange}{Mẹo}{Tip}
+  \lknewbox[\faExclamationTriangle]{warning}{lkred}{Cảnh báo}{Warning}
+  \lknewbox[\faQuestionCircle]{question}{accent}{Câu hỏi}{Question}
+  \lknewbox[\faPen]{examplebox}{lkgorange}{Ví dụ}{Example}
+  \lknewbox[\faLightbulb]{summary}{lkgorange}{Điểm cần nhớ}{Takeaways}
+\else
+  \lknewbox{keyidea}{accent}{Ý chính}{Key idea}
+  \lknewbox{info}{lkblue}{Ghi chú}{Note}
+  \lknewbox{tip}{lkgreen}{Mẹo}{Tip}
+  \lknewbox{warning}{lkred}{Lưu ý}{Warning}
+  \lknewbox{question}{lkorange}{Câu hỏi}{Question}
+  \lknewbox{examplebox}{lkteal}{Ví dụ}{Example}
+  \lknewbox{summary}{lkpurple}{Tóm tắt}{Summary}
+\fi
 
 % Plain framed box without title: \begin{lkframe} ... \end{lkframe}
 \NewTColorBox{lkframe}{O{}}{enhanced, breakable, arc=2pt, boxrule=0.5pt,
   colback=white, colframe=black!20, #1}
+
+% Panel with an accent title bar: an agent answer, a quoted result, a worked step.
+%   \begin{lkpanel}{Phản hồi của agent} ... \end{lkpanel}
+\NewTColorBox{lkpanel}{O{} m}{enhanced, breakable, arc=3pt, boxrule=0.6pt,
+  colback=white, colframe=black!35, colbacktitle=accent, coltitle=white,
+  fonttitle=\sffamily\bfseries\small, title={#2}, toptitle=2pt, bottomtitle=2pt,
+  left=8pt, right=8pt, top=5pt, bottom=5pt,
+  before upper={\setlength{\parskip}{0.4em}}, #1}
 
 \endinput

@@ -1,6 +1,6 @@
 % <<vi:Báo cáo nhiều chương — tạo bằng latexkit. Biên dịch: latexmk (kết quả ở build/main.pdf).||en:Multi-chapter report — made with latexkit. Build: latexmk (output in build/main.pdf).>>
 % <<vi:Mỗi chương là một file trong chapters/. Thêm chương: tạo file mới rồi thêm \input bên dưới.||en:Each chapter is a file in chapters/. Add one: create the file, then add an \input line below.>>
-\documentclass[11pt,a4paper]{report}
+\documentclass[12pt,a4paper]{report}
 \usepackage[{{PKGOPTS}}, parskip]{latexkit}
 \setcounter{tocdepth}{1}
 
@@ -9,6 +9,10 @@
 \institution{<<vi:Đơn vị / nhóm||en:Organisation / team>>}
 \author{{{AUTHOR}}}
 \date{{{DATE}}}
+
+% <<vi:Tùy chọn: đặt nhãn ngắn cho header và thông tin ở footer.||en:Optional: short header labels and footer text.>>
+% \lkheader{<<vi:Tên tài liệu||en:Document title>>}{{{AUTHOR}}}
+% \lkfooter{email@example.com}
 
 \begin{document}
 \pagenumbering{roman}
@@ -23,8 +27,12 @@
 \todo{<<vi:Một trang: vấn đề, cách làm, kết quả chính, khuyến nghị.||en:One page: problem, approach, key results, recommendations.>>}
 
 \tableofcontents
+%%IF diagram|plot
 \listoffigures
+%%ENDIF
+%%IF table
 \listoftables
+%%ENDIF
 
 \chapter*{<<vi:Danh mục từ viết tắt||en:Abbreviations>>}
 \addcontentsline{toc}{chapter}{<<vi:Danh mục từ viết tắt||en:Abbreviations>>}

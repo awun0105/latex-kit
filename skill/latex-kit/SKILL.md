@@ -93,6 +93,14 @@ TikZ · các thành phần và kết nối → D2 · các tầng chồng nhau �
 
 ## Rules
 
+- New notes/report/proposal/book/letter use `style=guide` and Latin Modern 12pt.
+  Use `\lkheader{short title}{author}` and `\lkfooter{text}` to customise running text;
+  `\institution[tagline]{name}` and `\lklogo{file}` are optional. Keep branding generic.
+- CV/letter examples contain bracketed boilerplate and generic contact information. Replace
+  these with supplied facts; do not invent qualifications, scores or project achievements.
+- Explain a new English term in Vietnamese at first use. Introduce visuals before they appear,
+  describe what the evidence shows, and label illustrative values as examples.
+
 - Colors: use `accent`, `lkblue lkteal lkgreen lkorange lkred lkpurple lkgray`, the OpenTikZ
   palette `otblue otorange otteal otpurple otvermillion otgray` or the figures4papers palette
   `f4pblue f4pgreenA..C f4predA..B f4pred f4pgray` — never raw hex in `.tex` files. In figures4papers

@@ -14,3 +14,8 @@ __pycache__/
 gallery/diagrams/*.pdf
 gallery/catalog.tex
 gallery/plots/
+
+# Personal reference samples (do not commit)
+AI-Vibe-Researcher.pdf
+CV_coverletter_phase3_AI20K/
+CV_coverletter_phase3_AI20K.zip

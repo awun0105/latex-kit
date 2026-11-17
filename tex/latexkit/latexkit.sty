@@ -16,8 +16,11 @@
 %
 % Other options:
 %   lang=vi|en        document language (default vi)
-%   accent=1F4E79     main color, HTML hex
-%   style=modern|plain  modern = colored sans-serif headings
+%   accent=1F4E79     main color, HTML hex (style=guide: 344F1E)
+%   style=modern|plain|guide  modern = colored sans-serif headings;
+%                     guide = handout look (latexkit-guide.sty): Latin Modern 12pt, green
+%                     header/footer rules, Roman section numbers, boxed captions, tabbed notes
+%   font=noto|lm      main fonts with LuaLaTeX (default noto; style=guide uses lm)
 %   float=here|auto   here = figures and tables stay where they are written
 %   margin=2.5cm      page margins; margin=none keeps the class layout (venue classes)
 %   parskip           blank line between paragraphs, no indent
@@ -42,12 +45,13 @@
 \newif\iflk@minted
 \newif\iflk@vi      \lk@vitrue
 
-\def\lk@accent{1F4E79}
+\def\lk@accent{auto}
+\def\lk@font{auto}
 \def\lk@style{modern}
 \def\lk@float{auto}
 \def\lk@bib{natbib}
 \def\lk@bibfile{references}
-\def\lk@margin{2.5cm}
+\def\lk@margin{auto}
 
 \DeclareKeys[latexkit]{
   lang.code     = {\ifstrequal{#1}{en}{\lk@vifalse}{\lk@vitrue}},
@@ -57,6 +61,7 @@
   bib.store     = \lk@bib,
   bibfile.store = \lk@bibfile,
   margin.store  = \lk@margin,
+  font.store    = \lk@font,
   parskip.if    = lk@parskip,
   minted.if     = lk@minted,
   table.if      = lk@table,
@@ -73,6 +78,11 @@
                    \lk@boxfalse\lk@mathfalse\lk@algofalse\lk@sciencefalse},
 }
 \ProcessKeyOptions[latexkit]
+\newif\iflk@guide
+\ifdefstring{\lk@style}{guide}{\lk@guidetrue}{}
+\ifdefstring{\lk@accent}{auto}{\iflk@guide\def\lk@accent{344F1E}\else\def\lk@accent{1F4E79}\fi}{}
+\ifdefstring{\lk@font}{auto}{\iflk@guide\def\lk@font{lm}\else\def\lk@font{noto}\fi}{}
+\ifdefstring{\lk@margin}{auto}{\iflk@guide\def\lk@margin{guide}\else\def\lk@margin{2.5cm}\fi}{}
 
 % \lkstr{tiếng Việt}{English}: picks the text for the current language
 \newcommand{\lkstr}[2]{\iflk@vi#1\else#2\fi}
@@ -102,13 +112,22 @@
   \else
     \RequirePackage[english]{babel}
   \fi
-  % Noto first, then TeX Gyre (ships with every TeX distribution, covers Vietnamese)
+  % font=lm: explicitly select Latin Modern (covers Vietnamese).
+  \ifdefstring{\lk@font}{lm}{%
+    \setmainfont{Latin Modern Roman}[SmallCapsFont=lmromancaps10-regular.otf]
+    \setsansfont{Latin Modern Sans}
+    \setmonofont{Latin Modern Mono}[BoldFont=lmmonolt10-bold.otf,
+      BoldItalicFont=lmmonolt10-boldoblique.otf]
+  }{}
+  % font=noto: Noto first, then TeX Gyre (ships with every TeX distribution, covers Vietnamese)
+  \ifdefstring{\lk@font}{noto}{%
   \IfFontExistsTF{Noto Serif}{\setmainfont{Noto Serif}}{%
     \IfFontExistsTF{TeX Gyre Termes}{\setmainfont{TeX Gyre Termes}}{}}
   \IfFontExistsTF{Noto Sans}{\setsansfont{Noto Sans}}{%
     \IfFontExistsTF{TeX Gyre Heros}{\setsansfont{TeX Gyre Heros}}{}}
   \IfFontExistsTF{Noto Sans Mono}{\setmonofont{Noto Sans Mono}[Scale=0.88, AutoFakeSlant=0.15]}{%
     \IfFontExistsTF{DejaVu Sans Mono}{\setmonofont{DejaVu Sans Mono}[Scale=0.85, AutoFakeSlant=0.15]}{}}
+  }{}
 \fi
 
 % ---------------------------------------------------------------- colors
@@ -134,7 +153,12 @@
   \setbeamertemplate{itemize items}[circle]
 \else
   \ifdefstring{\lk@margin}{none}{}{% margin=none: keep the class layout (IEEEtran, cvpr, acmart ...)
-    \@ifpackageloaded{geometry}{}{\RequirePackage[a4paper,margin=\lk@margin]{geometry}}}
+    \ifdefstring{\lk@margin}{guide}{%
+      \@ifpackageloaded{geometry}{}{\RequirePackage{geometry}}%
+      \geometry{a4paper, left=2.2cm, right=2.2cm, top=2.9cm, bottom=2.7cm,
+        headheight=15pt, headsep=0.9cm, footskip=1.3cm}}{%
+      \@ifpackageloaded{geometry}{}{\RequirePackage[a4paper,margin=\lk@margin]{geometry}}}}
+  \iflk@guide\lk@parskiptrue\fi
   \iflk@parskip\RequirePackage[parfill]{parskip}\fi
   \setlength{\emergencystretch}{3em}
   \RequirePackage{float}
@@ -190,9 +214,10 @@
   \end{figure}}
 \RequirePackage{pgffor}
 
-% Title page for report and book: \subtitle{} and \institution{} are optional
+% Title page for report and book: \subtitle{}, \institution[tagline]{} and \lklogo{} are optional
 \providecommand{\subtitle}[1]{\def\lk@subtitle{#1}}
-\newcommand{\institution}[1]{\def\lk@institution{#1}}
+\NewDocumentCommand{\institution}{o m}{\def\lk@institution{#2}\IfValueT{#1}{\def\lk@tagline{#1}}}
+\newcommand{\lklogo}[1]{\def\lk@logo{#1}}
 \newcommand{\lktitlepage}{%
   \begin{titlepage}\sffamily
     \ifdefined\lk@institution{\large\lk@institution\par}\fi
@@ -204,6 +229,9 @@
     \vspace{2em}{\large\begin{tabular}[t]{@{}l@{}}\@author\end{tabular}\par}
     \vfill{\large\@date\par}
   \end{titlepage}}
+
+% ---------------------------------------------------------------- guide style
+\iflk@guide\iflk@beamer\else\RequirePackage{latexkit-guide}\fi\fi
 
 % ---------------------------------------------------------------- modules
 \iflk@table   \RequirePackage{latexkit-table}   \fi
@@ -230,6 +258,7 @@
   \hypersetup{colorlinks=true, linkcolor=., urlcolor=accent, citecolor=accent}
 \else
   \RequirePackage[colorlinks=true,linkcolor=accent,citecolor=accent,urlcolor=accent]{hyperref}
+  \iflk@guide\hypersetup{linkcolor=lkgdark, citecolor=lkgdark, urlcolor=accent}\fi
 \fi
 \RequirePackage[capitalise,noabbrev]{cleveref}
 \iflk@vi
